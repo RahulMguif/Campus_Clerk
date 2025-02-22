@@ -1,0 +1,30 @@
+# Excluding the virtual environment from pushing into git.
+myenv/
+
+__pycache__/
+# Ignore all files in the migrations folder
+**/migrations/*
+
+# Except for __init__.py, which should be included
+!**/migrations/__init__.py
+
+# # Ignore all files within news_events folder
+# **/media/news_events/*
+
+# # Ignore all files within career_cv folder
+# **/media/career_cv/*
+
+# # Ignore all files within career_notifications folder
+# **/media/career_notifications/*
+
+# # Ignore all files within covering_letter folder
+# **/media/covering_letter/*
+
+# # Ignore all files within tenders folder
+# **/media/tenders/*
+
+# # Ignore all files within banner folder
+# **/media/banner/*
+
+# # Ignore all files within eminent_visitors folder
+# **/media/eminent_visitors/*
