@@ -2,13 +2,13 @@ from django.db import models
 from mainsite.models import student_registration
 
 
-
 # Student application model
 
 class student_application_request(models.Model):
     student_pk = models.ForeignKey(student_registration, on_delete=models.CASCADE)
     student_application_no = models.CharField(max_length=50, null=True)
     full_name = models.CharField(max_length=100, null=True)
+    gender = models.CharField(max_length = 20, null=True)
     course = models.CharField(max_length=100, null=True) # eg: M-Tech, B-Tech
     branch = models.CharField(max_length=100, null=True) # eg: CS, ECE
     admission_no = models.CharField(max_length=50, null=True)
@@ -41,6 +41,7 @@ class student_application_request(models.Model):
 
     class Meta:
         db_table = 'student_application_request'
+
 
 # Student feedback model
 
