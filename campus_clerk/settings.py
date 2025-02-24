@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainsite',
     'student',
+    'office_admin',
+    'hod',
+    'student_rep',
+    'staff_advisor',
     
 ]
 
