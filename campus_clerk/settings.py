@@ -81,24 +81,24 @@ WSGI_APPLICATION = 'campus_clerk.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # ==============Local Server ============================
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': '',
-#        'USER': 'root',
-#        'PASSWORD': 'admin',
-#        'HOST':'localhost',
-#        'PORT':'3306',
-#    }
-# }
+DATABASES = {
+   'default': {
+       'ENGINE': 'django.db.backends.mysql',
+       'NAME': 'campus_clerk',
+       'USER': 'root',
+       'PASSWORD': 'admin',
+       'HOST':'localhost',
+       'PORT':'3306',
+   }
+}
 # ==============Local Server End============================
 
 # Password validation
