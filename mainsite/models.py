@@ -7,6 +7,7 @@ class student_registration(models.Model):
     password = models.CharField(max_length = 100, null=True)
     email = models.EmailField(max_length=150)
     mobile = models.BigIntegerField(null=True)
+    course = models.CharField(max_length = 100, null=True)
     department = models.CharField(max_length = 100, null=True)
     semester = models.CharField(max_length = 100, null=True)
     year_of_joining = models.CharField(max_length = 100, null=True)
