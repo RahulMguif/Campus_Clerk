@@ -199,4 +199,72 @@ button {
     padding-right: 15px;
     padding-left: 15px; } }
 
-/*# sourceMappingURL=style.css.map */
+/*password eye toggle*/
+
+    .password-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .password-wrapper input {
+        width: 100%;
+        padding-right: 40px; /* Space for the eye icon */
+    }
+
+    .password-wrapper .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #888;
+    }
+
+    .password-wrapper .toggle-password:hover {
+        color: #333;
+    }
+/*alert box*/
+        #alert-box {
+            position: fixed;
+            top: 100px;
+            right: 10px;
+            z-index: 1000;
+            width: auto;
+        }
+    
+        .alert {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 250px;
+        }
+    
+        .alert-success {
+            background-color: #28a745;
+        }
+    
+        .alert-error, .alert-danger {
+            background-color: #dc3545;
+        }
+    
+        .alert-info {
+            background-color: #17a2b8;
+        }
+    
+        .alert-warning {
+            background-color: #ffc107;
+            color: #333;
+        }
+    
+        .close-btn {
+            font-weight: bold;
+            margin-left: 15px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+ 

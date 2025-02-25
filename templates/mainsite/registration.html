@@ -7,43 +7,309 @@
 		<!-- STYLE CSS -->
 <link rel="stylesheet" href="{% static 'registration/css/style.css' %}">
 
+ <!------------- Django Messages Alert Box ----------------->
+{% if messages %}
+<div id="alert-box">
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+        {{ message }}
+        <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-------------------- END Django Messages Alert Box -------------->
 
 
 		<div class="wrapper" style="background-image: url('{% static 'registration/images/bg-registration-form-2.jpg' %}');">
-			<div class="inner" style="width: 800px; height: 600px; background-size: cover; background-position: center; background-image: url('{% static 'registration/images/registration-form-2.jpg' %}');">
-				<form action="">
+			
+			<div class="inner" style="width: 800px; height: 800px; background-size: cover; background-position: center; background-image: url('{% static 'registration/images/registration-form-2.jpg' %}');">
+				<form action="" method="POST">
+					{% csrf_token %}
 					<h3>Registration Form</h3>
 					<div class="form-group">
 						<div class="form-wrapper">
-							<label for="">First Name</label>
-							<input type="text" class="form-control">
+							<label for="">Full Name *</label>
+							<input type="text" class="form-control" name="fullname" required id="fullname">
 						</div>
 						<div class="form-wrapper">
-							<label for="">Last Name</label>
-							<input type="text" class="form-control">
+							<label for="">Email *</label>
+							<input type="email" class="form-control" name="email" required id="email" >
+							<div id="emailError" style="color: red; font-size: 0.8em;"></div> <!-- Error message container -->
 						</div>
 					</div>
+				
+					<div class="form-group">
+						<div class="form-wrapper">
+							<label for="">Course *</label>
+							<input type="text" class="form-control" name="course" required id="course">
+						</div>
+						<div class="form-wrapper">
+							<label for="">Department *</label>
+							<input type="text" class="form-control" name="department" required id="department">
+						</div>
+					</div>
+				
+					<div class="form-group">
+						<div class="form-wrapper">
+							<label for="semester">Semester *</label>
+							<select class="form-control" name="semester" id="semester" required>
+								<option value="">-- select --</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+							</select>
+						</div>
+						
+						<div class="form-wrapper">
+							<label for="">Year of Admission *</label>
+							<input type="date" class="form-control" name="year_of_joining" id="year_of_joining" required>
+						</div>
+					</div>
+				
 					<div class="form-wrapper">
-						<label for="">Email</label>
-						<input type="text" class="form-control">
+						<label for="mobile">Mobile *</label>
+						<div style="display: flex; align-items: center; gap: 5px;">
+							<input type="text" class="form-control" value="+91" disabled style="width: 80px; text-align: center; background-color: #e9ecef; border: 1px solid #ced4da;">
+							<input type="text" class="form-control" name="mobile" id="mobile" required maxlength="10" >
+
+						</div>
+						<div id="mobileError" style="color: red; font-size: 0.8em;"></div> <!-- Error message container -->
 					</div>
+					
+					
+					
 					<div class="form-wrapper">
-						<label for="">Password</label>
-						<input type="password" class="form-control">
+						<label for="password">Password *</label>
+						<div class="password-wrapper">
+							<input type="password" class="form-control" id="password" name="password" required maxlength="15">
+							<i class="fa fa-eye toggle-password" toggle="#password"></i>
+						</div>
 					</div>
+					<div class="error-messages" id="passwordErrorMessages"></div> <!-- Error message container for password -->
 					<div class="form-wrapper">
-						<label for="">Confirm Password</label>
-						<input type="password" class="form-control">
+						<label for="confirm_password">Confirm Password *</label>
+						<div class="password-wrapper">
+							<input type="password" class="form-control" id="password2" name="confirm_password" required maxlength="15">
+							<i class="fa fa-eye toggle-password" toggle="#password2"></i>
+						</div>
 					</div>
-					<div class="checkbox">
-						<label>
-							<input type="checkbox"> I accept the Terms of Use & Privacy Policy.
-							<span class="checkmark"></span>
-						</label>
-					</div>
-					<button>Register Now</button>
+					
+					<div class="error-messages col-12" id="confirmPasswordErrorMessages"></div> <!-- Error message container for confirm password -->
+                    
+				
+					<button type="submit" id="registerButton" disabled>Register Now</button>
 				</form>
+				
+				
+				
 			</div>
 		</div>
+<!--------------------------------------------------validation for inputs----------------------------------------------------------->
+		<script>
+			document.getElementById("fullname","").addEventListener("input", function (e) {
+				this.value = this.value.replace(/[^A-Za-z.' ]/g, '');
+			});
+			document.getElementById("department").addEventListener("input", function () {
+				this.value = this.value.replace(/[^A-Za-z.' ]/g, '');
+			});
+			document.getElementById("course").addEventListener("input", function () {
+				this.value = this.value.replace(/[^A-Za-z.' ]/g, '');
+			});
+
+			 // Get today's date in YYYY-MM-DD format
+			 let today = new Date().toISOString().split("T")[0];
+
+			 // Set max attribute to today's date
+			 document.getElementById("year_of_joining").setAttribute("max", today);
+		
+				document.getElementById("email").addEventListener("input", function () {
+					let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+					if (!emailPattern.test(this.value)) {
+						this.setCustomValidity("Please enter a valid email ");
+					} else {
+						this.setCustomValidity("");
+					}
+				});
+				</script>
+
+
+<script>
+    // Function to validate password fields and update error messages
+    function validatePasswords() {
+        var password = document.getElementById('password').value.trim();
+        var confirmPassword = document.getElementById('password2').value.trim();
+        var passwordErrorMessages = document.getElementById('passwordErrorMessages');
+        var confirmPasswordErrorMessages = document.getElementById('confirmPasswordErrorMessages');
+        var submitButton = document.getElementById('registerButton'); // Get submit button
+
+        // Clear previous error messages
+        passwordErrorMessages.innerHTML = '';
+        confirmPasswordErrorMessages.innerHTML = '';
+
+        var isValid = true;
+        var errors = [];
+
+        // Password length validation
+        if (password.length === 0) {
+            errors.push("Password is required.");
+            isValid = false;
+        } else if (password.length < 8 || password.length > 12) {
+            errors.push("Password must be between 8 and 12 characters.");
+            isValid = false;
+        }
+
+        // Password complexity validation
+        var uppercaseRegex = /[A-Z]/;
+        var lowercaseRegex = /[a-z]/;
+        var numberRegex = /[0-9]/;
+        var specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+
+        if (!uppercaseRegex.test(password)) errors.push("Password must contain at least one uppercase letter.");
+        if (!lowercaseRegex.test(password)) errors.push("Password must contain at least one lowercase letter.");
+        if (!numberRegex.test(password)) errors.push("Password must contain at least one number.");
+        if (!specialCharRegex.test(password)) errors.push("Password must contain at least one special character.");
+        if (/\s/.test(password)) errors.push("Password must not contain spaces.");
+
+        // Confirm password validation
+        if (password !== confirmPassword && confirmPassword !== '') {
+            appendErrorMessage(confirmPasswordErrorMessages, "Passwords do not match!");
+            isValid = false;
+        }
+
+        // Display password errors
+        errors.forEach(function(error) {
+            appendErrorMessage(passwordErrorMessages, error);
+        });
+
+        // Disable the submit button if validation fails
+        submitButton.disabled = !isValid;
+        return isValid;
+    }
+
+    // Function to append error message to the specified container
+    function appendErrorMessage(container, message) {
+        var errorMessage = document.createElement('p');
+        errorMessage.textContent = message;
+        errorMessage.style.color = 'red';
+        errorMessage.style.fontSize = '0.8em'; // Adjust font size as needed
+        container.appendChild(errorMessage);
+    }
+
+    // Event listeners to trigger password validation on input change and blur
+    document.getElementById('password').addEventListener('input', validatePasswords);
+    document.getElementById('password2').addEventListener('input', validatePasswords);
+    document.getElementById('password').addEventListener('blur', validatePasswords);
+    document.getElementById('password2').addEventListener('blur', validatePasswords);
+</script>
+
+<script>
+    document.querySelectorAll(".toggle-password").forEach(icon => {
+        icon.addEventListener("click", function () {
+            let input = document.querySelector(this.getAttribute("toggle"));
+            if (input.type === "password") {
+                input.type = "text";
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                this.classList.remove("fa-eye-slash");
+                this.classList.add("fa-eye");
+            }
+        });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let emailValid = false;
+        let mobileValid = false;
+
+        function checkField(fieldType, value) {
+            if (value.length === 0) return; // Do not check if field is empty
+
+            $.ajax({
+                url: "{% url 'check_user_existence' %}",  // Django URL to check existence
+                data: { [fieldType]: value },  // Send either 'email' or 'mobile' data
+                dataType: "json",
+                success: function (response) {
+                    if (fieldType === "email") {
+                        if (response.email_exists) {
+                            $("#emailError").text("Email is already registered.");
+                            emailValid = false;
+                        } else {
+                            $("#emailError").text(""); // Clear error message
+                            emailValid = true;
+                        }
+                    }
+
+                    if (fieldType === "mobile") {
+                        if (response.mobile_exists) {
+                            $("#mobileError").text("Mobile number is already registered.");
+                            mobileValid = false;
+                        } else {
+                            $("#mobileError").text(""); // Clear error message
+                            mobileValid = true;
+                        }
+                    }
+                }
+            });
+        }
+
+        // Check email on blur
+        $("#email").on("blur", function () {
+            checkField("email", $(this).val().trim());
+        });
+
+       
+        // ✅ Validate mobile on keypress (only numbers allowed)
+        $("#mobile").on("keypress", function (e) {
+            if (e.which < 48 || e.which > 57) { // Allow only numbers (0-9)
+                e.preventDefault();
+            }
+        });
+
+        // ✅ Validate mobile on blur (check length & format)
+        $("#mobile").on("blur", function () {
+            let mobile = $(this).val().trim();
+            let regex = /^[6789]\d{9}$/; // Starts with 6,7,8,9 and has 10 digits
+
+            if (!regex.test(mobile)) {
+                $("#mobileError").text("Enter a valid 10-digit Indian mobile number.");
+                mobileValid = false;
+            } else {
+                $("#mobileError").text(""); // Clear error message
+                mobileValid = true;
+                checkField("mobile", mobile);
+            }
+        });
+
+        // Prevent form submission if errors exist
+        $("form").on("submit", function (event) {
+            if (!emailValid || !mobileValid) {
+                event.preventDefault();
+                alert("Please correct the errors before submitting the form.");
+            }
+        });
+    });
+</script>
+
+
+<!-- JavaScript to Auto-Hide the Alert After 3 Seconds -->
+<script>
+    setTimeout(function() {
+        var alertBox = document.getElementById("alert-box");
+        if (alertBox) {
+            alertBox.style.display = "none";
+        }
+    }, 3000); // Hides after 3 seconds
+</script>
+
 
 {% endblock mainsite_content %}
