@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 
 from django.contrib import messages
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password,check_password
 from  mainsite.models import *
+
+from django.http import JsonResponse
 
 
 def home_view(request):
@@ -10,41 +12,13 @@ def home_view(request):
     return render(request, 'mainsite/home.html',)
 
 
-from django.contrib.auth.hashers import check_password
-# def login(request):
-#     if request.method == "POST":
-#         email = request.POST.get("email")
-#         password = request.POST.get("password")
-
-#         print(f"Email: {email}, Password: {password}")  # Debugging
-
-#         try:
-#             student = student_registration.objects.get(email=email)
-#             print(f"Stored Password (Hashed): {student.password}")  # Debugging
-
-#             if check_password(password, student.password):
-#                 request.session["student_id"] = student.id
-#                 request.session["student_name"] = student.fullname
-#                 messages.success(request, "Login successful!")
-#                 return render(request, "student/home.html")
-
-#             else:
-#                 messages.error(request, "Invalid email or password.")
-#                 print("Password mismatch!")  # Debugging
-#         except student_registration.DoesNotExist:
-#             messages.error(request, "Invalid email or password.")
-#             print("User does not exist!")  # Debugging
-
-#     return render(request, "mainsite/login.html")
+#======================login function for student========================================
 
 def login(request):
     if request.method == "POST":
-        print(f"Request POST Data: {request.POST}")  # Debugging
 
         email = request.POST.get("email")
-        password = request.POST.get("password")  # Ensure 'password' is used, not 'pass'
-
-        print(f"Email: {email}, Password: {password}")  # Debugging
+        password = request.POST.get("password")  
 
         if not password:
             print("Password field is empty!")  # Debugging
@@ -69,6 +43,19 @@ def login(request):
 
     return render(request, "mainsite/login.html")
 
+#======================END login function for student========================================
+#===================check already registered email and mobile================================
+def check_user_existence(request):
+    email = request.GET.get('email', None)
+    mobile = request.GET.get('mobile', None)
+
+    email_exists = student_registration.objects.filter(email=email).exists() if email else False
+    mobile_exists = student_registration.objects.filter(mobile=mobile).exists() if mobile else False
+
+    return JsonResponse({'email_exists': email_exists, 'mobile_exists': mobile_exists})
+
+#===================END check already registered email and mobile================================
+#========================== student registration=================================================
 
 def registration(request):
     if request.method == "POST":
@@ -105,11 +92,13 @@ def registration(request):
             semester=semester,
             year_of_joining=year_of_joining,
             password=hashed_password,
-            is_active=True  # Assuming user is active by default
+            is_active=True  
         )
         student.save()
 
         messages.success(request, "Registration successful!")
-        return redirect("login")  # Redirect to registration page (update URL name if needed)
+        return redirect("login")  
 
     return render(request, "mainsite/registration.html")
+
+#==========================END student registration===============================================

@@ -7,31 +7,20 @@
 		<!-- STYLE CSS -->
 <link rel="stylesheet" href="{% static 'registration/css/style.css' %}">
 
-<!-- Display Messages -->
-<style>
-	.form-wrapper {
-		position: relative;
-		width: 300px;
-	}
-	.form-control {
-		width: 100%;
-		padding: 10px;
-		padding-right: 40px;
-		border: 1px solid #ccc;
-		border-radius: 5px;
-		font-size: 16px;
-	}
-	.eye-icon {
-		position: absolute;
-		right: 10px;
-		top: 48%;
-		transform: translateY(-50%);
-		cursor: pointer;
-		font-size: 15px;
-		color: #888;
-	}
-</style>
- 
+ <!------------- Django Messages Alert Box ----------------->
+{% if messages %}
+<div id="alert-box">
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+        {{ message }}
+        <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-------------------- END Django Messages Alert Box -------------->
+
 
 		<div class="wrapper" style="background-image: url('{% static 'registration/images/bg-registration-form-2.jpg' %}');">
 			
@@ -47,6 +36,7 @@
 						<div class="form-wrapper">
 							<label for="">Email *</label>
 							<input type="email" class="form-control" name="email" required id="email" >
+							<div id="emailError" style="color: red; font-size: 0.8em;"></div> <!-- Error message container -->
 						</div>
 					</div>
 				
@@ -85,138 +75,43 @@
 				
 					<div class="form-wrapper">
 						<label for="mobile">Mobile *</label>
-						<input type="text" class="form-control" name="mobile" id="mobile" required 
-							   inputmode="numeric" maxlength="14">
+						<div style="display: flex; align-items: center; gap: 5px;">
+							<input type="text" class="form-control" value="+91" disabled style="width: 80px; text-align: center; background-color: #e9ecef; border: 1px solid #ced4da;">
+							<input type="text" class="form-control" name="mobile" id="mobile" required maxlength="10" >
+
+						</div>
+						<div id="mobileError" style="color: red; font-size: 0.8em;"></div> <!-- Error message container -->
 					</div>
 					
 					
-				
+					
 					<div class="form-wrapper">
-						<label for="password">Password</label>
-						<input type="password" class="form-control" id="password" name="password" required>
-						<i class="fas fa-eye eye-icon" id="togglePassword"></i>
-						<div id="passwordCriteria" class="error-message">
-							<p id="lengthCriteria">✅ Must be 6-12 characters</p>
-							<p id="uppercaseCriteria">❌ At least one uppercase letter</p>
-							<p id="lowercaseCriteria">❌ At least one lowercase letter</p>
-							<p id="numberCriteria">❌ At least one number</p>
-							<p id="specialCriteria">❌ At least one special character (@, #, $, etc.)</p>
+						<label for="password">Password *</label>
+						<div class="password-wrapper">
+							<input type="password" class="form-control" id="password" name="password" required maxlength="15">
+							<i class="fa fa-eye toggle-password" toggle="#password"></i>
+						</div>
+					</div>
+					<div class="error-messages" id="passwordErrorMessages"></div> <!-- Error message container for password -->
+					<div class="form-wrapper">
+						<label for="confirm_password">Confirm Password *</label>
+						<div class="password-wrapper">
+							<input type="password" class="form-control" id="password2" name="confirm_password" required maxlength="15">
+							<i class="fa fa-eye toggle-password" toggle="#password2"></i>
 						</div>
 					</div>
 					
-					<div class="form-wrapper">
-						<label for="confirm_password">Confirm Password</label>
-						<input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-						<i class="fas fa-eye eye-icon" id="toggleConfirmPassword"></i>
-						<div id="confirmError" class="error-message">Passwords do not match.</div>
-					</div>
-					
-					<script>
-						const passwordInput = document.getElementById("password");
-						const confirmPasswordInput = document.getElementById("confirm_password");
-						const togglePassword = document.getElementById("togglePassword");
-						const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
-						const passwordCriteria = document.getElementById("passwordCriteria");
-						const confirmError = document.getElementById("confirmError");
-					
-						// Password criteria elements
-						const lengthCriteria = document.getElementById("lengthCriteria");
-						const uppercaseCriteria = document.getElementById("uppercaseCriteria");
-						const lowercaseCriteria = document.getElementById("lowercaseCriteria");
-						const numberCriteria = document.getElementById("numberCriteria");
-						const specialCriteria = document.getElementById("specialCriteria");
-					
-						// Regular expressions
-						const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*!])[A-Za-z\d@#$%^&*!]{6,12}$/;
-					
-						// Show/hide password
-						function toggleVisibility(input, toggleIcon) {
-							toggleIcon.addEventListener("click", function () {
-								if (input.type === "password") {
-									input.type = "text";
-									toggleIcon.classList.add("fa-eye-slash");
-								} else {
-									input.type = "password";
-									toggleIcon.classList.remove("fa-eye-slash");
-								}
-							});
-						}
-					
-						toggleVisibility(passwordInput, togglePassword);
-						toggleVisibility(confirmPasswordInput, toggleConfirmPassword);
-					
-						// Password validation check
-						passwordInput.addEventListener("input", function () {
-							let value = passwordInput.value;
-					
-							// Length validation
-							if (value.length >= 6 && value.length <= 12) {
-								lengthCriteria.classList.add("valid");
-								lengthCriteria.textContent = "✅ Must be 6-12 characters";
-							} else {
-								lengthCriteria.classList.remove("valid");
-								lengthCriteria.textContent = "❌ Must be 6-12 characters";
-							}
-					
-							// Uppercase letter validation
-							if (/[A-Z]/.test(value)) {
-								uppercaseCriteria.classList.add("valid");
-								uppercaseCriteria.textContent = "✅ At least one uppercase letter";
-							} else {
-								uppercaseCriteria.classList.remove("valid");
-								uppercaseCriteria.textContent = "❌ At least one uppercase letter";
-							}
-					
-							// Lowercase letter validation
-							if (/[a-z]/.test(value)) {
-								lowercaseCriteria.classList.add("valid");
-								lowercaseCriteria.textContent = "✅ At least one lowercase letter";
-							} else {
-								lowercaseCriteria.classList.remove("valid");
-								lowercaseCriteria.textContent = "❌ At least one lowercase letter";
-							}
-					
-							// Number validation
-							if (/\d/.test(value)) {
-								numberCriteria.classList.add("valid");
-								numberCriteria.textContent = "✅ At least one number";
-							} else {
-								numberCriteria.classList.remove("valid");
-								numberCriteria.textContent = "❌ At least one number";
-							}
-					
-							// Special character validation
-							if (/[@#$%^&*!]/.test(value)) {
-								specialCriteria.classList.add("valid");
-								specialCriteria.textContent = "✅ At least one special character (@, #, $, etc.)";
-							} else {
-								specialCriteria.classList.remove("valid");
-								specialCriteria.textContent = "❌ At least one special character (@, #, $, etc.)";
-							}
-					
-							// Show password criteria only when user types
-							passwordCriteria.style.display = value.length > 0 ? "block" : "none";
-						});
-					
-						// Confirm password check
-						confirmPasswordInput.addEventListener("input", function () {
-							if (confirmPasswordInput.value === passwordInput.value) {
-								confirmError.style.display = "none";
-							} else {
-								confirmError.style.display = "block";
-							}
-						});
-					
-					</script>
+					<div class="error-messages col-12" id="confirmPasswordErrorMessages"></div> <!-- Error message container for confirm password -->
+                    
 				
-					<button type="submit">Register Now</button>
+					<button type="submit" id="registerButton" disabled>Register Now</button>
 				</form>
 				
 				
 				
 			</div>
 		</div>
-
+<!--------------------------------------------------validation for inputs----------------------------------------------------------->
 		<script>
 			document.getElementById("fullname","").addEventListener("input", function (e) {
 				this.value = this.value.replace(/[^A-Za-z.' ]/g, '');
@@ -233,8 +128,7 @@
 
 			 // Set max attribute to today's date
 			 document.getElementById("year_of_joining").setAttribute("max", today);
-			</script>
-			<script>
+		
 				document.getElementById("email").addEventListener("input", function () {
 					let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 					if (!emailPattern.test(this.value)) {
@@ -244,47 +138,178 @@
 					}
 				});
 				</script>
-				<script>
-					document.getElementById("mobile").addEventListener("input", function (e) {
-						let value = this.value;
-					
-						// Ensure "+91 " prefix is always present
-						if (!value.startsWith("+91 ")) {
-							this.value = "+91 ";
-						}
-					
-						// Allow only numbers after "+91 "
-						this.value = this.value.replace(/[^0-9+ ]/g, ''); 
-					
-						// Limit total length to "+91 " (4 chars) + 10 digits = 14 characters
-						if (this.value.length > 14) {
-							this.value = this.value.slice(0, 14);
-						}
-					});
-					
-					// Set default value when page loads
-					document.getElementById("mobile").value = "+91 ";
-					</script>
-					
-					
-		<script>
 
-			const passwordField = document.getElementById("password");
-			const togglePassword = document.getElementById("togglePassword");
-		
-			togglePassword.addEventListener("click", function () {
-				if (passwordField.type === "password") {
-					passwordField.type = "text";
-					togglePassword.classList.remove("fa-eye");
-					togglePassword.classList.add("fa-eye-slash");
-				} else {
-					passwordField.type = "password";
-					togglePassword.classList.remove("fa-eye-slash");
-					togglePassword.classList.add("fa-eye");
-				}
-			});
-		</script>
 
-	
+<script>
+    // Function to validate password fields and update error messages
+    function validatePasswords() {
+        var password = document.getElementById('password').value.trim();
+        var confirmPassword = document.getElementById('password2').value.trim();
+        var passwordErrorMessages = document.getElementById('passwordErrorMessages');
+        var confirmPasswordErrorMessages = document.getElementById('confirmPasswordErrorMessages');
+        var submitButton = document.getElementById('registerButton'); // Get submit button
+
+        // Clear previous error messages
+        passwordErrorMessages.innerHTML = '';
+        confirmPasswordErrorMessages.innerHTML = '';
+
+        var isValid = true;
+        var errors = [];
+
+        // Password length validation
+        if (password.length === 0) {
+            errors.push("Password is required.");
+            isValid = false;
+        } else if (password.length < 8 || password.length > 12) {
+            errors.push("Password must be between 8 and 12 characters.");
+            isValid = false;
+        }
+
+        // Password complexity validation
+        var uppercaseRegex = /[A-Z]/;
+        var lowercaseRegex = /[a-z]/;
+        var numberRegex = /[0-9]/;
+        var specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+
+        if (!uppercaseRegex.test(password)) errors.push("Password must contain at least one uppercase letter.");
+        if (!lowercaseRegex.test(password)) errors.push("Password must contain at least one lowercase letter.");
+        if (!numberRegex.test(password)) errors.push("Password must contain at least one number.");
+        if (!specialCharRegex.test(password)) errors.push("Password must contain at least one special character.");
+        if (/\s/.test(password)) errors.push("Password must not contain spaces.");
+
+        // Confirm password validation
+        if (password !== confirmPassword && confirmPassword !== '') {
+            appendErrorMessage(confirmPasswordErrorMessages, "Passwords do not match!");
+            isValid = false;
+        }
+
+        // Display password errors
+        errors.forEach(function(error) {
+            appendErrorMessage(passwordErrorMessages, error);
+        });
+
+        // Disable the submit button if validation fails
+        submitButton.disabled = !isValid;
+        return isValid;
+    }
+
+    // Function to append error message to the specified container
+    function appendErrorMessage(container, message) {
+        var errorMessage = document.createElement('p');
+        errorMessage.textContent = message;
+        errorMessage.style.color = 'red';
+        errorMessage.style.fontSize = '0.8em'; // Adjust font size as needed
+        container.appendChild(errorMessage);
+    }
+
+    // Event listeners to trigger password validation on input change and blur
+    document.getElementById('password').addEventListener('input', validatePasswords);
+    document.getElementById('password2').addEventListener('input', validatePasswords);
+    document.getElementById('password').addEventListener('blur', validatePasswords);
+    document.getElementById('password2').addEventListener('blur', validatePasswords);
+</script>
+
+<script>
+    document.querySelectorAll(".toggle-password").forEach(icon => {
+        icon.addEventListener("click", function () {
+            let input = document.querySelector(this.getAttribute("toggle"));
+            if (input.type === "password") {
+                input.type = "text";
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                this.classList.remove("fa-eye-slash");
+                this.classList.add("fa-eye");
+            }
+        });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let emailValid = false;
+        let mobileValid = false;
+
+        function checkField(fieldType, value) {
+            if (value.length === 0) return; // Do not check if field is empty
+
+            $.ajax({
+                url: "{% url 'check_user_existence' %}",  // Django URL to check existence
+                data: { [fieldType]: value },  // Send either 'email' or 'mobile' data
+                dataType: "json",
+                success: function (response) {
+                    if (fieldType === "email") {
+                        if (response.email_exists) {
+                            $("#emailError").text("Email is already registered.");
+                            emailValid = false;
+                        } else {
+                            $("#emailError").text(""); // Clear error message
+                            emailValid = true;
+                        }
+                    }
+
+                    if (fieldType === "mobile") {
+                        if (response.mobile_exists) {
+                            $("#mobileError").text("Mobile number is already registered.");
+                            mobileValid = false;
+                        } else {
+                            $("#mobileError").text(""); // Clear error message
+                            mobileValid = true;
+                        }
+                    }
+                }
+            });
+        }
+
+        // Check email on blur
+        $("#email").on("blur", function () {
+            checkField("email", $(this).val().trim());
+        });
+
+       
+        // ✅ Validate mobile on keypress (only numbers allowed)
+        $("#mobile").on("keypress", function (e) {
+            if (e.which < 48 || e.which > 57) { // Allow only numbers (0-9)
+                e.preventDefault();
+            }
+        });
+
+        // ✅ Validate mobile on blur (check length & format)
+        $("#mobile").on("blur", function () {
+            let mobile = $(this).val().trim();
+            let regex = /^[6789]\d{9}$/; // Starts with 6,7,8,9 and has 10 digits
+
+            if (!regex.test(mobile)) {
+                $("#mobileError").text("Enter a valid 10-digit Indian mobile number.");
+                mobileValid = false;
+            } else {
+                $("#mobileError").text(""); // Clear error message
+                mobileValid = true;
+                checkField("mobile", mobile);
+            }
+        });
+
+        // Prevent form submission if errors exist
+        $("form").on("submit", function (event) {
+            if (!emailValid || !mobileValid) {
+                event.preventDefault();
+                alert("Please correct the errors before submitting the form.");
+            }
+        });
+    });
+</script>
+
+
+<!-- JavaScript to Auto-Hide the Alert After 3 Seconds -->
+<script>
+    setTimeout(function() {
+        var alertBox = document.getElementById("alert-box");
+        if (alertBox) {
+            alertBox.style.display = "none";
+        }
+    }, 3000); // Hides after 3 seconds
+</script>
+
 
 {% endblock mainsite_content %}
