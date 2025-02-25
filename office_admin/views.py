@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth import logout
-from office_admin.models import office_admin
+from office_admin.models import course, departments, office_admin
 
 
 
@@ -35,10 +35,48 @@ def logout_view(request):
 
 def course_config(request):
     if request.method=="POST":
-        course=request.POST.get(course)
-        return HttpResponse(course)
-    return render(request,"office_admin/course_configuration.html")
+        course_name=request.POST.get('course')
+        add=course()
+        add.course_name=course_name
+        add.save()
+        messages.success(request,'Successfully Added')
+        return redirect('course_config')
+    table=course.objects.filter(delete_status=0)
+    context={'table':table}
+    return render(request,"office_admin/course_configuration.html",context)
 
 
 def department_config(request):
-    return render(request,"office_admin/department_configuration.html")
+    if request.method=='POST':
+        select=request.POST.get('select_name')
+        branch=request.POST.get('branch')
+        obj=departments()
+        obj.department_name=branch
+        obj.course_pk=course.objects.get(id=select)
+        obj.save()
+        messages.success(request,'Successfully Added')
+        return redirect('department_config')
+    cour = course.objects.filter(delete_status=0)
+    table = departments.objects.filter(delete_status=0)
+    context={'course':cour,'table':table}
+    return render(request,"office_admin/department_configuration.html",context)
+
+
+def department_delete(request):
+    if request.method=='POST':
+        id=request.POST.get('deletepackageid')
+        delete=departments.objects.get(id=id)
+        delete.delete_status=1
+        delete.save()
+        messages.success(request,'Delete Successfully')
+        return redirect('department_config')
+    
+    
+def course_delete(request):
+    if request.method=='POST':
+        id=request.POST.get('deletepackageid')
+        delete=course.objects.get(id=id)
+        delete.delete_status=1
+        delete.save()
+        messages.success(request,'Delete Successfully')
+        return redirect('course_config')
