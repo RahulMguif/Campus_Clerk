@@ -1,458 +1,24 @@
 {% extends 'student/index.html' %}
 {% block student_content %}
 
+<style>
+  .col-sm-3.col-form-label {
+    font-weight: bold; /* Makes the text strong (bold) */
+}
+.disabled-text {
+    font-weight: normal; /* Removes bold effect */
+    color: #6c757d; /* Optional: Makes it look slightly faded like a disabled field */
+}
+</style>
+
       <div class="main-panel">        
         <div class="content-wrapper">
           <div class="row">
-            <!-- <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Default form</h4>
-                  <p class="card-description">
-                    Basic form layout
-                  </p>
-                  <form class="forms-sample">
-                    <div class="form-group">
-                      <label for="exampleInputUsername1">Username</label>
-                      <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Username">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Email address</label>
-                      <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword1">Password</label>
-                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputConfirmPassword1">Confirm Password</label>
-                      <input type="password" class="form-control" id="exampleInputConfirmPassword1" placeholder="Password">
-                    </div>
-                    <div class="form-check form-check-flat form-check-primary">
-                      <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input">
-                        Remember me
-                      </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
-                  </form>
-                </div>
-              </div>
-            </div> -->
-            <!-- <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Horizontal Form</h4>
-                  <p class="card-description">
-                    Horizontal form layout
-                  </p>
-                  <form class="forms-sample">
-                    <div class="form-group row">
-                      <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Email</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Username">
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Email</label>
-                      <div class="col-sm-9">
-                        <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email">
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="exampleInputMobile" class="col-sm-3 col-form-label">Mobile</label>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" id="exampleInputMobile" placeholder="Mobile number">
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Password</label>
-                      <div class="col-sm-9">
-                        <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Re Password</label>
-                      <div class="col-sm-9">
-                        <input type="password" class="form-control" id="exampleInputConfirmPassword2" placeholder="Password">
-                      </div>
-                    </div>
-                    <div class="form-check form-check-flat form-check-primary">
-                      <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input">
-                        Remember me
-                      </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
-                  </form>
-                </div>
-              </div>
-            </div> -->
-            <!-- <div class="col-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Basic form elements</h4>
-                  <p class="card-description">
-                    Basic form elements
-                  </p>
-                  <form class="forms-sample">
-                    <div class="form-group">
-                      <label for="exampleInputName1">Name</label>
-                      <input type="text" class="form-control" id="exampleInputName1" placeholder="Name">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputEmail3">Email address</label>
-                      <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword4">Password</label>
-                      <input type="password" class="form-control" id="exampleInputPassword4" placeholder="Password">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleSelectGender">Gender</label>
-                        <select class="form-control" id="exampleSelectGender">
-                          <option>Male</option>
-                          <option>Female</option>
-                        </select>
-                      </div>
-                    <div class="form-group">
-                      <label>File upload</label>
-                      <input type="file" name="img[]" class="file-upload-default">
-                      <div class="input-group col-xs-12">
-                        <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                        <span class="input-group-append">
-                          <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputCity1">City</label>
-                      <input type="text" class="form-control" id="exampleInputCity1" placeholder="Location">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleTextarea1">Textarea</label>
-                      <textarea class="form-control" id="exampleTextarea1" rows="4"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
-                  </form>
-                </div>
-              </div>
-            </div> -->
-            <!-- <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Input size</h4>
-                  <p class="card-description">
-                    Add classes like <code>.form-control-lg</code> and <code>.form-control-sm</code>.
-                  </p>
-                  <div class="form-group">
-                    <label>Large input</label>
-                    <input type="text" class="form-control form-control-lg" placeholder="Username" aria-label="Username">
-                  </div>
-                  <div class="form-group">
-                    <label>Default input</label>
-                    <input type="text" class="form-control" placeholder="Username" aria-label="Username">
-                  </div>
-                  <div class="form-group">
-                    <label>Small input</label>
-                    <input type="text" class="form-control form-control-sm" placeholder="Username" aria-label="Username">
-                  </div>
-                </div>
-              </div>
-            </div> -->
-            <!-- <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Select size</h4>
-                  <p class="card-description">
-                    Add classes like <code>.form-control-lg</code> and <code>.form-control-sm</code>.                    
-                  </p>
-                  <div class="form-group">
-                    <label for="exampleFormControlSelect1">Large select</label>
-                    <select class="form-control form-control-lg" id="exampleFormControlSelect1">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleFormControlSelect2">Default select</label>
-                    <select class="form-control" id="exampleFormControlSelect2">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleFormControlSelect3">Small select</label>
-                    <select class="form-control form-control-sm" id="exampleFormControlSelect3">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-            <!-- <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Basic input groups</h4>
-                  <p class="card-description">
-                    Basic bootstrap input groups
-                  </p>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">@</span>
-                      </div>
-                      <input type="text" class="form-control" placeholder="Username" aria-label="Username">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text bg-primary text-white">$</span>
-                      </div>
-                      <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                      <div class="input-group-append">
-                        <span class="input-group-text">.00</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">$</span>
-                      </div>
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">0.00</span>
-                      </div>
-                      <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username">
-                      <div class="input-group-append">
-                        <button class="btn btn-sm btn-primary" type="button">Search</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">Action</a>
-                          <a class="dropdown-item" href="#">Another action</a>
-                          <a class="dropdown-item" href="#">Something else here</a>
-                          <div role="separator" class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">Separated link</a>
-                        </div>
-                      </div>
-                      <input type="text" class="form-control" aria-label="Text input with dropdown button">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Find in facebook" aria-label="Recipient's username">
-                      <div class="input-group-append">
-                        <button class="btn btn-sm btn-facebook" type="button">
-                          <i class="ti-facebook"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-            <!-- <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Checkbox Controls</h4>
-                  <p class="card-description">Checkbox and radio controls (default appearance is in primary color)</p>
-                  <form>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <div class="form-check">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input">
-                              Default
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" checked>
-                              Checked
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" disabled>
-                              Disabled
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" disabled checked>
-                              Disabled checked
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <div class="form-check">
-                            <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="">
-                              Default
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2" checked>
-                              Selected
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="optionsRadios2" id="optionsRadios3" value="option3" disabled>
-                              Disabled
-                            </label>
-                          </div>
-                          <div class="form-check">
-                            <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="optionsRadio2" id="optionsRadios4" value="option4" disabled checked>
-                              Selected and disabled
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <div class="card-body">
-                  <p class="card-description">Add class <code>.form-check-{color}</code> for checkbox and radio controls in theme colors</p>
-                  <form>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <div class="form-check form-check-primary">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" checked>
-                              Primary
-                            </label>
-                          </div>
-                          <div class="form-check form-check-success">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" checked>
-                              Success
-                            </label>
-                          </div>
-                          <div class="form-check form-check-info">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" checked>
-                              Info
-                            </label>
-                          </div>
-                          <div class="form-check form-check-danger">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" checked>
-                              Danger
-                            </label>
-                          </div>
-                          <div class="form-check form-check-warning">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" checked>
-                              Warning
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <div class="form-check form-check-primary">
-                            <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="ExampleRadio1" id="ExampleRadio1" checked>
-                              Primary
-                            </label>
-                          </div>
-                          <div class="form-check form-check-success">
-                            <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="ExampleRadio2" id="ExampleRadio2" checked>
-                              Success
-                            </label>
-                          </div>
-                          <div class="form-check form-check-info">
-                            <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="ExampleRadio3" id="ExampleRadio3" checked>
-                              Info
-                            </label>
-                          </div>
-                          <div class="form-check form-check-danger">
-                            <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="ExampleRadio4" id="ExampleRadio4" checked>
-                              Danger
-                            </label>
-                          </div>
-                          <div class="form-check form-check-warning">
-                            <label class="form-check-label">
-                              <input type="radio" class="form-check-input" name="ExampleRadio5" id="ExampleRadio5" checked>
-                              Warning
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div> -->
-            <!-- <div class="col-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Inline forms</h4>
-                  <p class="card-description">
-                    Use the <code>.form-inline</code> class to display a series of labels, form controls, and buttons on a single horizontal row
-                  </p>
-                  <form class="form-inline">
-                    <label class="sr-only" for="inlineFormInputName2">Name</label>
-                    <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Jane Doe">
-                  
-                    <label class="sr-only" for="inlineFormInputGroupUsername2">Username</label>
-                    <div class="input-group mb-2 mr-sm-2">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">@</div>
-                      </div>
-                      <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Username">
-                    </div>
-                    <div class="form-check mx-sm-2">
-                      <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" checked>
-                        Remember me
-                      </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary mb-2">Submit</button>
-                  </form>
-                </div>
-              </div>
-            </div> -->
             <div class="col-12 grid-margin">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">APPLICATION FORM</h4>
-                  <form class="form-sample">
+                  <form class="form-sample" id="undertakingForm">
                     <p class="card-description">
                       Personal info
                     </p>
@@ -467,63 +33,35 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Certification / Service Requested</label>
+                          <label class="col-sm-3 col-form-label">Certification / Service Requested *</label>
                           <div class="col-sm-9">
-                            <select name="certificate" class="form-control">
+                            <select name="certificate" class="form-control" required>
+                              <option value="" disabled selected>Select an option</option>
                               <option value="Course completion/studying">Course completion/studying</option>
                               <option value="Transfer Certificate">Transfer Certificate</option>
-                              <!-- <option>Category3</option>
-                              <option>Category4</option> -->
                             </select>
                           </div>
                         </div>
                       </div>
-                      <!-- <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Membership</label>
-                          <div class="col-sm-4">
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios1" value="" checked>
-                                Free
-                              </label>
-                            </div>
-                          </div>
-                          <div class="col-sm-5">
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios2" value="option2">
-                                Professional
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div> -->
                     </div>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Full Name</label>
+                          <label class="col-sm-3 col-form-label">Full Name *</label>
                           <div class="col-sm-9">
-                            <input type="text" name="full_name" class="form-control" />
+                            <input type="text" name="full_name" class="form-control" required />
                           </div>
                         </div>
                       </div>
-                      <!-- <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Last Name</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" />
-                          </div>
-                        </div>
-                      </div> -->
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Gender</label>
+                          <label class="col-sm-3 col-form-label">Gender *</label>
                           <div class="col-sm-9">
-                            <select name="gender" class="form-control">
+                            <select name="gender" class="form-control" required>
+                              <option value="" disabled selected>Select an option</option>
                               <option>Male</option>
                               <option>Female</option>
+                              <option>Others</option>
                             </select>
                           </div>
                         </div>
@@ -532,26 +70,24 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Course</label>
+                          <label class="col-sm-3 col-form-label">Course *</label>
                           <div class="col-sm-9">
-                            <select name="course" class="form-control">
+                            <select name="course" class="form-control" required>
+                              <option value="" disabled selected>Select an option</option>
                               <option value="B Tech">B. Tech</option>
                               <option value="M Tech">M. Tech</option>
-                              <!-- <option>Category3</option>
-                              <option>Category4</option> -->
                             </select>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Branch / Department</label>
+                          <label class="col-sm-3 col-form-label">Branch / Department *</label>
                           <div class="col-sm-9">
-                            <select name="branch" class="form-control">
+                            <select name="branch" class="form-control" required>
+                              <option value="" disabled selected>Select an option</option>
                               <option value="CS">CS</option>
                               <option value="EE">EE</option>
-                              <!-- <option>Category3</option>
-                              <option>Category4</option> -->
                             </select>
                           </div>
                         </div>
@@ -560,17 +96,17 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Adminssion Number</label>
+                          <label class="col-sm-3 col-form-label">Adminssion Number *</label>
                           <div class="col-sm-9">
-                            <input type="text" name="admission_no" class="form-control" />
+                            <input type="text" name="admission_no" class="form-control" required />
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Date of Admission</label>
+                          <label class="col-sm-3 col-form-label">Date of Admission *</label>
                           <div class="col-sm-9">
-                            <input class="form-control" name="admission_date" type="date" placeholder="dd/mm/yyyy"/>
+                            <input class="form-control" name="admission_date" type="date" placeholder="dd/mm/yyyy" required/>
                           </div>
                         </div>
                       </div>
@@ -578,142 +114,302 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">University Name</label>
+                          <label class="col-sm-3 col-form-label">University Name *</label>
                           <div class="col-sm-9">
-                            <input type="text" name="university" class="form-control" />
+                            <input type="text" name="university" class="form-control" required />
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">University Registration No</label>
+                          <label class="col-sm-3 col-form-label">University Reg. No *</label>
                           <div class="col-sm-9">
-                            <input type="text" name="university_reg_no" class="form-control" />
+                            <input type="text" name="university_reg_no" class="form-control" required />
                           </div>
                         </div>
                       </div>
                     </div>
-                    
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Semester *</label>
+                          <div class="col-sm-9">
+                            <select name="semester" class="form-control" required>
+                              <option value="" disabled selected>Select an option</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                              <option value="6">6</option>
+                              <option value="7">7</option>
+                              <option value="8">8</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Hostel Name</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="hostel_name" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Hostel Admission Date</label>
+                          <div class="col-sm-9">
+                            <input type="date" name="hostel_admission_date" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Transfer Certificate No</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="tc_no" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Transfer Certificate Date</label>
+                          <div class="col-sm-9">
+                            <input type="date" name="tc_date" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">
+                              Reason <span class="disabled-text">(Attach documental proof such as notifications, call letters, etc., if any)</span>
+                          </label>
+                          <div class="col-sm-9">
+                            <input type="file" name="document" class="form-control" accept=".pdf" id="id_copy_fileInput" />
+                            <small class="text-muted d-block mt-1">Please provide a valid file '.pdf' below 2MB..</small>
+                            <div class="invalid-tooltip" id="fileSizeError" style="display: none;">
+                                File size must be 2MB or less.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <p class="card-description">
-                      Address
+                      Contact Address
                     </p>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Address 1</label>
+                          <label class="col-sm-3 col-form-label">Address *</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" />
+                             <textarea name="address" class="form-control" rows="4" required></textarea>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">State</label>
+                          <label class="col-sm-3 col-form-label">Phone Number* </label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" />
+                            <input type="tel" name="phone" class="form-control" required />
                           </div>
                         </div>
                       </div>
                     </div>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-3 col-form-label"><strong>Applicant's Undertaking*</strong></label>
+                              <div class="col-sm-9">
+                                  <div class="form-check">
+                                      <input type="checkbox" class="form-check-input" id="undertaking1">
+                                      <label class="form-check-label" for="undertaking1">
+                                          I certify that all the information given above is true.
+                                      </label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input type="checkbox" class="form-check-input" id="undertaking2">
+                                      <label class="form-check-label" for="undertaking2">
+                                          No police/court/institute cases of law-and-order/indiscipline are pending against me.
+                                      </label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input type="checkbox" class="form-check-input" id="undertaking3">
+                                      <label class="form-check-label" for="undertaking3">
+                                          I undertake to return the testimonials (taken from office) within 3 days from the date of receipt, keep copies for future use, and not request the same again.
+                                      </label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input type="checkbox" class="form-check-input" id="undertaking4">
+                                      <label class="form-check-label" for="undertaking4">
+                                          I am not in receipt of any other scholarship/stipend, shall retain only one scholarship/stipend, and surrender all others, if any.
+                                      </label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input type="checkbox" class="form-check-input" id="undertaking5">
+                                      <label class="form-check-label" for="undertaking5">
+                                          I agree to legal and punitive actions against me if I enjoy more than one scholarship/stipend at a time.
+                                      </label>
+                                  </div>
+                                  <div id="error-message" style="color: red; font-size: 12px; display: none;">You must check all the boxes before submitting.</div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Address 2</label>
+                          <label class="col-sm-3 col-form-label">Student Signature *</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Postcode</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">City</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Country</label>
-                          <div class="col-sm-9">
-                            <select class="form-control">
-                              <option>America</option>
-                              <option>Italy</option>
-                              <option>Russia</option>
-                              <option>Britain</option>
-                            </select>
+                            <input type="file" id="signaturefile" name="student_sign" class="form-control" accept=".png, .jpg, .jpeg" required />
+                            <small class="text-muted d-block mt-1">Please provide a valid image file (.png or .jpg) with dimensions 200x100 pixels.</small>
+                            <div class="invalid-tooltip" id="invalidTooltip" style="display: none;">
+                              Please provide a valid image file (.png or .jpg) with dimensions 200x100 pixels.
+                            </div>
+                            <!-- Image preview area (hidden initially) -->
+                            <div class="image-preview mt-2" id="imagePreview" style="display: none;">
+                              <img id="previewImage" alt="Image preview">
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>  
                   </form>
                 </div>
               </div>
             </div>
-            <!-- <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Select 2</h4>
-                  <div class="form-group">
-                    <label>Single select box using select 2</label>
-                    <select class="js-example-basic-single w-100">
-                      <option value="AL">Alabama</option>
-                      <option value="WY">Wyoming</option>
-                      <option value="AM">America</option>
-                      <option value="CA">Canada</option>
-                      <option value="RU">Russia</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Multiple select using select 2</label>
-                    <select class="js-example-basic-multiple w-100" multiple="multiple">
-                      <option value="AL">Alabama</option>
-                      <option value="WY">Wyoming</option>
-                      <option value="AM">America</option>
-                      <option value="CA">Canada</option>
-                      <option value="RU">Russia</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-            <!-- <div class="col-md-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Typeahead</h4>
-                  <p class="card-description">
-                    A simple suggestion engine
-                  </p>
-                  <div class="form-group row">
-                    <div class="col">
-                      <label>Basic</label>
-                      <div id="the-basics">
-                        <input class="typeahead" type="text" placeholder="States of USA">
-                      </div>
-                    </div>
-                    <div class="col">
-                      <label>Bloodhound</label>
-                      <div id="bloodhound">
-                        <input class="typeahead" type="text" placeholder="States of USA">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
           </div>
         </div>
         <!-- content-wrapper ends -->
+
+
+<!--======================Validation and image preview for student signature=============-->
+        <script>
+          document.getElementById('signaturefile').addEventListener('change', function(event) {
+              const file = event.target.files[0];
+              const previewImage = document.getElementById('previewImage');
+              const imagePreview = document.getElementById('imagePreview');
+              const invalidTooltip = document.getElementById('invalidTooltip');
+          
+              if (file) {
+                  const fileType = file.type;
+                  const reader = new FileReader();
+          
+                  if (fileType.includes('image')) {
+                      reader.onload = function(e) {
+                          const img = new Image();
+          
+                          img.onload = function() {
+                              // Validate dimensions
+                              if (img.width === 200 && img.height === 100) {
+                                  previewImage.src = e.target.result;
+                                  imagePreview.style.display = 'block'; // Show preview
+                                  invalidTooltip.style.display = 'none'; // Hide error
+                              } else {
+                                  previewImage.src = ''; // Clear preview
+                                  imagePreview.style.display = 'none'; // Hide preview
+                                  invalidTooltip.style.display = 'block'; // Show error
+                              }
+                          };
+          
+                          img.src = e.target.result;
+                      };
+          
+                      reader.readAsDataURL(file);
+                  } else {
+                      previewImage.src = '';
+                      imagePreview.style.display = 'none'; // Hide preview
+                      invalidTooltip.style.display = 'none'; // Hide error
+                  }
+              } else {
+                  previewImage.src = '';
+                  imagePreview.style.display = 'none'; // Hide preview
+                  invalidTooltip.style.display = 'none'; // Hide error
+              }
+          });
+          </script>
+<!--======================Validation and image preview for student signature=============-->
+
+<!--======================Validation for document upload(max size 2mb)=============-->
+<script>
+  function toggleFileInput() {
+      var yesRadio = document.getElementById('flexRadioDefault1');
+      var fileInputContainer = document.getElementById('fileInputContainer');
+      var fileInput = document.getElementById('id_copy_fileInput');
+      var fileSizeError = document.getElementById('fileSizeError');
+  
+      if (yesRadio.checked) {
+          fileInputContainer.style.display = 'block';
+          fileInput.setAttribute('required', 'required');
+      } else {
+          fileInputContainer.style.display = 'none';
+          fileInput.removeAttribute('required');
+          fileSizeError.style.display = 'none'; // Hide error when toggled off
+      }
+  
+      var yesRadioUnregisted = document.getElementById('flexRadioDefaultUnregisted');
+      var fileInputContainerUnregisted = document.getElementById('fileInputContainerUnregisted');
+      var id_copy_fileInput_unregistred = document.getElementById('id_copy_fileInput_unregistred');
+  
+      if (yesRadioUnregisted.checked) {
+          fileInputContainerUnregisted.style.display = 'block';
+          id_copy_fileInput_unregistred.setAttribute('required', 'required');
+      } else {
+          fileInputContainerUnregisted.style.display = 'none';
+          id_copy_fileInput_unregistred.removeAttribute('required');
+      }
+  }
+  
+  // File size validation (Max: 2MB)
+  document.getElementById('id_copy_fileInput').addEventListener('change', function(event) {
+      var file = event.target.files[0];
+      var fileSizeError = document.getElementById('fileSizeError');
+  
+      if (file) {
+          if (file.size > 2 * 1024 * 1024) { // 2MB limit
+              fileSizeError.style.display = 'block';
+              event.target.value = ''; // Clear the file input
+          } else {
+              fileSizeError.style.display = 'none'; // Hide error if file is valid
+          }
+      }
+  });
+  
+  // Initial call to set the correct state on page load
+  document.addEventListener('DOMContentLoaded', function() {
+      toggleFileInput();
+  });
+  </script>
+<!--======================Validation for document upload(max size 2mb)=============-->
+
+<script>
+  document.getElementById("undertakingForm").addEventListener("submit", function(event) {
+      const checkboxes = document.querySelectorAll(".form-check-input");
+      const errorMessage = document.getElementById("error-message");
+      
+      let allChecked = true;
+      checkboxes.forEach(checkbox => {
+          if (!checkbox.checked) {
+              allChecked = false;
+          }
+      });
+
+      if (!allChecked) {
+          event.preventDefault(); // Prevent form submission
+          errorMessage.style.display = "block"; // Show error message
+      } else {
+          errorMessage.style.display = "none"; // Hide error message if all checked
+      }
+  });
+</script>
 
         {% endblock %}
 

@@ -23,6 +23,7 @@ class student_application_request(models.Model):
     apply_for = models.CharField(max_length=100, null=True) # certificate services
     reason = models.CharField(max_length=100, null=True)
     contact_address = models.CharField(max_length=100, null=True)
+    phone_number = models.CharField(max_length=100, null=True)
     student_signature_url = models.CharField(max_length = 150, null=True)
     staff_advisor_remark = models.CharField(max_length = 150, null=True)
     staff_advisor_signature_url = models.CharField(max_length = 150, null=True)
