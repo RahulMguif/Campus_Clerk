@@ -31,3 +31,14 @@ def logout_view(request):
     request.session.flush()  # Completely clears the session
     logout(request)  # Logs out the user
     return redirect('office_admin_login')  # Redirect to the login page (update as needed)
+
+
+def course_config(request):
+    if request.method=="POST":
+        course=request.POST.get(course)
+        return HttpResponse(course)
+    return render(request,"office_admin/course_configuration.html")
+
+
+def department_config(request):
+    return render(request,"office_admin/department_configuration.html")

@@ -1,0 +1,32 @@
+{% extends 'office_admin/index.html' %}
+{% load static %}
+{% block admin_content %}
+
+
+
+<div class="row">
+    <div class="col-md-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Course Configuration</h4>
+          <!-- <p class="card-description">
+            Basic form layout
+          </p> -->
+          <form method="POST" action="{% url 'course_config' %}" class="forms-sample">
+            {% csrf_token %}
+                <div class="form-group">
+                    <label for="exampleInputUsername1">Course Name</label>
+                    <input type="text" class="form-control" name="course" placeholder="Course Name">
+                </div>
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-light">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
