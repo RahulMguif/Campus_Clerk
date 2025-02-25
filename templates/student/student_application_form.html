@@ -16,9 +16,24 @@
           <div class="row">
             <div class="col-12 grid-margin">
               <div class="card">
+                <!-- ===========================Message Box In HTML============================= -->
+                <div class="col-lg-12">
+                  {% if messages %}
+                  {% for message in messages %}
+                  <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show collapse"
+                       role="alert">
+                      {{ message|safe }}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert"
+                              aria-label="Close"></button>
+                  </div>
+                  {% endfor %}
+                  {% endif %}
+                </div>
+                <!-- ========================Message Box End===================================== -->
                 <div class="card-body">
                   <h4 class="card-title">APPLICATION FORM</h4>
-                  <form class="form-sample" id="undertakingForm">
+                  <form class="form-sample" id="undertakingForm" method="post" action="{% url 'student_application' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <p class="card-description">
                       Personal info
                     </p>
@@ -116,7 +131,7 @@
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">University Name *</label>
                           <div class="col-sm-9">
-                            <input type="text" name="university" class="form-control" required />
+                            <input type="text" name="university_name" class="form-control" required />
                           </div>
                         </div>
                       </div>
@@ -190,7 +205,7 @@
                               Reason <span class="disabled-text">(Attach documental proof such as notifications, call letters, etc., if any)</span>
                           </label>
                           <div class="col-sm-9">
-                            <input type="file" name="document" class="form-control" accept=".pdf" id="id_copy_fileInput" />
+                            <input type="file" name="reason_document" class="form-control" accept=".pdf" id="id_copy_fileInput" />
                             <small class="text-muted d-block mt-1">Please provide a valid file '.pdf' below 2MB..</small>
                             <div class="invalid-tooltip" id="fileSizeError" style="display: none;">
                                 File size must be 2MB or less.
@@ -264,6 +279,14 @@
                     </div>
 
                     <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Email Address* </label>
+                          <div class="col-sm-9">
+                            <input type="email" name="student_email" class="form-control" required />
+                          </div>
+                        </div>
+                      </div>
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Student Signature *</label>
