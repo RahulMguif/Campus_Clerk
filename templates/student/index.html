@@ -110,11 +110,11 @@
               </a>
             </div>
           </li>
-          <li class="nav-item nav-settings d-none d-lg-flex">
+          <!-- <li class="nav-item nav-settings d-none d-lg-flex">
             <a class="nav-link" href="#">
               <i class="icon-ellipsis"></i>
             </a>
-          </li>
+          </li> -->
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
           <span class="icon-menu"></span>
@@ -124,7 +124,7 @@
     <!-- partial -->
 <div class="container-fluid page-body-wrapper">
   <!-- partial:partials/_settings-panel.html -->
-  <div class="theme-setting-wrapper">
+  <!-- <div class="theme-setting-wrapper">
     <div id="settings-trigger"><i class="ti-settings"></i></div>
     <div id="theme-settings" class="settings-panel">
       <i class="settings-close ti-close"></i>
@@ -141,19 +141,19 @@
         <div class="tiles default"></div>
       </div>
     </div>
-  </div>
+  </div> -->
   <div id="right-sidebar" class="settings-panel">
     <i class="settings-close ti-close"></i>
-    <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
+    <!-- <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
       <li class="nav-item">
         <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab" aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab" aria-controls="chats-section">CHATS</a>
       </li>
-    </ul>
+    </ul> -->
     <div class="tab-content" id="setting-content">
-      <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel" aria-labelledby="todo-section">
+      <!-- <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel" aria-labelledby="todo-section">
         <div class="add-items d-flex px-3 mb-0">
           <form class="form w-100">
             <div class="form-group d-flex">
@@ -228,9 +228,9 @@
           <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
           <p class="text-gray mb-0 ">Call Sarah Graves</p>
         </div>
-      </div>
+      </div> -->
       <!-- To do section tab ends -->
-      <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
+      <!-- <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
         <div class="d-flex align-items-center justify-content-between border-bottom">
           <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
           <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See All</small>
@@ -288,7 +288,7 @@
             <small class="text-muted my-auto">47 min</small>
           </li>
         </ul>
-      </div>
+      </div> -->
       <!-- chat tab ends -->
     </div>
   </div>
@@ -297,12 +297,12 @@
   <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="{% url 'student_dashboard' %}">
           <i class="icon-grid menu-icon"></i>
           <span class="menu-title">Dashboard</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
           <i class="icon-layout menu-icon"></i>
           <span class="menu-title">UI Elements</span>
@@ -315,7 +315,7 @@
             <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
           </ul>
         </div>
-      </li>
+      </li> -->
       <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
           <i class="icon-columns menu-icon"></i>
@@ -328,7 +328,7 @@
           </ul>
         </div>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
           <i class="icon-bar-graph menu-icon"></i>
           <span class="menu-title">Charts</span>
@@ -395,7 +395,7 @@
           <i class="icon-paper menu-icon"></i>
           <span class="menu-title">Documentation</span>
         </a>
-      </li>
+      </li> -->
     </ul>
   </nav>
   <!-- partial -->

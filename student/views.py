@@ -6,6 +6,8 @@ import traceback
 from django.contrib import messages
 from .models import *
 from datetime import datetime, date, timedelta
+from django.db import transaction
+from django.db.models import F
 
 # Create your views here.
 
@@ -15,10 +17,23 @@ def student_home(request):
 
 def application_form(request):
     try:
-        # return redirect('it_pricing')
         current_user = request.session.get('student_id')
         if current_user == None:
             return redirect('404')
+        
+        with transaction.atomic():
+            today_date = date.today().strftime('%y%m%d')  # Format: YYMMDD
+            
+            # Get the last application number for today
+            last_application = student_application_request.objects.filter(
+                student_application_no__startswith=f"AP{today_date}"
+            ).order_by('-student_application_no').first()
+
+            last_number = int(last_application.student_application_no[-2:]) if last_application else 0
+            application_number = f"AP{today_date}{last_number + 1:02d}"
+
+        print('Application ID genarated it is, Application_number : ', application_number)
+
         if request.method == 'POST':
             full_name = request.POST.get('full_name')
             certificate_service = request.POST.get('certificate')
@@ -38,6 +53,27 @@ def application_form(request):
             phone_number = request.POST.get('phone')
             student_email = request.POST.get('student_email')
 
+            # Convert to YYYY-MM-DD format
+            if date_of_admission:
+                date_of_admission = datetime.strptime(date_of_admission, "%Y-%m-%d").date()
+            else:
+                date_of_admission = None
+
+            if hostel_admission_date:
+                hostel_admission_date = datetime.strptime(hostel_admission_date, "%Y-%m-%d").date()
+            else:
+                hostel_admission_date = None
+
+            if tc_date:
+                tc_date = datetime.strptime(tc_date, "%Y-%m-%d").date()
+            else:
+                tc_date = None
+
+
+            # Check if the email already exists
+            if student_application_request.objects.filter(student_email_address=student_email).exists():
+                messages.error(request, 'This email is already associated with another application.')
+                return render(request, 'student/student_application_form.html', {'application_number': application_number})
 
             # Initialize the email validator
             validator = EmailValidator()
@@ -53,59 +89,51 @@ def application_form(request):
 
             # =====File Uploads=====
 
+            # Handle signature upload (Mandatory)
+
+            signature_file = None  # Initialize
+            attached_sign_url = None
+
             if 'student_sign' in request.FILES:
-                signature_scanned_copy_file = request.FILES['student_sign']
-                fs = FileSystemStorage(
-                    location='media/attached_signature')  # Location is useed to define a folder to save file inside the media folder
-                attached_sign = fs.save(signature_scanned_copy_file.name, signature_scanned_copy_file)
-                attached_sign_url = fs.base_location + '/' + attached_sign  # URl Retriving for DB Storing .baseurl is an inbuilt function
-                print('Attached signature saved into folder')
+                signature_file = request.FILES['student_sign']
+                fs = FileSystemStorage(location='media/attached_signature')
+                attached_sign = fs.save(signature_file.name, signature_file)
+                attached_sign_url = fs.base_location + '/' + attached_sign
             else:
-                print('Else aadhar_card_copy URL')
-                signature_scanned_copy_file = 'No signature is uploaded'
-                attached_sign_url = 'File is not upload by user'  # In Exceptional case 'File is not upload by user'
+                messages.error(request, "Signature is mandatory. Please upload a signature file.")
+                return redirect('registration')
+
+            # Handle proof document (Optional)
+
+            document_file = None  # Initialize the variable to avoid UnboundLocalError
+            attached_proof_url = None  # Default to None
 
             if 'reason_document' in request.FILES:
-                document_scanned_copy_file = request.FILES['reason_document']
-                fs = FileSystemStorage(
-                    location='media/attached_proofs')  # Location is useed to define a folder to save file inside the media folder
-                attached_proof = fs.save(document_scanned_copy_file.name, document_scanned_copy_file)
-                attached_proof_url = fs.base_location + '/' + attached_proof  # URl Retriving for DB Storing .baseurl is an inbuilt function
-                print('Attached proof saved into folder')
+                document_file = request.FILES['reason_document']
+                fs = FileSystemStorage(location='media/attached_proofs')
+                attached_proof = fs.save(document_file.name, document_file)
+                attached_proof_url = fs.base_location + '/' + attached_proof
             else:
-                print('Else aadhar_card_copy URL')
-                document_scanned_copy_file = 'No attachments is not uploaded'
-                attached_sign_url = 'File is not upload by user'  # In Exceptional case 'File is not upload by user'
+                attached_proof_url = None  # No proof uploaded
 
             
-
             print('=========================CERTIFICATE DETAILS=========================')
-            print('Attached Proof file', document_scanned_copy_file)
+            print('Attached Proof file', document_file)
             print('Attached Proof URL', attached_proof_url)
 
-            print('Attached signature file', document_scanned_copy_file)
+            print('Attached signature file', signature_file)
             print('Attached signature URL', attached_sign_url)
 
+            # Fetch the student instance based on session ID
+            try:
+                student_instance = student_registration.objects.get(id=current_user)
+            except student_registration.DoesNotExist:
+                messages.error(request, "Invalid student ID. Please log in again.")
+                return redirect('login')  # Redirect to login page if student is not found
 
-            row_count = student_application_request.objects.count()
-            if row_count == 0:
-                application_number = 1
-            else:
-                application_number = student_application_request.objects.last().id
-                application_number = application_number + 1
-            print('application_number', application_number)
-            date_today = date.today()  # get date for compain the Application ID
-            date_today = date_today.strftime('%Y%m%d')  # remove - from date
-            date_today = date_today[
-                         2:]  # Remove first 2 character from date because we need to trim the 20 from year 2023
-            application_id = 'AP' + str(date_today) + 'CC' + str(
-                application_number)  # str is used to convert ID to string.
-            
-            # Applied date id using for date
-            print('Application ID genarated it is, Application_id : ', application_id)
-
-            new_application_request = student_application_request.objects.create(student_pk = current_user,
-                                                                                 student_application_no = application_id,
+            # Save the application request
+            new_application_request = student_application_request.objects.create(student_pk = student_instance,
+                                                                                 student_application_no = application_number,
                                                                                  full_name = full_name,
                                                                                  gender = gender,
                                                                                  course = course,
@@ -133,12 +161,12 @@ def application_form(request):
 
             # contexts = {'username': user_nme, 'useremail': user_email}
             # return render(request, 'user_admin/registration.html', contexts)
-            return render(request, 'student/student_application_form.html')
+            return render(request, 'student/student_application_form.html', {'application_number': application_number})
         else:
             print('registration ELSE')
             # contexts = {'username': user_nme, 'useremail': user_email}
             # return render(request, 'user_admin/registration.html', contexts)
-            return render(request, 'student/student_application_form.html')
+            return render(request, 'student/student_application_form.html', {'application_number': application_number})
 
 
     except Exception as e:
@@ -147,5 +175,5 @@ def application_form(request):
         print('\ntraceback_str', traceback_str)
         # contexts = {'username': user_nme, 'useremail': user_email}
         # return render(request, 'user_admin/registration.html', contexts)
-        return render(request, 'student/student_application_form.html')
+        return render(request, 'student/student_application_form.html', {'application_number': application_number})
     

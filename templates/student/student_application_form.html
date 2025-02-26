@@ -1,6 +1,7 @@
 {% extends 'student/index.html' %}
 {% block student_content %}
 
+<!--===============Style for making the labels bold===============-->
 <style>
   .col-sm-3.col-form-label {
     font-weight: bold; /* Makes the text strong (bold) */
@@ -10,6 +11,56 @@
     color: #6c757d; /* Optional: Makes it look slightly faded like a disabled field */
 }
 </style>
+<!--===============Style for making the labels bold ENDS===============-->
+
+<!-- CSS for the Alert Box -->
+<style>
+  #alert-box {
+    position: fixed;
+    top: 100px;
+    right: 10px;
+    z-index: 1000;
+    width: auto;
+  }
+
+  .alert {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 250px;
+  }
+
+  .alert-success {
+    background-color: #28a745;
+  }
+
+  .alert-error, .alert-danger {
+    background-color: #dc3545;
+  }
+
+  .alert-info {
+    background-color: #17a2b8;
+  }
+
+  .alert-warning {
+    background-color: #ffc107;
+    color: #333;
+  }
+
+  .close-btn {
+    font-weight: bold;
+    margin-left: 15px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+</style>
+<!-- CSS for the Alert Box ENDS-->
+
 
       <div class="main-panel">        
         <div class="content-wrapper">
@@ -17,18 +68,21 @@
             <div class="col-12 grid-margin">
               <div class="card">
                 <!-- ===========================Message Box In HTML============================= -->
-                <div class="col-lg-12">
-                  {% if messages %}
+                <!-- Django Messages Alert Box -->
+                {% if messages %}
+                <div id="alert-box">
                   {% for message in messages %}
-                  <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show collapse"
-                       role="alert">
-                      {{ message|safe }}
-                      <button type="button" class="btn-close" data-bs-dismiss="alert"
-                              aria-label="Close"></button>
+                  <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                    <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
                   </div>
                   {% endfor %}
-                  {% endif %}
                 </div>
+                {% endif %}
+ 
+ 
+ 
+
                 <!-- ========================Message Box End===================================== -->
                 <div class="card-body">
                   <h4 class="card-title">APPLICATION FORM</h4>
@@ -42,7 +96,7 @@
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Application Number</label>
                           <div class="col-sm-9">
-                            <input type="text" name="application_no" class="form-control" disabled />
+                            <input type="text" name="application_no" class="form-control" value="{{ application_number }}" disabled />
                           </div>
                         </div>
                       </div>
@@ -413,6 +467,7 @@
   </script>
 <!--======================Validation for document upload(max size 2mb)=============-->
 
+<!-- ===============Script to validate the ckeckbox to prevent form submission without checking it===================-->
 <script>
   document.getElementById("undertakingForm").addEventListener("submit", function(event) {
       const checkboxes = document.querySelectorAll(".form-check-input");
@@ -433,6 +488,19 @@
       }
   });
 </script>
+<!-- ===============Script to validate the ckeckbox to prevent form submission without checking it ENDS===================-->
+
+<!-- ===============Script to hide message notification===================-->
+ <!-- JavaScript to Auto-Hide the Alert After 3 Seconds -->
+ <script>
+  setTimeout(function() {
+    var alertBox = document.getElementById("alert-box");
+    if (alertBox) {
+      alertBox.style.display = "none";
+    }
+  }, 3000); // Hides after 3 seconds
+</script>
+<!-- ===============Script to hide message notification ENDS===================-->
 
         {% endblock %}
 
