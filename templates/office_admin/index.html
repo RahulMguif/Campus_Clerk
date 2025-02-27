@@ -86,7 +86,7 @@
           </li> {% endcomment %}
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="images/faces/face28.jpg" alt="profile"/>
+              <img src="{% static 'admin/images/faces/face28.jpg' %}" alt="profile"/>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
               <!-- <a class="dropdown-item">
@@ -149,30 +149,31 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'view_applications' %}">
               <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">View Applications</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'department_config' %}">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Department</span>
+              <span class="menu-title">Review Applications</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'course_config' %}">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Courses Configuration</span>
+              <i class="bi bi-book-half menu-icon"></i>
+              <span class="menu-title">Course Configuration</span>
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'department_config' %}">
+              <i class="bi bi-diagram-3-fill menu-icon"></i>
+              <span class="menu-title">Department</span>
+            </a>
+          </li>
+          
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'add_staff_advisor' %}">
-              <i class="icon-paper menu-icon"></i>
+              <i class="icon-head menu-icon"></i>
               <span class="menu-title">Add staff advisor</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'add_hod' %}">
-              <i class="icon-paper menu-icon"></i>
+              <i class="bi bi-person-badge menu-icon"></i>
               <span class="menu-title">Add HOD </span>
             </a>
           </li>
@@ -192,6 +193,10 @@
       </div>
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
+           <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2025.  CampusClerk.</span>
+           
+          </div>
          
          
         </footer> 
