@@ -8,12 +8,36 @@ from .models import *
 from datetime import datetime, date, timedelta
 from django.db import transaction
 from django.db.models import F
+from django.utils import timezone
+
 
 # Create your views here.
 
 
 def student_home(request):
-    return render(request, 'student/home.html')
+    try:
+        current_user = request.session.get('student_id')
+        if current_user is None:
+            return redirect('404')
+
+        # Fetch the student details using the primary key
+        student = student_registration.objects.filter(pk=current_user).first()
+
+        if not student:
+            return redirect('404')  # Redirect if student not found
+
+        # Pass student data (fullname) to the template
+        context = {
+            'student_name': student.fullname,
+        }
+        return render(request, 'student/home.html', context)
+
+    except Exception as e:
+        print('Exception in student_home:', e)
+        traceback_str = traceback.format_exc()
+        print('\ntraceback_str:', traceback_str)
+        return render(request, 'student/home.html')
+
 
 def application_form(request):
     try:
@@ -56,6 +80,8 @@ def application_form(request):
             phone_number = request.POST.get('phone')
             student_email = request.POST.get('student_email')
 
+            application_date = timezone.now()
+
             # Convert to YYYY-MM-DD format
             if date_of_admission:
                 date_of_admission = datetime.strptime(date_of_admission, "%Y-%m-%d").date()
@@ -74,9 +100,9 @@ def application_form(request):
 
 
             # Check if the email already exists
-            if student_application_request.objects.filter(student_email_address=student_email).exists():
-                messages.error(request, 'This email is already associated with another application.')
-                return render(request, 'student/student_application_form.html', {'application_number': application_number})
+            # if student_application_request.objects.filter(student_email_address=student_email).exists():
+            #     messages.error(request, 'This email is already associated with another application.')
+            #     return render(request, 'student/student_application_form.html', {'application_number': application_number})
 
             # Initialize the email validator
             validator = EmailValidator()
@@ -156,7 +182,8 @@ def application_form(request):
                                                                                  phone_number = phone_number,
                                                                                  student_signature_url = attached_sign_url,
                                                                                  student_email_address = student_email,
-                                                                                 application_status = 'Initial'
+                                                                                 application_status = 'Initial',
+                                                                                 application_submitted_date = application_date,
                                                                                  )
             print('registration POST Success')
             messages.success(request,
@@ -164,7 +191,8 @@ def application_form(request):
 
             # contexts = {'username': user_nme, 'useremail': user_email}
             # return render(request, 'user_admin/registration.html', contexts)
-            return render(request, 'student/student_application_form.html', {'application_number': application_number})
+            # return render(request, 'student/student_application_form.html', {'application_number': application_number})
+            return redirect('my_applications')
         else:
             print('registration ELSE')
             # contexts = {'username': user_nme, 'useremail': user_email}
@@ -180,3 +208,25 @@ def application_form(request):
         # return render(request, 'user_admin/registration.html', contexts)
         return render(request, 'student/student_application_form.html', {'application_number': application_number})
     
+
+def my_applications(request):
+    try:
+        # Get the currently logged-in student's ID from session
+        current_user_id = request.session.get('student_id')
+
+        if current_user_id is None:
+            return redirect('404')
+
+        # Fetch applications for the current student
+        applications = student_application_request.objects.filter(
+            student_pk_id=current_user_id, 
+            delete_status=False  # Exclude deleted applications
+        ).order_by('-id')  # Order by latest submitted
+
+    except Exception as e:
+        print('Exception in my_applications:', e)
+        traceback_str = traceback.format_exc()
+        print('\ntraceback_str:', traceback_str)
+        return render(request, 'student/view_applications.html', {'applications': []})
+
+    return render(request, 'student/view_applications.html', {'applications': applications})

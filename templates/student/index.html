@@ -21,6 +21,8 @@
   <link rel="stylesheet" href="{% static 'admin/css/vertical-layout-light/style.css' %}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{% static 'admin/images/favicon.png' %}" />
+  <!-- Message box css -->
+  <link rel="stylesheet" href="{% static 'admin/css/message_box.css' %}">
 </head>
 <body>
   <div class="container-scroller">
@@ -47,7 +49,7 @@
           </li>
         </ul> -->
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item dropdown">
+          <!-- <li class="nav-item dropdown">
             <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
               <i class="icon-bell mx-0"></i>
               <span class="count"></span>
@@ -94,17 +96,17 @@
                 </div>
               </a>
             </div>
-          </li>
+          </li> -->
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="images/faces/face28.jpg" alt="profile"/>
+              <img src="{% static 'admin/images/faces/face28.jpg' %}" alt="profile"/>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item">
+              <!-- <a class="dropdown-item">
                 <i class="ti-settings text-primary"></i>
                 Settings
-              </a>
-              <a class="dropdown-item">
+              </a> -->
+              <a href="{% url 'student_logout' %}" class="dropdown-item">
                 <i class="ti-power-off text-primary"></i>
                 Logout
               </a>
@@ -172,23 +174,28 @@
           </ul>
         </div>
       </li> -->
-      <li class="nav-item {% if request.resolver_match.url_name == 'student_application' %} active {% endif %}">
+      <li class="nav-item {% if request.resolver_match.url_name in 'student_application my_applications' %} active {% endif %}">
         <a class="nav-link" data-toggle="collapse" href="#form-elements" 
-           aria-expanded="{% if request.resolver_match.url_name == 'student_application' %}true{% else %}false{% endif %}" 
+           aria-expanded="{% if request.resolver_match.url_name in 'student_application my_applications' %}true{% else %}false{% endif %}" 
            aria-controls="form-elements">
             <i class="icon-columns menu-icon"></i>
             <span class="menu-title">Services</span>
             <i class="menu-arrow"></i>
         </a>
-        <div class="collapse {% if request.resolver_match.url_name == 'student_application' %} show {% endif %}" id="form-elements">
+        <div class="collapse {% if request.resolver_match.url_name in 'student_application my_applications' %} show {% endif %}" id="form-elements">
             <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'student_application' %} active {% endif %}" 
                        href="{% url 'student_application' %}">Application Form</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'my_applications' %} active {% endif %}" 
+                       href="{% url 'my_applications' %}">My Applications</a>
+                </li>
             </ul>
         </div>
-      </li>
+    </li>
+    
     
       <!-- <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
