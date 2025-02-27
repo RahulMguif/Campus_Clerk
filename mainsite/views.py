@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password,check_password
 from  mainsite.models import *
 
 from django.http import JsonResponse
+from django.contrib.auth import logout
 
 
 def home_view(request):
@@ -32,7 +33,8 @@ def login(request):
                 request.session["student_id"] = student.id
                 request.session["student_name"] = student.fullname
                 messages.success(request, "Login successful!")
-                return render(request, "student/home.html")
+                # return render(request, "student/home.html")
+                return redirect('student_dashboard')
 
             else:
                 messages.error(request, "Invalid email or password.")
@@ -102,3 +104,10 @@ def registration(request):
     return render(request, "mainsite/registration.html")
 
 #==========================END student registration===============================================
+
+
+def user_logout(request):
+    request.session.flush()  # Completely clears the session
+    logout(request)  # Logs out the user
+    messages.success(request, "Logout successful!")
+    return redirect('home')  # Redirect to the login page (update as needed)

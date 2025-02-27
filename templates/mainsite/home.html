@@ -3,6 +3,20 @@
 {% block mainsite_content %}
 
 
+<!-- ===========================Message Box In HTML============================= -->
+    <!-- Django Messages Alert Box -->
+    {% if messages %}
+    <div id="alert-box">
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+        {{ message }}
+        <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+    </div>
+    {% endfor %}
+    </div>
+    {% endif %}
+<!-- ========================Message Box End===================================== -->
+
  <!-- Carousel Start -->
  <div class="container-fluid p-0 mb-5">
     <div class="owl-carousel header-carousel position-relative">
@@ -414,4 +428,17 @@
 </div>
 <!-- Testimonial End -->
     
+
+<!-- ===============Script to hide message notification===================-->
+ <!-- JavaScript to Auto-Hide the Alert After 3 Seconds -->
+ <script>
+    setTimeout(function() {
+      var alertBox = document.getElementById("alert-box");
+      if (alertBox) {
+        alertBox.style.display = "none";
+      }
+    }, 3000); // Hides after 3 seconds
+  </script>
+  <!-- ===============Script to hide message notification ENDS===================-->
+
 {% endblock mainsite_content %}

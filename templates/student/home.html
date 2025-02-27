@@ -6,10 +6,23 @@
     <div class="main-panel">
       <div class="content-wrapper">
         <div class="row">
+          <!-- ===========================Message Box In HTML============================= -->
+          <!-- Django Messages Alert Box -->
+          {% if messages %}
+          <div id="alert-box">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+              {{ message }}
+              <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+          <!-- ========================Message Box End===================================== -->
           <div class="col-md-12 grid-margin">
             <div class="row">
               <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold">Welcome Student</h3>
+                <h3 class="font-weight-bold">Welcome {{ student_name }}</h3>
                
               </div>
               
@@ -94,5 +107,17 @@
        
       </div>
       <!-- content-wrapper ends -->
+
+<!-- ===============Script to hide message notification===================-->
+ <!-- JavaScript to Auto-Hide the Alert After 3 Seconds -->
+ <script>
+  setTimeout(function() {
+    var alertBox = document.getElementById("alert-box");
+    if (alertBox) {
+      alertBox.style.display = "none";
+    }
+  }, 3000); // Hides after 3 seconds
+</script>
+<!-- ===============Script to hide message notification ENDS===================-->
 
       {% endblock %}
