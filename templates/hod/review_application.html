@@ -1,6 +1,7 @@
-{% extends 'office_admin/index.html' %}
+{% extends 'hod/index.html' %}
 {% load static %}
-{% block admin_content %}
+{% block hod_content %} 
+
 <!-- Material Design Icons -->
 <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
 
@@ -66,14 +67,14 @@
                                     <th scope="col">Branch</th>
                                     <th scope="col">Apply For</th>
                                   
+                                    <th scope="col">Staff Advisor Approval Status</th>
+                                    <th scope="col">HOD Remark</th>
                                     <th scope="col">HOD Approval Status</th>
-                                    <th scope="col">Office Remark</th>
-                                    <th scope="col">Office Approval Status</th>
                                   <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for entry in application_details %}
+                                {% for entry in applications %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ entry.student_application_no }}</td>
@@ -82,9 +83,9 @@
                                     <td>{{ entry.course }}</td>
                                     <td>{{ entry.branch }}</td>
                                     <td>{{ entry.apply_for }}</td>
-                                    <td>{{ entry.hod_approval_status }}</td>
-                                    <td>{{ entry.office_remark }}</td>
-                                    <td>{{ entry.office_approval_status }}</td>
+                                    <td>{{ entry.staff_approval_status }}</td>
+                                    <td>{{ entry.hod_remark|default:'Pending'  }}</td>
+                                    <td>{{ entry.hod_approval_status|default:'Pending'  }}</td>
                                     
                                  
                                     <td>
@@ -102,7 +103,7 @@
                                         <div class="modal-dialog modal-dialog-centered modal-lg" >  <!-- Wider Modal -->
                                             <div class="modal-content border-0 shadow-lg rounded-lg">
                                                 <div class="modal-header bg-primary text-white">
-                                                    <h5 class="modal-title">Review Application Details and Upload Office Signature</h5>
+                                                    <h5 class="modal-title">Review Application Details and Upload HOD Signature</h5>
                                                    
                                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
@@ -204,6 +205,24 @@
                                                                     <input type="text" class="form-control" value="{{ entry.branch }}" readonly>
                                                                 </div>
 
+                                                                <!-- Application Status -->
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label class="form-label fw-semibold">Application Status</label>
+                                                                    <input type="text" class="form-control" value="{{ entry.application_status }}" readonly>
+                                                                </div>
+                                                                 <!-- Ninth Row -->
+                                                            <div class="col-md-6 mb-3">
+                                                                <label class="form-label fw-semibold">Contact Address</label>
+                                                                <textarea class="form-control" rows="2" readonly>{{ entry.contact_address }}</textarea>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <label class="form-label fw-semibold">Student Signature</label><br>
+                                                                <a href="/{{ entry.student_signature_url }}" target="_blank">View Student Signature</a>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <label class="form-label fw-semibold">Application Submitted Date</label>
+                                                                <input type="text" class="form-control" value="{{ entry.application_submitted_date }}" readonly>
+                                                            </div>
                                                                 <!-- Staff Advisor Remark -->
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label fw-semibold">Staff Advisor Remark</label>
@@ -221,82 +240,39 @@
                                                                     <label class="form-label fw-semibold">Staff Approval Date</label>
                                                                     <input type="text" class="form-control" value="{{ entry.staff_approval_date }}" readonly>
                                                                 </div>
-
-                                                                <!-- HOD Remark -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">HOD Remark</label>
-                                                                    <textarea class="form-control" rows="2" readonly>{{ entry.hod_remark }}</textarea>
-                                                                </div>
-
-                                                                <!-- HOD Signature -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">HOD Signature</label><br>
-                                                                    <a href="/{{ entry.hod_signature_url }}" target="_blank">View HOD Signature</a>
-                                                                </div>
-
-                                                                <!-- HOD Approval Date -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">HOD Approval Date</label>
-                                                                    <input type="text" class="form-control" value="{{ entry.hod_approval_date }}" readonly>
-                                                                </div>
-
-                                                                <!-- Office Approval Date -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">Office Approval Date</label>
-                                                                    <input type="text" class="form-control" value="{{ entry.office_approval_date }}" readonly>
-                                                                </div>
-
-
-                                                                <!-- Application Status -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">Application Status</label>
-                                                                    <input type="text" class="form-control" value="{{ entry.application_status }}" readonly>
-                                                                </div>
-
-                                                            <!-- Ninth Row -->
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Contact Address</label>
-                                                                <textarea class="form-control" rows="2" readonly>{{ entry.contact_address }}</textarea>
-                                                            </div>
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Student Signature</label><br>
-                                                                <a href="/{{ entry.student_signature_url }}" target="_blank">View Student Signature</a>
-                                                            </div>
                                     
                                                             <!-- Approval Status Rows -->
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">Staff Approval Status</label>
                                                                 <input type="text" class="form-control" value="{{ entry.staff_approval_status }}" readonly>
                                                             </div>
+                                                           
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">HOD Approval Status</label>
-                                                                <input type="text" class="form-control" value="{{ entry.hod_approval_status }}" readonly>
+                                                                <input type="text" class="form-control" value="{{ entry.hod_approval_status|default:'Pending' }}" readonly>
                                                             </div>
-                                    
+                                                            
+                                                            <!-- HOD Approval Date -->
                                                             <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Office Approval Status</label>
-                                                                <input type="text" class="form-control" value="{{ entry.office_approval_status }}" readonly>
+                                                                <label class="form-label fw-semibold">HOD Approval Date</label>
+                                                                <input type="text" class="form-control" value="{{ entry.hod_approval_date|default:'Pending' }}" readonly>
                                                             </div>
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Application Submitted Date</label>
-                                                                <input type="text" class="form-control" value="{{ entry.application_submitted_date }}" readonly>
-                                                            </div>
+                                                            
                                                             <div class="col-12">
-                                                                <h4 class="fw-bold text-center bg-light py-2 rounded">----- For Office Use Only -----</h4>
+                                                                <h4 class="fw-bold text-center bg-light py-2 rounded">----- For HOD  Only -----</h4>
                                                             </div>
                                                             <!-- Editable Fields -->
                                                             <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Office Remark</label>
-                                                                <textarea class="form-control" name="office_remark" rows="2"  
-                                                                    placeholder="Write any remark" style="height: 49px;">{% if entry.office_remark %}{{ entry.office_remark }}{% endif %}</textarea>
+                                                                <label class="form-label fw-semibold">HOD Remark</label>
+                                                                <textarea class="form-control"name="hod_remark" rows="2"  placeholder="Write any remark" style="height: 49px;">{% if entry.office_remark %}{{ entry.office_remark }}{% endif %}</textarea>
                                                             </div>
+
+                                                           
                                                             
                                                             <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Upload Office Signature *</label>
-                                                                <input type="file" class="form-control" name="office_signature" accept="image/*" required>
+                                                                <label class="form-label fw-semibold">HOD Signature *</label>
+                                                                <input type="file" class="form-control" name="hod_signature" accept="image/*" required>
                                                             </div>
-                                                        </div>
-                                    
                                                         <div class="d-flex justify-content-end gap-2">
                                                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                                                             <button type="submit" class="btn btn-primary">Submit</button>
