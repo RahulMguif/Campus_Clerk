@@ -24,12 +24,15 @@ def application_form(request):
         with transaction.atomic():
             today_date = date.today().strftime('%y%m%d')  # Format: YYMMDD
             
-            # Get the last application number for today
-            last_application = student_application_request.objects.filter(
-                student_application_no__startswith=f"AP{today_date}"
-            ).order_by('-student_application_no').first()
+            # Get the last application number globally (not filtering by date)
+            last_application = student_application_request.objects.order_by('-student_application_no').first()
+            
+            # Extract the last numeric part and increment
+            if last_application:
+                last_number = int(last_application.student_application_no[-2:])  # Extract last 2 digits
+            else:
+                last_number = 0  # Start from 01 if no previous applications exist
 
-            last_number = int(last_application.student_application_no[-2:]) if last_application else 0
             application_number = f"AP{today_date}{last_number + 1:02d}"
 
         print('Application ID genarated it is, Application_number : ', application_number)
