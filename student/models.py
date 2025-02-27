@@ -25,6 +25,7 @@ class student_application_request(models.Model):
     contact_address = models.CharField(max_length=100, null=True)
     phone_number = models.CharField(max_length=100, null=True)
     student_signature_url = models.CharField(max_length = 150, null=True)
+    student_email_address = models.CharField(max_length = 150, null=True)
     staff_advisor_remark = models.CharField(max_length = 150, null=True)
     staff_advisor_signature_url = models.CharField(max_length = 150, null=True)
     staff_approval_status = models.CharField(max_length=20, null=True)
@@ -38,6 +39,7 @@ class student_application_request(models.Model):
     office_approval_status = models.CharField(max_length=20, null=True)
     office_approval_date = models.DateField(null=True)
     application_submitted_date = models.DateTimeField(null=True)
+    application_status = models.CharField(max_length=20, null=True)
     delete_status = models.BooleanField(default=False)
 
     class Meta:
