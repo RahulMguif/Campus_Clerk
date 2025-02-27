@@ -90,42 +90,26 @@ def add_staff_advisor(request):
         user_nme = request.session.get('user_nme')
         if user_nme is None:
             return redirect('error_404')
-        
+        department = departments.objects.filter(delete_status=0)  # Exclude deleted records
         if request.method == 'POST' and 'add' in request.POST:
             name = request.POST.get('name').strip()
             email = request.POST.get('email').strip()
             password= request.POST.get('password').strip()
             mobile= request.POST.get('mobile').strip()
+            department_id=request.POST.get('department')
+            # Ensure the department exists before saving
+            if department_id:
+                department = departments.objects.get(id=department_id)  # Fetch the department object
+            else:
+                department = None  # Handle cases where no department is selected
            
-            # try:
-            #     # Validate username format
-            #     validate_username(name)
-            #     validate_email(email)
-            #     validate_password(password)
-            #     # Validate mobile number length for India
-            #     if country_code == "91" and len(mobile) < 10:
-            #         raise ValidationError("For India, the mobile number must be at least 10 digits.")
-                
-            #     # if main_admin.objects.filter(email=email).exists() or main_admin.objects.filter(mobile=phone_full_number).exists():
-            #     #     raise ValidationError("Admin already exists with this email or mobile number.")
-            #     if staff_advisor.objects.filter(
-            #         (Q(email=email) | Q(mobile=phone_full_number)) & Q(delete_status=0)
-            #     ).exists():
-            #         raise ValidationError("Admin already exists with this email or mobile number.")
-
-            
-            # except ValidationError as ve:
-            #     messages.error(request, str(ve.message))
-            #     return redirect('add_main_admin')    
-
-            # Save the new chat ID to the database
             staff_advisor.objects.create(
                 name=name,
                 email=email,
                 password=password,
                 mobile=mobile,
                 is_active=1,
-
+                department_pk=department 
                 
             )
 
@@ -137,7 +121,8 @@ def add_staff_advisor(request):
 
         contexts = {
             'username': user_nme,
-            'all_data': all_data
+            'all_data': all_data,
+            'department':department
         }
     
         return render(request,"office_admin/add_staff_advisor.html",contexts)
@@ -162,11 +147,19 @@ def edit_staff_advisor(request):
             email = request.POST.get("email")
             password = request.POST.get("password")
             mobile = request.POST.get("mobile")
+            department_id=request.POST.get('department')
+            # Ensure the department exists before saving
+            if department_id:
+                department = departments.objects.get(id=department_id)  # Fetch the department object
+            else:
+                department = None  # Handle cases where no department is selected
+
             entry = get_object_or_404(staff_advisor, pk=admin_pk)
             entry.name = name
             entry.email = email
             entry.password = password
             entry.mobile = mobile
+            entry. department_pk=department 
 
             entry.save()
             messages.success(request, 'Updated Successfully.')
@@ -237,41 +230,27 @@ def add_hod(request) :
         user_nme = request.session.get('user_nme')
         if user_nme is None:
             return redirect('error_404')
-        
+        department = departments.objects.filter(delete_status=0)  # Exclude deleted records
         if request.method == 'POST' and 'add' in request.POST:
             name = request.POST.get('name').strip()
             email = request.POST.get('email').strip()
             password= request.POST.get('password').strip()
             mobile= request.POST.get('mobile').strip()
+            department_id=request.POST.get('department')
+            # Ensure the department exists before saving
+            if department_id:
+                department = departments.objects.get(id=department_id)  # Fetch the department object
+            else:
+                department = None  # Handle cases where no department is selected
            
-            # try:
-            #     # Validate username format
-            #     validate_username(name)
-            #     validate_email(email)
-            #     validate_password(password)
-            #     # Validate mobile number length for India
-            #     if country_code == "91" and len(mobile) < 10:
-            #         raise ValidationError("For India, the mobile number must be at least 10 digits.")
-                
-            #     # if main_admin.objects.filter(email=email).exists() or main_admin.objects.filter(mobile=phone_full_number).exists():
-            #     #     raise ValidationError("Admin already exists with this email or mobile number.")
-            #     if staff_advisor.objects.filter(
-            #         (Q(email=email) | Q(mobile=phone_full_number)) & Q(delete_status=0)
-            #     ).exists():
-            #         raise ValidationError("Admin already exists with this email or mobile number.")
-
-            
-            # except ValidationError as ve:
-            #     messages.error(request, str(ve.message))
-            #     return redirect('add_main_admin')    
-
-            # Save the new chat ID to the database
+           
             hod.objects.create(
                 name=name,
                 email=email,
                 password=password,
                 mobile=mobile,
                 is_active=1,
+                department_pk=department 
 
                 
             )
@@ -284,7 +263,8 @@ def add_hod(request) :
 
         contexts = {
             'username': user_nme,
-            'all_data': all_data
+            'all_data': all_data,
+            'department':department
         }
     
         
@@ -308,11 +288,20 @@ def edit_hod(request):
             email = request.POST.get("email")
             password = request.POST.get("password")
             mobile = request.POST.get("mobile")
+            department_id=request.POST.get('department')
+            # Ensure the department exists before saving
+            if department_id:
+                department = departments.objects.get(id=department_id)  # Fetch the department object
+            else:
+                department = None  # Handle cases where no department is selected
+
             entry = get_object_or_404(hod, pk=admin_pk)
             entry.name = name
             entry.email = email
             entry.password = password
             entry.mobile = mobile
+            entry. department_pk=department 
+
 
             entry.save()
             messages.success(request, 'Updated Successfully.')

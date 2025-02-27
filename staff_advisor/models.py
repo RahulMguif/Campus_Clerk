@@ -1,4 +1,5 @@
 from django.db import models
+from office_admin.models import *
 
 class staff_advisor(models.Model):
     name = models.CharField(max_length = 100, null=True)
@@ -9,5 +10,6 @@ class staff_advisor(models.Model):
     password_reset_token = models.CharField(max_length = 500, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     delete_status = models.BooleanField(default=False)
+    department_pk=models.ForeignKey(departments, on_delete=models.CASCADE, null=True, blank=True)
     class Meta:
         db_table = 'staff_advisor'
