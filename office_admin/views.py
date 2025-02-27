@@ -290,7 +290,7 @@ def add_hod(request) :
         return render(request,'office_admin/add_hod.html',contexts)   
 
     except Exception as e:
-        print('Exception in staff_advisor:', e)
+        print('Exception in add_hod:', e)
         messages.error(request, 'An error occurred. Please contact admin.')
         return render(request,'office_admin/add_hod.html')   
     
