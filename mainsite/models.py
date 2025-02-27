@@ -1,5 +1,6 @@
 from django.db import models
-
+from staff_advisor.models import *
+from hod.models import *
 # Create your models here.
 
 class student_registration(models.Model):
@@ -18,3 +19,12 @@ class student_registration(models.Model):
     class Meta:
         db_table = 'student_registration'
         
+
+class login(models.Model):
+    hod_pk = models.ForeignKey(hod, on_delete=models.CASCADE)
+    staff_advisor_pk = models.ForeignKey(staff_advisor, on_delete=models.CASCADE)
+    role = models.CharField(max_length = 50, null=True)
+    delete_status = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'login'

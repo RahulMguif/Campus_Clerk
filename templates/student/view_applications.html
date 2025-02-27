@@ -351,9 +351,18 @@
                                                 </div>
                 
                                                 <div class="form-group">
-                                                    <label>Reason</label>
-                                                    <textarea class="form-control" rows="2" disabled>{{ application.reason }}</textarea>
+                                                    <label>Reason (Attached Document):</label>
+                                                    <div>
+                                                        {% if application.reason_document %}
+                                                            <a href="{{ application.reason }}" target="_blank" class="btn btn-primary btn-sm">
+                                                                View Document
+                                                            </a>
+                                                        {% else %}
+                                                            <button class="btn btn-secondary btn-sm" disabled>No Document</button>
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
+                                                
                 
                                                 <div class="form-group">
                                                     <label>Contact Address</label>
