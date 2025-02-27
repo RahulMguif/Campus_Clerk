@@ -160,7 +160,7 @@ def application_form(request):
                                                                                  )
             print('registration POST Success')
             messages.success(request,
-                             f'<strong>Your Application Submit Successfully..</strong><br>You will get a response within 48hr after review your application..')
+                             f'Your Application Submit Successfully.You will get a response within 48hr after review your application..')
 
             # contexts = {'username': user_nme, 'useremail': user_email}
             # return render(request, 'user_admin/registration.html', contexts)
