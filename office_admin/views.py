@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from office_admin.models import *
 from staff_advisor.models import *
 from hod.models import *
+from student.models import *
 
 
 def admin_home(request):
@@ -377,3 +378,53 @@ def change_status_hod(request, admin_pk):
     else:
         return redirect('add_hod')  
     
+def view_applications(request):
+    application_details = student_application_request.objects.filter(hod_approval_status='Approved')
+
+    return render(request,'office_admin/view_applications.html',{'application_details':application_details})    
+
+
+from django.core.files.storage import FileSystemStorage
+
+def update_application(request, application_id):
+    application_entry = get_object_or_404(student_application_request, id=application_id)
+
+    if request.method == 'POST':
+        office_remark = request.POST.get('office_remark', '')
+        office_signature = request.FILES.get('office_signature')
+
+        # Update office remark
+        application_entry.office_remark = office_remark
+
+        # Handle office signature file upload
+        if office_signature:
+            fs = FileSystemStorage(location='media/office_signatures/')
+            filename = fs.save(office_signature.name, office_signature)
+            application_entry.office_signature_url = f'media/office_signatures/{filename}'
+
+        # Save changes
+        application_entry.save()
+        print("saved application")
+        messages.success(request, "Application updated successfully!")
+        return redirect('view_applications')  # Adjust based on your URL name
+
+    return render(request, 'office_admin/update_application.html', {'application_entry': application_entry})
+
+from django.utils.timezone import now
+
+
+def approval_status_office(request, admin_pk):  # Changed application_id → admin_pk
+    if request.method == "POST":
+        application = get_object_or_404(student_application_request, pk=admin_pk)
+        new_status = request.POST.get("adminstatus")  # Get status from form
+
+        # Update application status and date
+        application.office_approval_status = new_status
+        application.office_approval_date = now()
+        application.save()
+
+        messages.success(request, "Application status updated successfully.")
+        return redirect("view_applications")  # Redirect to the applications page
+
+    messages.error(request, "Invalid request.")
+    return redirect("view_applications")
