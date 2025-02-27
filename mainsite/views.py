@@ -111,3 +111,58 @@ def user_logout(request):
     logout(request)  # Logs out the user
     messages.success(request, "Logout successful!")
     return redirect('home')  # Redirect to the login page (update as needed)
+
+
+
+def department_user_login(request):
+    if request.method == 'POST':
+        email = request.POST.get('username')
+        password = request.POST.get('password')
+        print("email", email)
+
+        try:
+            # Check if the user exists in the department_login table
+            user_login = department_login.objects.select_related('hod_pk', 'staff_advisor_pk').filter(
+                hod_pk__email=email, delete_status=False
+            ).first() or department_login.objects.select_related('hod_pk', 'staff_advisor_pk').filter(
+                staff_advisor_pk__email=email, delete_status=False
+            ).first()
+
+            print("user_login:", user_login)
+
+            if not user_login:
+                messages.error(request, 'No account found with this email.')
+                return redirect('home')
+
+            # Identify the user and check the password
+            if user_login.hod_pk:
+                user = user_login.hod_pk
+                role = "hod"
+            else:
+                user = user_login.staff_advisor_pk
+                role = "staff_advisor"
+
+            # Check if the account is blocked
+            if user.is_active == 2:
+                messages.error(request, 'Your account has been blocked. Please contact the administrator.')
+                return redirect('home')
+
+            if user.password == password:  # Check password (Consider hashing for security)
+                request.session['username'] = email
+                request.session['role'] = role  # Store role in session
+                request.session.set_expiry(0)
+
+                if role == "hod":
+                    return redirect('hod_home')
+                else:
+                    return redirect('staff_home')
+            else:
+                messages.error(request, 'Invalid password.')
+                return redirect('home')
+
+        except Exception as e:
+            print('Exception in department_user_login:', e)
+            messages.error(request, 'An error occurred during login. Please try again.')
+            return redirect('home')
+
+    return render(request, "mainsite/department_login.html")

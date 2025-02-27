@@ -6,6 +6,7 @@ from office_admin.models import *
 from staff_advisor.models import *
 from hod.models import *
 from student.models import *
+from mainsite.models import *
 
 
 def admin_home(request):
@@ -103,14 +104,21 @@ def add_staff_advisor(request):
             else:
                 department = None  # Handle cases where no department is selected
            
-            staff_advisor.objects.create(
-                name=name,
-                email=email,
-                password=password,
-                mobile=mobile,
-                is_active=1,
-                department_pk=department 
-                
+            staff = staff_advisor.objects.create(
+                    name=name,
+                    email=email,
+                    password=password,
+                    mobile=mobile,
+                    is_active=1,
+                    department_pk=department 
+                    
+                )
+
+            # Create login entry for staff advisor
+            department_login.objects.create(
+                staff_advisor_pk=staff,
+                role="staff_advisor",
+                delete_status=False
             )
 
             messages.success(request, 'Successfully saved the staff advisor.')
@@ -182,9 +190,16 @@ def delete_staff_advisor(request):
         print("POST data:", request.POST)
         admin_pk = request.POST.get('admin_pk')
         print("Received chat_id_pk:", admin_pk)
+        # Check if staff_advisor exists
         main_admin_record = staff_advisor.objects.get(id=admin_pk)
         main_admin_record.delete_status = True
         main_admin_record.save()
+
+        login_record = department_login.objects.filter(staff_advisor_pk=main_admin_record).first()
+        if login_record:
+            login_record.delete_status = True
+            login_record.save()
+
         messages.success(request, 'Successfully deleted the staff advisor.')
         return redirect('add_staff_advisor')
     except main_admin_record.DoesNotExist:   
@@ -244,15 +259,22 @@ def add_hod(request) :
                 department = None  # Handle cases where no department is selected
            
            
-            hod.objects.create(
-                name=name,
-                email=email,
-                password=password,
-                mobile=mobile,
-                is_active=1,
-                department_pk=department 
+            hod_data = hod.objects.create(
+                    name=name,
+                    email=email,
+                    password=password,
+                    mobile=mobile,
+                    is_active=1,
+                    department_pk=department 
 
-                
+                    
+                )
+
+            # Create login entry for staff advisor
+            department_login.objects.create(
+                hod_pk=hod_data,
+                role="hod",
+                delete_status=False
             )
 
             messages.success(request, 'Successfully saved the HOD.')
@@ -327,6 +349,12 @@ def delete_hod(request):
         main_admin_record = hod.objects.get(id=admin_pk)
         main_admin_record.delete_status = True
         main_admin_record.save()
+
+        login_record = department_login.objects.filter(hod_pk=main_admin_record).first()
+        if login_record:
+            login_record.delete_status = True
+            login_record.save()
+
         messages.success(request, 'Successfully deleted the hod.')
         return redirect('add_hod')
     except main_admin_record.DoesNotExist:   

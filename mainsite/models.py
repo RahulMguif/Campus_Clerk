@@ -20,11 +20,11 @@ class student_registration(models.Model):
         db_table = 'student_registration'
         
 
-class login(models.Model):
-    hod_pk = models.ForeignKey(hod, on_delete=models.CASCADE)
-    staff_advisor_pk = models.ForeignKey(staff_advisor, on_delete=models.CASCADE)
+class department_login(models.Model):
+    hod_pk = models.ForeignKey(hod, on_delete=models.CASCADE, null=True)
+    staff_advisor_pk = models.ForeignKey(staff_advisor, on_delete=models.CASCADE, null=True)
     role = models.CharField(max_length = 50, null=True)
     delete_status = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'login'
+        db_table = 'department_login'

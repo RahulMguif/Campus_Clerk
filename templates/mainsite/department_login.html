@@ -28,10 +28,10 @@
           <div class="col-lg-4 mx-auto">
             <div class="auth-form-light text-left py-5 px-4 px-sm-5">
               <div class="brand-logo">
-                <h2>Welcome Staff Advisor</h2>
+                <h2>Welcome Department User</h2>
               </div>
               
-              <form action="{% url 'staff_advisor_login' %}" method="POST" class="pt-3">
+              <form action="{% url 'department_user_login' %}" method="POST" class="pt-3">
                 {% csrf_token %}
                 <div class="form-group">
                   <input type="email" class="form-control form-control-lg" name="username" placeholder="Username">
