@@ -25,6 +25,10 @@ def student_home(request):
 
         # Fetch the student details using the primary key
         student = student_registration.objects.filter(pk=current_user).first()
+        application = student_application_request.objects.filter(student_pk=current_user, delete_status=0).count()
+        approved_applications=student_application_request.objects.filter(student_pk=current_user,office_approval_status= 'Approved').count()
+        print('approved_applications',approved_applications)
+        print("application count:",application)
         
         if not student:
             return redirect('404')  # Redirect if student not found
@@ -33,6 +37,8 @@ def student_home(request):
         context = {
             'student_name': student.fullname,
             'student_email' : student.email,
+            'application':application,
+            'approved_applications':approved_applications
         }
         return render(request, 'student/home.html', context)
 
@@ -41,6 +47,8 @@ def student_home(request):
         traceback_str = traceback.format_exc()
         print('\ntraceback_str:', traceback_str)
         return render(request, 'student/home.html')
+
+    
 
 
 def application_form(request):

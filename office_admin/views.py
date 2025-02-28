@@ -10,7 +10,10 @@ from mainsite.models import *
 
 
 def admin_home(request):
-    return render(request,"office_admin/home.html")
+    application = student_application_request.objects.filter(hod_approval_status='Approved', delete_status=0).count()
+    approved_applications=student_application_request.objects.filter(office_approval_status= 'Approved').count()
+    print(application)
+    return render(request,"office_admin/home.html",{'application':application,'approved_applications':approved_applications})
 
 def office_admin_login(request):
     if request.method=='POST':

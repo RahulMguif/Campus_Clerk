@@ -7,5 +7,6 @@ urlpatterns = [
     path('add_feedback/',views.add_feedback,name='add_feedback'),
     path('my_applications/', views.my_applications, name='my_applications'),
     path('feedback_view',views.feedback_view,name='feedback_view'),
-    path('flag_comment',views.flag_comment,name='flag_comment')
+    path('flag_comment',views.flag_comment,name='flag_comment'),
+    
 ]
