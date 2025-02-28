@@ -8,5 +8,6 @@ urlpatterns = [
     path('my_applications/', views.my_applications, name='my_applications'),
     path('feedback_view',views.feedback_view,name='feedback_view'),
     path('flag_comment',views.flag_comment,name='flag_comment'),
-    path('edit_profile',views.edit_profile,name='edit_profile')
+    path('edit_profile',views.edit_profile,name='edit_profile'),
+    
 ]
