@@ -66,9 +66,8 @@
                                     <th scope="col">Branch</th>
                                     <th scope="col">Apply For</th>
                                   
-                                    <th scope="col">HOD Approval Status</th>
-                                    <th scope="col">Office Remark</th>
-                                    <th scope="col">Office Approval Status</th>
+                                    <th scope="col">Staff Approval Status</th>
+                                    <th scope="col">Staff Remark</th>
                                   <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -82,9 +81,17 @@
                                     <td>{{ entry.course }}</td>
                                     <td>{{ entry.branch }}</td>
                                     <td>{{ entry.apply_for }}</td>
-                                    <td>{{ entry.hod_approval_status }}</td>
-                                    <td>{{ entry.office_remark }}</td>
-                                    <td>{{ entry.office_approval_status }}</td>
+                                    <!-- <td>{{ entry.staff_approval_status }}</td> -->
+                                     <td>
+                                        <label class="badge 
+                                                {% if entry.staff_approval_status == 'Approved' %} badge-success
+                                                {% elif entry.staff_approval_status == 'Rejected' %} badge-danger
+                                                {% else %} badge-warning {% endif %}">
+                                            {{ entry.staff_approval_status}}
+                                        </label>
+                                     </td>
+                                    <td>{{ entry.staff_advisor_remark }}</td>
+                                    <!-- <td>{{ entry.office_approval_status }}</td> -->
                                     
                                  
                                     <td>
@@ -102,12 +109,12 @@
                                         <div class="modal-dialog modal-dialog-centered modal-lg" >  <!-- Wider Modal -->
                                             <div class="modal-content border-0 shadow-lg rounded-lg">
                                                 <div class="modal-header bg-primary text-white">
-                                                    <h5 class="modal-title">Review Application Details and Upload Office Signature</h5>
+                                                    <h5 class="modal-title">Review Application Details and Update Staff Advisor Remarks and Signature</h5>
                                                    
                                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{% url 'update_application' entry.pk %}" method="post" enctype="multipart/form-data">
+                                                    <form action="{% url 'update_staff_remark' entry.pk %}" method="post" enctype="multipart/form-data">
 
                                                         {% csrf_token %}
                                                         <input type="hidden" name="admin_pk" value="{{ entry.id }}">
@@ -188,10 +195,14 @@
                                                                 <label class="form-label fw-semibold">Apply For</label>
                                                                 <input type="text" class="form-control" value="{{ entry.apply_for }}" readonly>
                                                             </div>
+                                                            <!-- Reason (Document or Message) -->
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">Reason</label><br>
-                                                                
-                                                                    <a href="/{{ entry.reason }}" target="_blank">View Reason</a>
+                                                                {% if entry.reason %}
+                                                                    <a href="/{{ entry.reason }}" target="_blank" class="btn btn-primary btn-sm">View Reason</a>
+                                                                {% else %}
+                                                                    <button class="btn btn-secondary btn-sm" disabled>No Reason Provided</button>
+                                                                {% endif %}
                                                             </div>
                                                             
                                                              <!-- Course and Branch -->
@@ -204,46 +215,25 @@
                                                                     <input type="text" class="form-control" value="{{ entry.branch }}" readonly>
                                                                 </div>
 
-                                                                <!-- Staff Advisor Remark -->
+                                                                <!-- Staff Advisor Remark (Editable) -->
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label fw-semibold">Staff Advisor Remark</label>
-                                                                    <textarea class="form-control" rows="2" readonly>{{ entry.staff_advisor_remark }}</textarea>
+                                                                    <textarea class="form-control" name="staff_advisor_remark" rows="2" required placeholder="Enter your remarks" style="height: 49px;">{% if entry.staff_advisor_remark %}{{ entry.staff_advisor_remark }}{% endif %}</textarea>
                                                                 </div>
 
-                                                                <!-- Staff Advisor Signature -->
+                                                                <!-- Staff Advisor Signature (Upload or Display Existing) -->
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">Staff Advisor Signature</label><br>
-                                                                    <a href="/{{ entry.staff_advisor_signature_url }}" target="_blank">View Staff Advisor Signature</a>
-                                                                </div>
-
-                                                                <!-- Staff Approval Date -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">Staff Approval Date</label>
-                                                                    <input type="text" class="form-control" value="{{ entry.staff_approval_date }}" readonly>
-                                                                </div>
-
-                                                                <!-- HOD Remark -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">HOD Remark</label>
-                                                                    <textarea class="form-control" rows="2" readonly>{{ entry.hod_remark }}</textarea>
-                                                                </div>
-
-                                                                <!-- HOD Signature -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">HOD Signature</label><br>
-                                                                    <a href="/{{ entry.hod_signature_url }}" target="_blank">View HOD Signature</a>
-                                                                </div>
-
-                                                                <!-- HOD Approval Date -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">HOD Approval Date</label>
-                                                                    <input type="text" class="form-control" value="{{ entry.hod_approval_date }}" readonly>
-                                                                </div>
-
-                                                                <!-- Office Approval Date -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">Office Approval Date</label>
-                                                                    <input type="text" class="form-control" value="{{ entry.office_approval_date }}" readonly>
+                                                                    <label class="form-label fw-semibold">Upload Staff Advisor Signature *</label>
+                                                                    
+                                                                    {% if entry.staff_advisor_signature_url %}
+                                                                        <div>
+                                                                            <img src="/{{ entry.staff_advisor_signature_url }}" 
+                                                                                alt="Staff Advisor Signature"
+                                                                                style="max-width: 100%; height: auto; border: 1px solid #ddd; padding: 5px;">
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    
+                                                                    <input type="file" class="form-control mt-2" name="staff_advisor_signature" accept="image/*" required>
                                                                 </div>
 
 
@@ -252,49 +242,6 @@
                                                                     <label class="form-label fw-semibold">Application Status</label>
                                                                     <input type="text" class="form-control" value="{{ entry.application_status }}" readonly>
                                                                 </div>
-
-                                                            <!-- Ninth Row -->
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Contact Address</label>
-                                                                <textarea class="form-control" rows="2" readonly>{{ entry.contact_address }}</textarea>
-                                                            </div>
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Student Signature</label><br>
-                                                                <a href="/{{ entry.student_signature_url }}" target="_blank">View Student Signature</a>
-                                                            </div>
-                                    
-                                                            <!-- Approval Status Rows -->
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Staff Approval Status</label>
-                                                                <input type="text" class="form-control" value="{{ entry.staff_approval_status }}" readonly>
-                                                            </div>
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">HOD Approval Status</label>
-                                                                <input type="text" class="form-control" value="{{ entry.hod_approval_status }}" readonly>
-                                                            </div>
-                                    
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Office Approval Status</label>
-                                                                <input type="text" class="form-control" value="{{ entry.office_approval_status }}" readonly>
-                                                            </div>
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Application Submitted Date</label>
-                                                                <input type="text" class="form-control" value="{{ entry.application_submitted_date }}" readonly>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <h4 class="fw-bold text-center bg-light py-2 rounded">----- For Office Use Only -----</h4>
-                                                            </div>
-                                                            <!-- Editable Fields -->
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Office Remark</label>
-                                                                <textarea class="form-control" name="office_remark" rows="2" required 
-                                                                    placeholder="Write any remark" style="height: 49px;">{% if entry.office_remark %}{{ entry.office_remark }}{% endif %}</textarea>
-                                                            </div>
-                                                            
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Upload Office Signature *</label>
-                                                                <input type="file" class="form-control" name="office_signature" accept="image/*" required>
-                                                            </div>
                                                         </div>
                                     
                                                         <div class="d-flex justify-content-end gap-2">
@@ -310,33 +257,32 @@
                                     <!-- =========EDIT SignUp Email Modal END=============== -->
 
                                   
-                                      <!-- Change status modal-->
-                                      <div id="ChangeStatusModal{{entry.pk}}" class="modal fade" tabindex="-1" aria-labelledby="ChangeStatusModal" aria-hidden="true">
+                                    <!-- Change Status Modal -->
+                                    <div id="ChangeStatusModal{{ entry.pk }}" class="modal fade" tabindex="-1" aria-labelledby="ChangeStatusModal" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-md">
                                             <div class="modal-content border-0 shadow-lg">
-                                    
+
                                                 <!-- Modal Header -->
                                                 <div class="modal-header bg-primary text-white">
                                                     <h5 class="modal-title fw-bold">Change Status</h5>
                                                     <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                    
+
                                                 <!-- Modal Body -->
                                                 <div class="modal-body">
-                                                    <form action="{% url 'approval_status_office' entry.pk %}" method="post">
+                                                    <form action="{% url 'approval_status_staff_advisor' entry.pk %}" method="post">
                                                         {% csrf_token %}
-                                                        <input type="hidden" name="admin_pk" value="{{ entry.pk }}">
-                                    
+                                                        <input type="hidden" name="application_id" value="{{ entry.pk }}">
+
                                                         <!-- Status Dropdown -->
                                                         <div class="mb-3">
                                                             <label class="form-label fw-semibold">Change Status</label>
-                                                            <select class="form-select border rounded-3 py-1 px-3 fs-5" name="adminstatus">
+                                                            <select class="form-select border rounded-3 py-1 px-3 fs-5" name="staff_advisor_status">
                                                                 <option value="Approved">Approve</option>
                                                                 <option value="Rejected">Reject</option>
                                                             </select>
                                                         </div>
-                                                        
-                                    
+
                                                         <!-- Modal Footer Buttons -->
                                                         <div class="d-flex justify-content-end gap-2">
                                                             <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">
@@ -348,10 +294,11 @@
                                                         </div>
                                                     </form>
                                                 </div>
-                                    
+
                                             </div>
                                         </div>
                                     </div>
+
                                     
                                     <!--end of status modal-->
 
