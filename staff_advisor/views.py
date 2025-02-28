@@ -246,3 +246,7 @@ def add_student(request):
 
         return render(request, 'staff_advisor/add_students.html', {'department': department, 'courses': courses})
 
+
+
+def view_feedback(request):
+    return render(request,'staff_advisor/feedback_view.html')

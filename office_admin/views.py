@@ -89,8 +89,8 @@ def add_staff_advisor(request):
   
     try:
         user_nme = request.session.get('user_nme')
-        if user_nme is None:
-            return redirect('error_404')
+        # if user_nme is None:    
+        #     return redirect('error_404')
         department = departments.objects.filter(delete_status=0)  # Exclude deleted records
         if request.method == 'POST' and 'add' in request.POST:
             name = request.POST.get('name').strip()
@@ -243,8 +243,8 @@ def change_admin_status(request, admin_pk):
 def add_hod(request) :
     try:
         user_nme = request.session.get('user_nme')
-        if user_nme is None:
-            return redirect('error_404')
+        # if user_nme is None:
+        #     return redirect('error_404')
         department = departments.objects.filter(delete_status=0)  # Exclude deleted records
         if request.method == 'POST' and 'add' in request.POST:
             name = request.POST.get('name').strip()

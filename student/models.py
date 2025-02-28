@@ -54,7 +54,7 @@ class student_application_request(models.Model):
 
 class feedback(models.Model):
     student_pk = models.ForeignKey(student_registration, on_delete=models.CASCADE)
-    department = models.CharField(max_length=100, null=True) # eg: CS, ECE
+    department = models.ForeignKey(departments, on_delete=models.CASCADE,null=True)
     semester = models.IntegerField(null=True)
     comment = models.CharField(max_length=1100)
     is_flaged = models.IntegerField(null=True)

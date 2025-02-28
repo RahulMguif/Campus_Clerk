@@ -262,3 +262,7 @@ def add_feedback(request):
     context={'department':department,'student_id':student_id}
     return render(request,"student/feedback.html",context)
     
+
+
+def feedback_view(request):
+    return render(request,'student/feedback_view.html')
