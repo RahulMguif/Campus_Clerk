@@ -294,8 +294,9 @@ def feedback_view(request):
     student_id = request.session.get("student_id")
     student=student_registration.objects.get(id=student_id)
     stud_dept=student.department
+    stud_sem=student.semester
     # return HttpResponse(stud_dept)
-    feed = feedback.objects.filter(delete_status=0, department_pk_id__department_name=stud_dept,is_flaged=0)
+    feed = feedback.objects.filter(delete_status=0, department_pk_id__department_name=stud_dept,is_flaged=0,semester=stud_sem)
     context={'feed':feed}
     return render(request,"student/feedback_view.html",context)
 

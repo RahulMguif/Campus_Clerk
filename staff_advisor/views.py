@@ -249,4 +249,10 @@ def add_student(request):
 
 
 def view_feedback(request):
-    return render(request,"staff_advisor/feedback_view.html")
+    email=request.session.get('username')
+    staff=staff_advisor.objects.get(email=email)
+    staff_dept=staff.department_pk
+    feed = feedback.objects.filter(delete_status=0, department_pk=staff_dept,is_flaged=0)
+    feeds_app = feedback.objects.filter(delete_status=0, department_pk=staff_dept,is_flaged=1)
+    context={'feed':feed,'feeds_app':feeds_app}
+    return render(request,"staff_advisor/feedback_view.html",context)
