@@ -6,6 +6,7 @@ from  mainsite.models import *
 
 from django.http import JsonResponse
 from django.contrib.auth import logout
+from office_admin.models import *
 
 
 def home_view(request):
@@ -60,19 +61,23 @@ def check_user_existence(request):
 #========================== student registration=================================================
 
 def registration(request):
+    departments_list=departments.objects.filter(delete_status=0)
+    courses=course.objects.filter(delete_status=0)
     if request.method == "POST":
+
         fullname = request.POST.get("fullname")
         email = request.POST.get("email")
         mobile = request.POST.get("mobile")
-        course = request.POST.get("course")
+        course_list = request.POST.get("course")
         department = request.POST.get("department")
         semester = request.POST.get("semester")
         year_of_joining = request.POST.get("year_of_joining")
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
-
+        
+       
         # Validate required fields
-        if not (fullname and email and mobile and course and department and semester and year_of_joining and password and confirm_password):
+        if not (fullname and email and mobile and course_list and department and semester and year_of_joining and password and confirm_password):
             messages.error(request, "All fields are required.")
             return render(request, "mainsite/registration.html")
 
@@ -89,7 +94,7 @@ def registration(request):
             fullname=fullname,
             email=email,
             mobile=mobile,
-            course=course,
+            course=course_list,
             department=department,
             semester=semester,
             year_of_joining=year_of_joining,
@@ -101,7 +106,7 @@ def registration(request):
         messages.success(request, "Registration successful!")
         return redirect("login")  
 
-    return render(request, "mainsite/registration.html")
+    return render(request, "mainsite/registration.html", { 'departments_list': departments_list,'courses':courses})
 
 #==========================END student registration===============================================
 

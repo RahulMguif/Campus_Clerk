@@ -412,7 +412,7 @@ def feedback_menu(request):
     return render(request,"office_admin/feed_back_menu.html",context)
     
 def view_applications(request):
-    application_details = student_application_request.objects.filter(hod_approval_status='Approved')
+    application_details = student_application_request.objects.filter(hod_approval_status='Approved').order_by('-id')
 
     return render(request,'office_admin/view_applications.html',{'application_details':application_details})    
 

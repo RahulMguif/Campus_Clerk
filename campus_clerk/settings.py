@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'campus_clerk.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.mysql',
-       'NAME': 'campus_clerk1',
+       'NAME': 'campus_clerk',
        'USER': 'root',
        'PASSWORD': 'admin',
        'HOST':'localhost',

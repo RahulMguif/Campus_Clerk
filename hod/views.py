@@ -34,7 +34,7 @@ def review_application(request):
     applications = student_application_request.objects.filter(
         staff_approval_status='Approved',
         branch=department_instance.department_name  # Match by department name, not ID
-    )
+    ).order_by('-id')
 
     print("Filtered Applications:", applications)  # Debugging
     applications = list(applications) 
