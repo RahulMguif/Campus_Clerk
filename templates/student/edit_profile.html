@@ -1,0 +1,174 @@
+{% extends 'student/index.html' %}
+{% block student_content %}
+{% load static %}
+
+<!--===============Style for making the labels bold===============-->
+<style>
+  .col-sm-3.col-form-label {
+    font-weight: bold; /* Makes the text strong (bold) */
+}
+.disabled-text {
+    font-weight: normal; /* Removes bold effect */
+    color: #6c757d; /* Optional: Makes it look slightly faded like a disabled field */
+}
+</style>
+<!--===============Style for making the labels bold ENDS===============-->
+
+
+
+
+      <div class="main-panel">        
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <!-- ===========================Message Box In HTML============================= -->
+                <!-- Django Messages Alert Box -->
+                {% if messages %}
+                <div id="alert-box">
+                  {% for message in messages %}
+                  <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                    <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+                  </div>
+                  {% endfor %}
+                </div>
+                {% endif %}
+                <!-- ========================Message Box End===================================== -->
+                <div class="card-body">
+                  <h4 class="card-title">Edit Profile</h4>
+<form class="form-sample" id="profileEditForm" method="post" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p class="card-description">Edit Profile</p>
+    
+    <!-- <div class="text-center mb-3">
+        <label for="profileImageInput">
+            <img id="profileImage" src="{{ student.profile_pic_url }}" class="rounded-circle" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;">
+        </label>
+        <input type="file" name="profile_image" id="profileImageInput" class="d-none" accept=".png, .jpg, .jpeg">
+    </div> -->
+    <div class="position-relative text-center mb-3">
+        <label for="profileImageInput" class="position-relative d-inline-block">
+            <!-- Profile Image -->
+            <img id="profileImage" 
+            src="{% if student.profile_pic_url %}/media/{{ student.profile_pic_url }}{% else %}{% static 'admin/images/faces/avatar.jpg' %}{% endif %}" 
+                 class="rounded-circle border border-secondary shadow" 
+                 alt="Profile Image" 
+                 style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;">
+    
+            <!-- Plus Icon -->
+            <span class="position-absolute" 
+                  style="bottom: 0; right: 10px; background-color: white; border-radius: 50%; padding: 5px;">
+                <i class="ti-plus text-primary" style="font-size: 18px;"></i>
+            </span>
+        </label>
+    
+        <!-- Hidden File Input -->
+        <input type="file" name="profile_pic" id="profileImageInput" class="d-none" accept=".png, .jpg, .jpeg">
+    </div>
+    
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="fullname" class="form-control" value="{{ student.fullname }}" required />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" name="email" class="form-control" value="{{ student.email }}" required />
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" name="mobile" class="form-control" value="{{ student.mobile }}" required />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Course *</label>
+                <select name="course" class="form-control" required>
+                    {% for c in courses %}
+                        <option value="{{ c.id }}" {% if c.id == student.course %}selected{% endif %}>{{ c.course_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Department *</label>
+                <select name="department" class="form-control" required>
+                    {% for d in departments %}
+                        <option value="{{ d.id }}" {% if d.id == student.department %}selected{% endif %}>{{ d.department_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Semester *</label>
+                <select name="semester" class="form-control" required>
+                    <option value="1" {% if student.semester == '1' %}selected{% endif %}>1</option>
+                    <option value="2" {% if student.semester == '2' %}selected{% endif %}>2</option>
+                    <option value="3" {% if student.semester == '3' %}selected{% endif %}>3</option>
+                    <option value="4" {% if student.semester == '4' %}selected{% endif %}>4</option>
+                    <option value="5" {% if student.semester == '5' %}selected{% endif %}>5</option>
+                    <option value="6" {% if student.semester == '6' %}selected{% endif %}>6</option>
+                    <option value="7" {% if student.semester == '7' %}selected{% endif %}>7</option>
+                    <option value="8" {% if student.semester == '8' %}selected{% endif %}>8</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Year of Joining *</label>
+                <input type="date" name="year_of_joining" class="form-control" value="{{ student.year_of_joining }}" required />
+            </div>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- content-wrapper ends -->
+
+<script>
+document.getElementById("profileImageInput").addEventListener("change", function(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        document.getElementById("profileImage").src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+});
+</script>
+
+
+<!-- ===============Script to hide message notification===================-->
+ <!-- JavaScript to Auto-Hide the Alert After 3 Seconds -->
+ <script>
+    setTimeout(function() {
+      var alertBox = document.getElementById("alert-box");
+      if (alertBox) {
+        alertBox.style.display = "none";
+      }
+    }, 3000); // Hides after 3 seconds
+  </script>
+  <!-- ===============Script to hide message notification ENDS===================-->
+
+  {% endblock %}

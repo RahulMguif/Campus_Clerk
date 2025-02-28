@@ -72,6 +72,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'office_admin.context_processors.feedback_status',
                 "student.context_processors.student_context",  # Ensure this matches
+                "student.context_processors.student_profile",
             ],
         },
     },
@@ -96,7 +97,7 @@ DATABASES = {
        'ENGINE': 'django.db.backends.mysql',
        'NAME': 'campus_clerk',
        'USER': 'root',
-       'PASSWORD': '',
+       'PASSWORD': 'admin',
        'HOST':'localhost',
        'PORT':'3306',
    }
