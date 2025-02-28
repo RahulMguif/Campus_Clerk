@@ -33,6 +33,7 @@ def student_home(request):
         context = {
             'student_name': student.fullname,
             'student_email' : student.email,
+            'profile_pic_url': student.profile_pic_url,  # Pass profile pic URL
         }
         return render(request, 'student/home.html', context)
 
@@ -309,3 +310,50 @@ def flag_comment(request):
         flag.save()
         messages.success(request, 'Successfully flaged the comment')
         return redirect('feedback_view')
+    
+
+def edit_profile(request):
+    try:
+        current_user = request.session.get('student_id')
+        if current_user is None:
+            return redirect('404')
+        
+        # Fetch the student details from session
+        current_user_email = request.session.get('student_email')
+
+        student = student_registration.objects.filter(pk=current_user).first()
+        if not student:
+            return redirect('404')
+
+        if request.method == 'POST':
+            student.fullname = request.POST.get('fullname')
+            student.email = request.POST.get('email')
+            student.mobile = request.POST.get('mobile')
+            student.course = request.POST.get('course')
+            student.department = request.POST.get('department')
+            student.semester = request.POST.get('semester')
+            student.year_of_joining = request.POST.get('year_of_joining')
+            
+            # Handle Profile Picture Upload
+            if 'profile_pic' in request.FILES:
+                profile_pic = request.FILES['profile_pic']
+                fs = FileSystemStorage(location='media/profile_pic')  # Save in 'media/profile_pic' folder
+                filename = fs.save(profile_pic.name, profile_pic)
+                student.profile_pic_url = 'profile_pic/' + filename  # Save relative path in DB
+
+            student.save()
+            messages.success(request, "Your profile has been updated successfully")
+            return redirect('student_dashboard')
+
+        context = {
+            'student': student,
+            'courses': course.objects.all(),
+            'departments': departments.objects.all(),
+            'student_email': current_user_email,
+        }
+        return render(request, 'student/edit_profile.html', context)
+    except Exception as e:
+        print('Exception in edit_profile:', e)
+        traceback_str = traceback.format_exc()
+        print('\ntraceback_str:', traceback_str)
+        return render(request, 'student/edit_profile.html')

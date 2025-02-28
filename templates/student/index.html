@@ -98,9 +98,17 @@
             </div>
           </li> -->
           <li class="nav-item nav-profile dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+            <!-- <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
               <img src="{% static 'admin/images/faces/avatar.jpg' %}" alt="profile"/>
+            </a> -->
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="{% if student_profile_pic and student_profile_pic != 'admin/images/faces/avatar.jpg' %}/media/{{ student_profile_pic }}{% else %}{% static 'admin/images/faces/avatar.jpg' %}{% endif %}" 
+                   alt="profile" 
+                   class="rounded-circle" 
+                   style="width: 40px; height: 40px; object-fit: cover;">
             </a>
+          
+          
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
               <!-- <a class="dropdown-item">
                 <i class="ti-settings text-primary"></i>
@@ -110,6 +118,10 @@
                 <i class="ti-user text-primary"></i>
                 {{ student_email }}
               </span>
+              <a href="{% url 'edit_profile' %}" class="dropdown-item">
+                <i class="ti-pencil text-primary"></i>
+                Edit Profile
+              </a>
               <div class="dropdown-divider"></div>
               <a href="{% url 'student_logout' %}" class="dropdown-item">
                 <i class="ti-power-off text-primary"></i>
