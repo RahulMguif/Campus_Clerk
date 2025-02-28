@@ -25,7 +25,7 @@ def student_home(request):
 
         # Fetch the student details using the primary key
         student = student_registration.objects.filter(pk=current_user).first()
-
+        
         if not student:
             return redirect('404')  # Redirect if student not found
 
@@ -266,4 +266,21 @@ def add_feedback(request):
 
 
 def feedback_view(request):
-    return render(request,'student/feedback_view.html')
+    student_id = request.session.get("student_id")
+    student=student_registration.objects.get(id=student_id)
+    stud_dept=student.department
+    # return HttpResponse(stud_dept)
+    feed = feedback.objects.filter(delete_status=0, department_id__department_name=stud_dept,is_flaged=0)
+    context={'feed':feed}
+    return render(request,"student/feedback_view.html",context)
+
+
+
+def flag_comment(request):
+    if request.method=='POST':
+        id=request.POST.get('flaged')
+        flag=feedback.objects.get(id=id)
+        flag.is_flaged=1
+        flag.save()
+        messages.success(request, 'Successfully flaged the comment')
+        return redirect('feedback_view')

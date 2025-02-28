@@ -207,15 +207,15 @@
       </li>
       {% endif %}
 
+      {% if is_class_rep %}
       <li class="nav-item {% if request.resolver_match.url_name == 'feedback_view' %} active {% endif %}">
-        <a class="nav-link {% if request.resolver_match.url_name == 'feedback_view' %} active {% endif %}" 
-          href="{% url 'feedback_view' %}">
-            <i class="icon-grid menu-icon"></i>
-            <span class="menu-title">Feedback View</span>
-        </a>
-    </li>
-
-
+          <a class="nav-link {% if request.resolver_match.url_name == 'feedback_view' %} active {% endif %}" 
+            href="{% url 'feedback_view' %}">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Feedback View</span>
+          </a>
+      </li>
+      {% endif %}
 
 
     

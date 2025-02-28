@@ -249,4 +249,4 @@ def add_student(request):
 
 
 def view_feedback(request):
-    return render(request,'staff_advisor/feedback_view.html')
+    return render(request,"staff_advisor/feedback_view.html")
