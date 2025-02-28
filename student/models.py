@@ -2,6 +2,7 @@ from django.db import models
 from mainsite.models import student_registration
 from staff_advisor.models import *
 from hod.models import *
+from office_admin.models import *
 
 
 # Student application model
@@ -54,7 +55,7 @@ class student_application_request(models.Model):
 
 class feedback(models.Model):
     student_pk = models.ForeignKey(student_registration, on_delete=models.CASCADE)
-    department = models.ForeignKey(departments, on_delete=models.CASCADE,null=True)
+    department_pk = models.ForeignKey(departments, on_delete=models.CASCADE, null=True) # eg: CS, ECE
     semester = models.IntegerField(null=True)
     comment = models.CharField(max_length=1100)
     is_flaged = models.IntegerField(null=True)
