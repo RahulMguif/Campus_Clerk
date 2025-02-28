@@ -336,7 +336,8 @@
                                                             
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">HOD Signature *</label>
-                                                                <input type="file" class="form-control" name="hod_signature" accept="image/*" required>
+                                                                <input type="file" class="form-control" name="hod_signature" accept=".png, .jpg, .jpeg" required>
+                                                                <small class="text-muted d-block mt-1">Please provide a valid image file (.png or .jpg) with dimensions 200 x 100 pixels.</small>  
                                                             </div>
                                                         <div class="d-flex justify-content-end gap-2">
                                                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -376,6 +377,57 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function validateHodSignature(inputField) {
+            const allowedExtensions = ["png", "jpg", "jpeg"];
+            const maxSize = 500 * 1024; // 500 KB
+            const file = inputField.files[0];
+    
+            if (file) {
+                const fileExtension = file.name.split('.').pop().toLowerCase();
+                const fileSize = file.size;
+    
+                if (!allowedExtensions.includes(fileExtension)) {
+                    alert(" Invalid file format! Please upload a valid image (.png, .jpg, .jpeg).");
+                    inputField.value = "";
+                    return;
+                }
+    
+                if (fileSize > maxSize) {
+                    alert("File size too large! Please upload an image smaller than 500 KB.");
+                    inputField.value = "";
+                    return;
+                }
+    
+                // Check image dimensions
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+    
+                img.onload = function () {
+                    if (img.width !== 200 || img.height !== 100) {
+                        alert(" Invalid dimensions! Please upload an image with exactly 200x100 pixels.");
+                        inputField.value = "";
+                    }
+                };
+            }
+        }
+    
+        // Apply validation only to the HOD Signature input field
+        const hodSignatureInput = document.querySelector('input[name="hod_signature"]');
+    
+        if (hodSignatureInput) {
+            hodSignatureInput.addEventListener("change", function () {
+                validateHodSignature(this);
+            });
+        }
+    });
+</script>
+    
 
 <!-- ===================Alert Fade Out Script==================== -->
 <script src="{% static 'main_admin/assets/js/jquery_3.6.3.min.js' %}"></script>
