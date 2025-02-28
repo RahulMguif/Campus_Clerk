@@ -62,8 +62,10 @@
                     <label for="exampleInputUsername1">Select Feedback Enable Status</label>
                     <select class="form-control" name="select_value" id="">
                         <option selected disabled>---- Select ---</option>
-                        <option value="1" {% if status.enable_status == 1 %}selected{% endif %}>On</option>
-                        <option value="0" {% if status.enable_status == 0 %}selected{% endif %}>Off</option>
+                        <!-- <option value="1" {% if status.enable_status == 1 %}selected{% endif %}>On</option>
+                        <option value="0" {% if status.enable_status == 0 %}selected{% endif %}>Off</option> -->
+                        <option value="1" {% if status.enable_status %}selected{% endif %}>On</option>
+                        <option value="0" {% if not status.enable_status %}selected{% endif %}>Off</option>
                     </select>
                 </div>
                 <div class="modal-footer">
