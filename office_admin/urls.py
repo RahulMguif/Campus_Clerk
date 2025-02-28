@@ -17,5 +17,6 @@ urlpatterns = [
     path('edit_hod',views.edit_hod,name='edit_hod'),
     path('delete_hod',views.delete_hod,name='delete_hod'),
     path('change_status_hod/<int:admin_pk>/',views.change_status_hod,name='change_status_hod'),
+    path('feedback_menu/',views.feedback_menu,name='feedback_menu')
 
 ]

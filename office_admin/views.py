@@ -377,3 +377,19 @@ def change_status_hod(request, admin_pk):
     else:
         return redirect('add_hod')  
     
+    
+def feedback_menu(request):
+    if request.method == 'POST':
+        id=request.POST.get('id')
+        # return HttpResponse(id)
+        select=request.POST.get('select_value')
+        update=feedback_enable.objects.get(id=id)
+        update.enable_status=select
+        update.save()
+        messages.success(request, 'Successfully changed the status')
+        return redirect('feedback_menu')
+    ids=1
+    status=feedback_enable.objects.get(id=ids)
+    context={'status':status}
+    return render(request,"office_admin/feed_back_menu.html",context)
+    
