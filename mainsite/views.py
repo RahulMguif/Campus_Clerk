@@ -33,6 +33,7 @@ def login(request):
             if check_password(password, student.password):
                 request.session["student_id"] = student.id
                 request.session["student_name"] = student.fullname
+                request.session["student_email"] = student.email
                 messages.success(request, "Login successful!")
                 # return render(request, "student/home.html")
                 return redirect('student_dashboard')
