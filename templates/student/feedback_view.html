@@ -1,9 +1,117 @@
-{% extends 'staff_advisor/index.html' %}
+{% extends 'student/index.html' %}
 {% load static %}
-{% block staff_advisor_content %}
+{% block student_content %}
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
+<div class="main-panel">        
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                    <div class="card-body">
+                        <h4 class="card-title">My Applications</h4>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            SR No.
+                                        </th>
+                                        <th>
+                                            Comment
+                                        </th>
+                                        <th>
+                                            Submitted Date
+                                        </th>
+                                        <th>
+                                            Flag the Comment
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for n in feed %}
+                                    <tr>
+                                        <td class="py-1">
+                                            {{ forloop.counter }}
+                                        </td>
+                                        <td>
+                                            {{ n.comment }}
+                                        </td>
+                                        <td>
+                                            {{ n.submitted_date|date }}
+                                        </td>
+                                        
+                                        <td>
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                                data-target="#viewApplicationModal{{ n.id }}">
+                                                <i class="bi bi-flag-fill"></i>  <!-- Solid flag -->
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <!--======================Application details view modal==================-->
+                                    <div class="modal fade" id="viewApplicationModal{{ n.id }}" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-md" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Flage the Comment</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form method="POST" action="{% url 'flag_comment' %}">
+                                                    {% csrf_token %}
+                                                    <div class="modal-body">
+                                                        <!-- <h4 class="text-center">APPLICATION FORM</h4> -->
+                                                        <div class="row">
+                                                            <div class="modal-body text-center p-5">
+                                                                <lord-icon 
+                                                                    src="https://cdn.lordicon.com/zpxybbhl.json" 
+                                                                    trigger="loop" 
+                                                                    colors="primary:#121331,secondary:#08a88a" 
+                                                                    style="width:120px;height:120px">
+                                                                </lord-icon>
+                                                                <div class="mt-4">
+                                                                    <h4 class="mb-3">Do you want to Flag the comment</span> Course..?</h4>
+                                                                    <!-- <p class="text-muted mb-4">If you remove the course it will remove from DB</p> -->
+                                                                    <input type="hidden" name="flaged" value="{{n.id}}">
+                                                                    <div class="hstack gap-2 justify-content-center">
+                                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+                                                                        <!-- <a href="javascript:void(0);" class="btn btn-danger">Yes</a> -->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
 
+                                                    <div class="modal-footer">
+                                                        
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--======================Application details view modal ENDS==================-->
+                    
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="10" class="text-center">No applications found.</td>
+                                    </tr>
+                    
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.lordicon.com/lordicon.js"></script>
 
 
 {% endblock %}
