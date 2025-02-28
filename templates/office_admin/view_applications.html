@@ -82,9 +82,27 @@
                                     <td>{{ entry.course }}</td>
                                     <td>{{ entry.branch }}</td>
                                     <td>{{ entry.apply_for }}</td>
-                                    <td>{{ entry.hod_approval_status }}</td>
-                                    <td>{{ entry.office_remark }}</td>
-                                    <td>{{ entry.office_approval_status }}</td>
+                                    <!-- <td>{{ entry.hod_approval_status }}</td> -->
+                                    <td>
+                                        <span class="{% if entry.hod_approval_status == 'Pending' %}text-warning
+                                                     {% elif entry.hod_approval_status == 'Approved' %}text-success
+                                                     {% elif entry.hod_approval_status == 'Rejected' %}text-danger
+                                                     {% else %}text-secondary{% endif %}">
+                                            {{ entry.hod_approval_status }}
+                                        </span>
+                                    </td>
+                                    
+                                    <td>{{ entry.office_remark|default:'Pending' }}</td>
+                                    <!-- <td>{{ entry.office_approval_status|default:'Pending' }}</td> -->
+                                    <td>
+                                        <span class="{% if entry.office_approval_status == 'Pending' %}text-warning
+                                                     {% elif entry.office_approval_status == 'Approved' %}text-success
+                                                     {% elif entry.office_approval_status == 'Rejected' %}text-danger
+                                                     {% else %}text-secondary{% endif %}">
+                                            {{ entry.office_approval_status }}
+                                        </span>
+                                    </td>
+                                    
                                     
                                  
                                     <td>
@@ -190,8 +208,12 @@
                                                             </div>
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">Reason</label><br>
-                                                                
+                                                            
+                                                                {% if entry.reason %}
                                                                     <a href="/{{ entry.reason }}" target="_blank">View Reason</a>
+                                                                {% else %}
+                                                                    <span class="text-danger">Not uploaded by student</span>
+                                                                {% endif %}
                                                             </div>
                                                             
                                                              <!-- Course and Branch -->
@@ -202,6 +224,25 @@
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label fw-semibold">Branch</label>
                                                                     <input type="text" class="form-control" value="{{ entry.branch }}" readonly>
+                                                                </div>
+                                                                   <!-- Application Status -->
+                                                                   <div class="col-md-6 mb-3">
+                                                                    <label class="form-label fw-semibold">Application Status</label>
+                                                                    <input type="text" class="form-control" value="{{ entry.application_status }}" readonly>
+                                                                </div>
+
+                                                                <!-- Ninth Row -->
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label class="form-label fw-semibold">Contact Address</label>
+                                                                    <textarea class="form-control" rows="2" readonly>{{ entry.contact_address }}</textarea>
+                                                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label class="form-label fw-semibold">Student Signature</label><br>
+                                                                    <a href="/{{ entry.student_signature_url }}" target="_blank">View Student Signature</a>
+                                                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label class="form-label fw-semibold">Application Submitted Date</label>
+                                                                    <input type="text" class="form-control" value="{{ entry.application_submitted_date }}" readonly>
                                                                 </div>
 
                                                                 <!-- Staff Advisor Remark -->
@@ -214,6 +255,11 @@
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label fw-semibold">Staff Advisor Signature</label><br>
                                                                     <a href="/{{ entry.staff_advisor_signature_url }}" target="_blank">View Staff Advisor Signature</a>
+                                                                </div>
+                                                                    <!-- Approval Status Rows -->
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label class="form-label fw-semibold">Staff Approval Status</label>
+                                                                    <input type="text" class="form-control" value="{{ entry.staff_approval_status }}" readonly>
                                                                 </div>
 
                                                                 <!-- Staff Approval Date -->
@@ -233,6 +279,12 @@
                                                                     <label class="form-label fw-semibold">HOD Signature</label><br>
                                                                     <a href="/{{ entry.hod_signature_url }}" target="_blank">View HOD Signature</a>
                                                                 </div>
+                                                                        
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label class="form-label fw-semibold">HOD Approval Status</label>
+                                                                        <input type="text" class="form-control" value="{{ entry.hod_approval_status }}" readonly>
+                                                                    </div>
+                                            
 
                                                                 <!-- HOD Approval Date -->
                                                                 <div class="col-md-6 mb-3">
@@ -247,40 +299,14 @@
                                                                 </div>
 
 
-                                                                <!-- Application Status -->
-                                                                <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">Application Status</label>
-                                                                    <input type="text" class="form-control" value="{{ entry.application_status }}" readonly>
-                                                                </div>
-
-                                                            <!-- Ninth Row -->
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Contact Address</label>
-                                                                <textarea class="form-control" rows="2" readonly>{{ entry.contact_address }}</textarea>
-                                                            </div>
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Student Signature</label><br>
-                                                                <a href="/{{ entry.student_signature_url }}" target="_blank">View Student Signature</a>
-                                                            </div>
+                                                             
                                     
-                                                            <!-- Approval Status Rows -->
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Staff Approval Status</label>
-                                                                <input type="text" class="form-control" value="{{ entry.staff_approval_status }}" readonly>
-                                                            </div>
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">HOD Approval Status</label>
-                                                                <input type="text" class="form-control" value="{{ entry.hod_approval_status }}" readonly>
-                                                            </div>
-                                    
+                                                          
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">Office Approval Status</label>
                                                                 <input type="text" class="form-control" value="{{ entry.office_approval_status }}" readonly>
                                                             </div>
-                                                            <div class="col-md-6 mb-3">
-                                                                <label class="form-label fw-semibold">Application Submitted Date</label>
-                                                                <input type="text" class="form-control" value="{{ entry.application_submitted_date }}" readonly>
-                                                            </div>
+                                                           
                                                             <div class="col-12">
                                                                 <h4 class="fw-bold text-center bg-light py-2 rounded">----- For Office Use Only -----</h4>
                                                             </div>

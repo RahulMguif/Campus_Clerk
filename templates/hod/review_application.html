@@ -23,6 +23,8 @@
     .modal-title {
         color: #ffffff; /* Replace #333 with your desired color */
     }
+ 
+
 
 </style>
 <div class="main-content" >
@@ -56,6 +58,7 @@
                    
 
                     <div class="table-responsive" style="max-height: 300px;">
+                      {% if applications %} 
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -83,20 +86,77 @@
                                     <td>{{ entry.course }}</td>
                                     <td>{{ entry.branch }}</td>
                                     <td>{{ entry.apply_for }}</td>
-                                    <td>{{ entry.staff_approval_status }}</td>
+                                    <td>
+                                        <span class="{% if entry.staff_approval_status == 'Pending' %}text-warning
+                                                     {% elif entry.staff_approval_status == 'Approved' %}text-success
+                                                     {% elif entry.staff_approval_status == 'Rejected' %}text-danger
+                                                     {% else %}text-secondary{% endif %}">
+                                            {{ entry.staff_approval_status }}
+                                        </span>
+                                    </td>
                                     <td>{{ entry.hod_remark|default:'Pending'  }}</td>
-                                    <td>{{ entry.hod_approval_status|default:'Pending'  }}</td>
+                                    <td>
+                                        <span class="{% if entry.hod_approval_status == 'Pending' %}text-warning
+                                                     {% elif entry.hod_approval_status == 'Approved' %}text-success
+                                                     {% elif entry.hod_approval_status == 'Rejected' %}text-danger
+                                                     {% else %}text-secondary{% endif %}">
+                                            {{ entry.hod_approval_status|default:'Pending' }}
+                                        </span>
+                                    </td>
                                     
                                  
                                     <td>
                                         <a href="#" class="link-success fs-15">
-                                            <i class="ri-arrow-left-right-line" data-bs-toggle="modal" data-bs-target="#ChangeStatusModal{{ entry.pk }}" title="Change Status"></i>
+                                            <i class="ri-arrow-left-right-line" data-bs-toggle="modal" data-bs-target="#ChangeStatus{{ entry.pk }}" title="Change Status"></i>
                                         </a>
                                         <a class="text-body me-1 fs-15 fw-medium" href="#" title="Review Application" data-bs-toggle="modal" data-bs-target="#EditidModal{{ entry.pk }}">
                                             <i class="ri-edit-box-line text-info me-1"></i>
                                         </a>
                                        
                                     </td>
+                                    <div id="ChangeStatus{{entry.pk}}" class="modal fade" tabindex="-1" aria-labelledby="ChangeStatus" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-md">
+                                            <div class="modal-content border-0 shadow-lg">
+                                    
+                                                <!-- Modal Header -->
+                                                <div class="modal-header bg-primary text-white">
+                                                    <h5 class="modal-title fw-bold">Change Status</h5>
+                                                    <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                    
+                                                <!-- Modal Body -->
+                                                <div class="modal-body">
+                                                    <form action="{% url 'approval_status_hod' entry.pk %}" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="application_pk" value="{{ entry.pk }}">
+                                    
+                                                        <!-- Status Dropdown -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-semibold">Change Status</label>
+                                                            <select class="form-select border rounded-3 py-1 px-3 fs-5" name="adminstatus">
+                                                                <option value="Approved">Approve</option>
+                                                                <option value="Rejected">Reject</option>
+                                                            </select>
+                                                        </div>
+                                                        
+                                    
+                                                        <!-- Modal Footer Buttons -->
+                                                        <div class="d-flex justify-content-end gap-2">
+                                                            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">
+                                                                <i class="bi bi-x-circle"></i> Close
+                                                            </button>
+                                                            <button type="submit" class="btn btn-primary px-4">
+                                                                <i class="bi bi-check-circle"></i> Change Status
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!--end of status modal-->
                                     <!-- ==================INNER MODELS======================= -->
                                     <!-- =========EDIT SignUp Email Modal =============== -->
                                     <div id="EditidModal{{ entry.pk }}" class="modal fade" tabindex="-1" aria-labelledby="EditidModal" aria-hidden="true"  style="transform: translateY(-8%);">
@@ -191,9 +251,14 @@
                                                             </div>
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">Reason</label><br>
-                                                                
+                                                            
+                                                                {% if entry.reason %}
                                                                     <a href="/{{ entry.reason }}" target="_blank">View Reason</a>
+                                                                {% else %}
+                                                                    <span class="text-danger">Not uploaded by student</span>
+                                                                {% endif %}
                                                             </div>
+                                                            
                                                             
                                                              <!-- Course and Branch -->
                                                                 <div class="col-md-6 mb-3">
@@ -264,7 +329,7 @@
                                                             <!-- Editable Fields -->
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">HOD Remark</label>
-                                                                <textarea class="form-control"name="hod_remark" rows="2"  placeholder="Write any remark" style="height: 49px;">{% if entry.office_remark %}{{ entry.office_remark }}{% endif %}</textarea>
+                                                                <textarea class="form-control"name="hod_remark" rows="2"  placeholder="Write any remark" style="height: 49px;">{% if entry.hod_remark %}{{ entry.hod_remark }}{% endif %}</textarea>
                                                             </div>
 
                                                            
@@ -287,49 +352,7 @@
 
                                   
                                       <!-- Change status modal-->
-                                      <div id="ChangeStatusModal{{entry.pk}}" class="modal fade" tabindex="-1" aria-labelledby="ChangeStatusModal" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-md">
-                                            <div class="modal-content border-0 shadow-lg">
-                                    
-                                                <!-- Modal Header -->
-                                                <div class="modal-header bg-primary text-white">
-                                                    <h5 class="modal-title fw-bold">Change Status</h5>
-                                                    <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                    
-                                                <!-- Modal Body -->
-                                                <div class="modal-body">
-                                                    <form action="{% url 'approval_status_office' entry.pk %}" method="post">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" name="admin_pk" value="{{ entry.pk }}">
-                                    
-                                                        <!-- Status Dropdown -->
-                                                        <div class="mb-3">
-                                                            <label class="form-label fw-semibold">Change Status</label>
-                                                            <select class="form-select border rounded-3 py-1 px-3 fs-5" name="adminstatus">
-                                                                <option value="Approved">Approve</option>
-                                                                <option value="Rejected">Reject</option>
-                                                            </select>
-                                                        </div>
-                                                        
-                                    
-                                                        <!-- Modal Footer Buttons -->
-                                                        <div class="d-flex justify-content-end gap-2">
-                                                            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">
-                                                                <i class="bi bi-x-circle"></i> Close
-                                                            </button>
-                                                            <button type="submit" class="btn btn-primary px-4">
-                                                                <i class="bi bi-check-circle"></i> Change Status
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                    
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!--end of status modal-->
+                                     
 
                                     <!-- ==================INNER MODELS======================= -->
                                 </tr><!-- end tr -->
@@ -338,6 +361,9 @@
                                
                             </tbody><!-- end tbody -->
                         </table><!-- end table -->
+                    {% else %}
+                        <h4>No applications found from your department.</h4>
+                    {% endif %}    
                     </div>
                 </div><!-- end cardbody -->
             </div><!-- end card -->
@@ -349,6 +375,7 @@
 </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- ===================Alert Fade Out Script==================== -->
 <script src="{% static 'main_admin/assets/js/jquery_3.6.3.min.js' %}"></script>
