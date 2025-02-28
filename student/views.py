@@ -247,7 +247,7 @@ def add_feedback(request):
         student=request.POST.get('student_id')
         student_obj=student_registration.objects.get(id=student)
         feed=feedback()
-        feed.department=department_obj
+        feed.department_pk=department_obj
         feed.semester=semester
         feed.comment=comment
         feed.student_pk=student_obj
@@ -255,7 +255,8 @@ def add_feedback(request):
         feed.submitted_date=timezone.now()
         feed.delete_status=0
         feed.save()
-        messages.success(request, 'Successfully changed the status')
+        print("feedback saved")
+        messages.success(request, 'Successfully submitted the feedback')
         return redirect('add_feedback')
     student_id=request.session["student_id"]
     department=departments.objects.filter(delete_status=0)
