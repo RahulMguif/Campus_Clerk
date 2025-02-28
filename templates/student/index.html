@@ -195,8 +195,25 @@
             </ul>
         </div>
     </li>
+
+      
+      {% if feed %}  {# Only shows if feed_exists is True (enable_status=1 exists) #}
+      <li class="nav-item {% if request.resolver_match.url_name == 'add_feedback' %} active {% endif %}">
+          <a class="nav-link {% if request.resolver_match.url_name == 'add_feedback' %} active {% endif %}" 
+            href="{% url 'add_feedback' %}">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Feedback</span>
+          </a>
+      </li>
+      {% endif %}
+
+
+
+
+
+
     
-    
+
       <!-- <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
           <i class="icon-bar-graph menu-icon"></i>
@@ -268,12 +285,11 @@
     </ul>
   </nav>
   <!-- partial -->
-    
+  
     
     {% block student_content %} {% endblock %}
 
-
-
+      
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">

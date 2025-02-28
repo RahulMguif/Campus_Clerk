@@ -1,9 +1,12 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.core.files.storage import FileSystemStorage
 import traceback
 from django.contrib import messages
+
+from office_admin.models import departments, feedback_enable
 from .models import *
 from datetime import datetime, date, timedelta
 from django.db import transaction
@@ -230,3 +233,32 @@ def my_applications(request):
         return render(request, 'student/view_applications.html', {'applications': []})
 
     return render(request, 'student/view_applications.html', {'applications': applications})
+
+
+from django.utils import timezone
+
+def add_feedback(request):
+    if request.method=='POST':
+        depart=request.POST.get('department')
+        department_obj=departments.objects.get(id=depart)
+        # return HttpResponse(depart)
+        semester=request.POST.get('semester')
+        comment=request.POST.get('comment')
+        student=request.POST.get('student_id')
+        student_obj=student_registration.objects.get(id=student)
+        feed=feedback()
+        feed.department=department_obj
+        feed.semester=semester
+        feed.comment=comment
+        feed.student_pk=student_obj
+        feed.is_flaged=0
+        feed.submitted_date=timezone.now()
+        feed.delete_status=0
+        feed.save()
+        messages.success(request, 'Successfully changed the status')
+        return redirect('add_feedback')
+    student_id=request.session["student_id"]
+    department=departments.objects.filter(delete_status=0)
+    context={'department':department,'student_id':student_id}
+    return render(request,"student/feedback.html",context)
+    
