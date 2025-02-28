@@ -13,6 +13,7 @@ class student_registration(models.Model):
     semester = models.CharField(max_length = 100, null=True)
     year_of_joining = models.CharField(max_length = 100, null=True)
     is_active = models.BooleanField(default=False)
+    is_class_rep = models.BooleanField(default=False, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     password_reset_token = models.CharField(max_length = 500, null=True)
     
