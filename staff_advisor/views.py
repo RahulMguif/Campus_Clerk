@@ -46,7 +46,7 @@ def view_student_applications(request):
         return redirect('home')
 
     # Get applications where the department matches the staff advisor's department
-    application_details = student_application_request.objects.filter(branch=staff_advisor_obj.department_pk.department_name)
+    application_details = student_application_request.objects.filter(branch=staff_advisor_obj.department_pk.department_name).order_by('-id')
 
     return render(request, 'staff_advisor/view_student_applications.html', {'application_details': application_details, 'staff_email': staff_advisor_obj.email})
 
