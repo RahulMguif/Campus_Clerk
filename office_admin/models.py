@@ -23,3 +23,9 @@ class office_admin(models.Model):
     
     class Meta:
         db_table = 'office_admin'
+        
+        
+class feedback_enable(models.Model):
+    enable_status = models.BooleanField(default=False)
+    class Meta:
+        db_table = 'feedback_enable'
