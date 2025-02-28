@@ -1,0 +1,507 @@
+{% extends 'student/index.html' %}
+{% block student_content %}
+
+<!--===============Style for making the labels bold===============-->
+<style>
+  .col-sm-3.col-form-label {
+    font-weight: bold; /* Makes the text strong (bold) */
+}
+.disabled-text {
+    font-weight: normal; /* Removes bold effect */
+    color: #6c757d; /* Optional: Makes it look slightly faded like a disabled field */
+}
+</style>
+<!--===============Style for making the labels bold ENDS===============-->
+
+<!-- CSS for the Alert Box -->
+<style>
+  #alert-box {
+    position: fixed;
+    top: 100px;
+    right: 10px;
+    z-index: 1000;
+    width: auto;
+  }
+
+  .alert {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 250px;
+  }
+
+  .alert-success {
+    background-color: #28a745;
+  }
+
+  .alert-error, .alert-danger {
+    background-color: #dc3545;
+  }
+
+  .alert-info {
+    background-color: #17a2b8;
+  }
+
+  .alert-warning {
+    background-color: #ffc107;
+    color: #333;
+  }
+
+  .close-btn {
+    font-weight: bold;
+    margin-left: 15px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+</style>
+<!-- CSS for the Alert Box ENDS-->
+
+
+      <div class="main-panel">        
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <!-- ===========================Message Box In HTML============================= -->
+                <!-- Django Messages Alert Box -->
+                {% if messages %}
+                <div id="alert-box">
+                  {% for message in messages %}
+                  <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                    <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+                  </div>
+                  {% endfor %}
+                </div>
+                {% endif %}
+ 
+ 
+ 
+
+                <!-- ========================Message Box End===================================== -->
+                <div class="card-body">
+                  <h4 class="card-title">APPLICATION FORM</h4>
+                  <form class="form-sample" id="undertakingForm" method="post" action="{% url 'student_application' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <p class="card-description">
+                      Personal info
+                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Application Number</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="application_no" class="form-control" value="{{ application_number }}" disabled />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Certification / Service Requested *</label>
+                          <div class="col-sm-9">
+                            <select name="certificate" class="form-control" required>
+                              <option value="" disabled selected>Select an option</option>
+                              <option value="Course completion/studying">Course completion/studying</option>
+                              <option value="Transfer Certificate">Transfer Certificate</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Full Name *</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="full_name" class="form-control" required />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Gender *</label>
+                          <div class="col-sm-9">
+                            <select name="gender" class="form-control" required>
+                              <option value="" disabled selected>Select an option</option>
+                              <option>Male</option>
+                              <option>Female</option>
+                              <option>Others</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Course *</label>
+                          <div class="col-sm-9">
+                            <select name="course" class="form-control" required>
+                              <option value="" disabled selected>Select an option</option>
+                              <option value="B Tech">B. Tech</option>
+                              <option value="M Tech">M. Tech</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Branch / Department *</label>
+                          <div class="col-sm-9">
+                            <select name="branch" class="form-control" required>
+                              <option value="" disabled selected>Select an option</option>
+                              <option value="CS">CS</option>
+                              <option value="EE">EE</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Adminssion Number *</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="admission_no" class="form-control" required />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Date of Admission *</label>
+                          <div class="col-sm-9">
+                            <input class="form-control" name="admission_date" type="date" placeholder="dd/mm/yyyy" required/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">University Name *</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="university_name" class="form-control" required />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">University Reg. No *</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="university_reg_no" class="form-control" required />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Semester *</label>
+                          <div class="col-sm-9">
+                            <select name="semester" class="form-control" required>
+                              <option value="" disabled selected>Select an option</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                              <option value="6">6</option>
+                              <option value="7">7</option>
+                              <option value="8">8</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Hostel Name</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="hostel_name" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Hostel Admission Date</label>
+                          <div class="col-sm-9">
+                            <input type="date" name="hostel_admission_date" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Transfer Certificate No</label>
+                          <div class="col-sm-9">
+                            <input type="text" name="tc_no" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Transfer Certificate Date</label>
+                          <div class="col-sm-9">
+                            <input type="date" name="tc_date" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">
+                              Reason <span class="disabled-text">(Attach documental proof such as notifications, call letters, etc., if any)</span>
+                          </label>
+                          <div class="col-sm-9">
+                            <input type="file" name="reason_document" class="form-control" accept=".pdf" id="id_copy_fileInput" />
+                            <small class="text-muted d-block mt-1">Please provide a valid file '.pdf' below 2MB..</small>
+                            <div class="invalid-tooltip" id="fileSizeError" style="display: none;">
+                                File size must be 2MB or less.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <p class="card-description">
+                      Contact Address
+                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Address *</label>
+                          <div class="col-sm-9">
+                             <textarea name="address" class="form-control" rows="4" required></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Phone Number* </label>
+                          <div class="col-sm-9">
+                            <input type="tel" name="phone" class="form-control" required />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group row">
+                              <label class="col-sm-3 col-form-label"><strong>Applicant's Undertaking*</strong></label>
+                              <div class="col-sm-9">
+                                  <div class="form-check">
+                                      <input type="checkbox" class="form-check-input" id="undertaking1">
+                                      <label class="form-check-label" for="undertaking1">
+                                          I certify that all the information given above is true.
+                                      </label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input type="checkbox" class="form-check-input" id="undertaking2">
+                                      <label class="form-check-label" for="undertaking2">
+                                          No police/court/institute cases of law-and-order/indiscipline are pending against me.
+                                      </label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input type="checkbox" class="form-check-input" id="undertaking3">
+                                      <label class="form-check-label" for="undertaking3">
+                                          I undertake to return the testimonials (taken from office) within 3 days from the date of receipt, keep copies for future use, and not request the same again.
+                                      </label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input type="checkbox" class="form-check-input" id="undertaking4">
+                                      <label class="form-check-label" for="undertaking4">
+                                          I am not in receipt of any other scholarship/stipend, shall retain only one scholarship/stipend, and surrender all others, if any.
+                                      </label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input type="checkbox" class="form-check-input" id="undertaking5">
+                                      <label class="form-check-label" for="undertaking5">
+                                          I agree to legal and punitive actions against me if I enjoy more than one scholarship/stipend at a time.
+                                      </label>
+                                  </div>
+                                  <div id="error-message" style="color: red; font-size: 12px; display: none;">You must check all the boxes before submitting.</div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Email Address* </label>
+                          <div class="col-sm-9">
+                            <input type="email" name="student_email" class="form-control" required />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Student Signature *</label>
+                          <div class="col-sm-9">
+                            <input type="file" id="signaturefile" name="student_sign" class="form-control" accept=".png, .jpg, .jpeg" required />
+                            <small class="text-muted d-block mt-1">Please provide a valid image file (.png or .jpg) with dimensions 200x100 pixels.</small>
+                            <div class="invalid-tooltip" id="invalidTooltip" style="display: none;">
+                              Please provide a valid image file (.png or .jpg) with dimensions 200x100 pixels.
+                            </div>
+                            <!-- Image preview area (hidden initially) -->
+                            <div class="image-preview mt-2" id="imagePreview" style="display: none;">
+                              <img id="previewImage" alt="Image preview">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>  
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+
+
+<!--======================Validation and image preview for student signature=============-->
+        <script>
+          document.getElementById('signaturefile').addEventListener('change', function(event) {
+              const file = event.target.files[0];
+              const previewImage = document.getElementById('previewImage');
+              const imagePreview = document.getElementById('imagePreview');
+              const invalidTooltip = document.getElementById('invalidTooltip');
+          
+              if (file) {
+                  const fileType = file.type;
+                  const reader = new FileReader();
+          
+                  if (fileType.includes('image')) {
+                      reader.onload = function(e) {
+                          const img = new Image();
+          
+                          img.onload = function() {
+                              // Validate dimensions
+                              if (img.width === 200 && img.height === 100) {
+                                  previewImage.src = e.target.result;
+                                  imagePreview.style.display = 'block'; // Show preview
+                                  invalidTooltip.style.display = 'none'; // Hide error
+                              } else {
+                                  previewImage.src = ''; // Clear preview
+                                  imagePreview.style.display = 'none'; // Hide preview
+                                  invalidTooltip.style.display = 'block'; // Show error
+                              }
+                          };
+          
+                          img.src = e.target.result;
+                      };
+          
+                      reader.readAsDataURL(file);
+                  } else {
+                      previewImage.src = '';
+                      imagePreview.style.display = 'none'; // Hide preview
+                      invalidTooltip.style.display = 'none'; // Hide error
+                  }
+              } else {
+                  previewImage.src = '';
+                  imagePreview.style.display = 'none'; // Hide preview
+                  invalidTooltip.style.display = 'none'; // Hide error
+              }
+          });
+          </script>
+<!--======================Validation and image preview for student signature=============-->
+
+<!--======================Validation for document upload(max size 2mb)=============-->
+<script>
+  function toggleFileInput() {
+      var yesRadio = document.getElementById('flexRadioDefault1');
+      var fileInputContainer = document.getElementById('fileInputContainer');
+      var fileInput = document.getElementById('id_copy_fileInput');
+      var fileSizeError = document.getElementById('fileSizeError');
+  
+      if (yesRadio.checked) {
+          fileInputContainer.style.display = 'block';
+          fileInput.setAttribute('required', 'required');
+      } else {
+          fileInputContainer.style.display = 'none';
+          fileInput.removeAttribute('required');
+          fileSizeError.style.display = 'none'; // Hide error when toggled off
+      }
+  
+      var yesRadioUnregisted = document.getElementById('flexRadioDefaultUnregisted');
+      var fileInputContainerUnregisted = document.getElementById('fileInputContainerUnregisted');
+      var id_copy_fileInput_unregistred = document.getElementById('id_copy_fileInput_unregistred');
+  
+      if (yesRadioUnregisted.checked) {
+          fileInputContainerUnregisted.style.display = 'block';
+          id_copy_fileInput_unregistred.setAttribute('required', 'required');
+      } else {
+          fileInputContainerUnregisted.style.display = 'none';
+          id_copy_fileInput_unregistred.removeAttribute('required');
+      }
+  }
+  
+  // File size validation (Max: 2MB)
+  document.getElementById('id_copy_fileInput').addEventListener('change', function(event) {
+      var file = event.target.files[0];
+      var fileSizeError = document.getElementById('fileSizeError');
+  
+      if (file) {
+          if (file.size > 2 * 1024 * 1024) { // 2MB limit
+              fileSizeError.style.display = 'block';
+              event.target.value = ''; // Clear the file input
+          } else {
+              fileSizeError.style.display = 'none'; // Hide error if file is valid
+          }
+      }
+  });
+  
+  // Initial call to set the correct state on page load
+  document.addEventListener('DOMContentLoaded', function() {
+      toggleFileInput();
+  });
+  </script>
+<!--======================Validation for document upload(max size 2mb)=============-->
+
+<!-- ===============Script to validate the ckeckbox to prevent form submission without checking it===================-->
+<script>
+  document.getElementById("undertakingForm").addEventListener("submit", function(event) {
+      const checkboxes = document.querySelectorAll(".form-check-input");
+      const errorMessage = document.getElementById("error-message");
+      
+      let allChecked = true;
+      checkboxes.forEach(checkbox => {
+          if (!checkbox.checked) {
+              allChecked = false;
+          }
+      });
+
+      if (!allChecked) {
+          event.preventDefault(); // Prevent form submission
+          errorMessage.style.display = "block"; // Show error message
+      } else {
+          errorMessage.style.display = "none"; // Hide error message if all checked
+      }
+  });
+</script>
+<!-- ===============Script to validate the ckeckbox to prevent form submission without checking it ENDS===================-->
+
+<!-- ===============Script to hide message notification===================-->
+ <!-- JavaScript to Auto-Hide the Alert After 3 Seconds -->
+ <script>
+  setTimeout(function() {
+    var alertBox = document.getElementById("alert-box");
+    if (alertBox) {
+      alertBox.style.display = "none";
+    }
+  }, 3000); // Hides after 3 seconds
+</script>
+<!-- ===============Script to hide message notification ENDS===================-->
+
+        {% endblock %}
+
+        

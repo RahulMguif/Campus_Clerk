@@ -1,0 +1,65 @@
+{% extends 'student/index.html' %}
+{% block student_content %}
+
+
+
+<div class="main-panel">        
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Feedback Application</h4>
+                    <form class="form-sample" method="post" action="{% url 'add_feedback' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="hidden" value="{{student_id}}" name="student_id">
+                                <label class="col-sm-3 col-form-label">Select Department</label>
+                                <div class="col-sm-12">
+                                    <select class="form-control" name="department" id="">
+                                        <option value="" disabled selected>--- Select ---</option>
+                                        {% for n in department %}
+                                        <option value="{{n.id}}">{{n.department_name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="col-sm-3 col-form-label">Select Semester</label>
+                                <div class="col-sm-12">
+                                    <select class="form-control" name="semester" id="">
+                                        <option value="" disabled selected>--- Select ---</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="col-sm-3 col-form-label">Description</label>
+                                <div class="col-sm-12">
+                                    <textarea class="form-control" name="comment" id="" style="height: 100px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12 d-flex justify-content-center">
+                                <div class="col-sm-12 mt-3 text-center">
+                                    <button type="submit" class="btn btn-primary" >Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
