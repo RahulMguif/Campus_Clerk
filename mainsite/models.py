@@ -17,6 +17,8 @@ class student_registration(models.Model):
     is_class_rep = models.BooleanField(default=False, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     password_reset_token = models.CharField(max_length = 500, null=True)
+    is_approved = models.BooleanField(default=False)
+
     
     class Meta:
         db_table = 'student_registration'
