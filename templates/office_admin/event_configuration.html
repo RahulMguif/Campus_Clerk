@@ -48,15 +48,15 @@
     <div class="col-md-6 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Course Configuration</h4>
+          <h4 class="card-title">Event Configuration</h4>
           <!-- <p class="card-description">
             Basic form layout
           </p> -->
-          <form method="POST" action="{% url 'course_config' %}" class="forms-sample">
+          <form method="POST" action="{% url 'event_config' %}" class="forms-sample">
             {% csrf_token %}
                 <div class="form-group">
-                    <label for="exampleInputUsername1">Course Name</label>
-                    <input type="text" class="form-control" name="course" placeholder="Course Name">
+                    <label for="exampleInputUsername1">Event Name</label>
+                    <input type="text" class="form-control" name="event" placeholder="Event Name">
                 </div>
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                 <!-- <button class="btn btn-light">Cancel</button> -->
@@ -70,24 +70,24 @@
     <div class="col-lg-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Course Configuration</h4>
+                <h4 class="card-title">Event Configuration</h4>
                 
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>Sl.No</th>
-                                <th>Course Name</th>
+                                <th>Event Name</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for n in table %}
+                            {% for event in events %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td>{{n.course_name}}</td>
+                                <td>{{event.event_name}}</td>
                                 <td>
-                                    <a href="#" class="link-danger fs-15" data-bs-toggle="modal" data-bs-target="#DeleteModel{{ n.id }}">
+                                    <a href="#" class="link-danger fs-15" data-bs-toggle="modal" data-bs-target="#DeleteModel{{ event.id }}">
                                       <i class="bi bi-trash3 trash-icon" title="Delete"></i>
                                     </a>
                                 </td>
@@ -102,10 +102,10 @@
 </div>
 
 
-{% for n in table %}
+{% for event in events %}
  <!--  Extra Large modal FOR DELETE -->
- <div id="DeleteModel{{n.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <form action="{% url 'course_delete' %}" method="post">
+ <div id="DeleteModel{{event.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <form action="{% url 'event_delete' %}" method="post">
   {% csrf_token %}
   <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -115,9 +115,9 @@
           <div class="modal-body text-center p-5">
               <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:120px;height:120px"></lord-icon>
               <div class="mt-4">
-                  <h4 class="mb-3">Do you want to remove <span class="badge badge-outline-danger"> {{n.course_name}} </span> Course..?</h4>
-                  <p class="text-muted mb-4">If you remove the course it will remove from DB</p>
-                  <input type="hidden" name="deletepackageid" value="{{n.id}}">
+                  <h4 class="mb-3">Do you want to remove <span class="badge badge-outline-danger"> {{event.event_name}} </span> Event..?</h4>
+                  <p class="text-muted mb-4">If you remove the event it will remove from DB</p>
+                  <input type="hidden" name="deletepackageid" value="{{event.id}}">
                   <div class="hstack gap-2 justify-content-center">
                       <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                       <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>

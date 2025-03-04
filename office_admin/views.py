@@ -487,3 +487,196 @@ def approval_status_office(request, admin_pk):  # Changed application_id → adm
 
     messages.error(request, "Invalid request.")
     return redirect("view_applications")
+
+
+def event_config(request):
+    if request.method=="POST":
+        event_name=request.POST.get('event')
+        add=event()
+        add.event_name=event_name
+        add.save()
+        messages.success(request,'Successfully Added')
+        return redirect('event_config')
+    event_data=event.objects.filter(delete_status=0)
+    context={'events':event_data}
+    return render(request,"office_admin/event_configuration.html",context)
+
+
+def event_delete(request):
+    if request.method=='POST':
+        id=request.POST.get('deletepackageid')
+        delete=event.objects.get(id=id)
+        delete.delete_status=1
+        delete.save()
+        messages.success(request,'Delete Successfully')
+        return redirect('event_config')
+    
+#Adding staff incharge
+def add_staff_incharge(request):
+  
+    try:
+        user_nme = request.session.get('user_nme')
+        # if user_nme is None:    
+        #     return redirect('error_404')
+        department = departments.objects.filter(delete_status=0)  # Exclude deleted records
+        events_data = event.objects.filter(delete_status=0)  # Exclude deleted records
+        if request.method == 'POST' and 'add' in request.POST:
+            name = request.POST.get('name').strip()
+            email = request.POST.get('email').strip()
+            password= request.POST.get('password').strip()
+            mobile= request.POST.get('mobile').strip()
+            department_id=request.POST.get('department')
+            events_id=request.POST.get('events')
+            # Ensure the department exists before saving
+            if department_id:
+                department = departments.objects.get(id=department_id)  # Fetch the department object
+            else:
+                department = None  # Handle cases where no department is selected
+
+            if events_id:
+                events_data = event.objects.get(id=events_id)  # Fetch the event object
+            else:
+                events_data = None  # Handle cases where no event is selected
+           
+            staff_incharge_data = staff_incharge.objects.create(
+                    name=name,
+                    email=email,
+                    password=password,
+                    mobile=mobile,
+                    is_active=1,
+                    department_pk=department, 
+                    event_pk=events_data,
+                    
+                )
+
+            # Create login entry for staff advisor
+            department_login.objects.create(
+                staff_incharge_pk=staff_incharge_data,
+                role="staff_incharge",
+                delete_status=False
+            )
+
+            messages.success(request, 'Successfully saved the staff incharge.')
+            return redirect('add_staff_incharge')
+        
+        # Fetch all data from the database
+        all_data = staff_incharge.objects.filter(delete_status=False).order_by('-id')  # Adjust filter as needed
+
+        contexts = {
+            'username': user_nme,
+            'all_data': all_data,
+            'department':department,
+            'event_data':events_data,
+        }
+    
+        return render(request,"office_admin/add_staff_incharge.html",contexts)
+
+    except Exception as e:
+        print('Exception in add_staff_incharge:', e)
+        messages.error(request, 'An error occurred. Please contact admin.')
+        return render(request,"office_admin/add_staff_incharge.html")
+    
+
+def edit_staff_incharge(request):
+    if request.method == "POST":
+        try:
+            user_nme = request.session.get('user_nme')
+            if user_nme is None:
+                return redirect('error_404')
+            
+            staff_incharge_pk = request.POST.get("staff_incharge_pk")
+            name = request.POST.get("name")
+            email = request.POST.get("email")
+            password = request.POST.get("password")
+            mobile = request.POST.get("mobile")
+            department_id=request.POST.get('department')
+            event_id=request.POST.get('events')
+            # Ensure the department exists before saving
+            if department_id:
+                department = departments.objects.get(id=department_id)  # Fetch the department object
+            else:
+                department = None  # Handle cases where no department is selected
+
+            # Ensure the event exists before saving
+            if event_id:
+                event_data = event.objects.get(id=event_id)  # Fetch the event object
+            else:
+                event_data = None  # Handle cases where no event is selected
+
+            entry = get_object_or_404(staff_incharge, pk=staff_incharge_pk)
+            entry.name = name
+            entry.email = email
+            entry.password = password
+            entry.mobile = mobile 
+            entry.department_pk=department
+            entry.event_pk=event_data
+
+            entry.save()
+            messages.success(request, 'Updated Successfully.')
+
+            return redirect('add_staff_incharge')
+
+        except Exception as e:
+            print('Exception in add_staff_incharge:', e)
+            messages.error(request, 'An error occurred. Please contact  admin.')
+            return render(request,"office_admin/add_staff_incharge.html")
+
+    return redirect('add_staff_incharge')
+
+def delete_staff_incharge(request):
+    try:
+        user_nme = request.session.get('user_nme')
+        if user_nme is None:
+            return redirect('error_404')
+        
+        print("POST data:", request.POST)
+        staff_incharge_pk = request.POST.get('staff_incharge_pk')
+        # Check if staff_incharge exists
+        main_admin_record = staff_incharge.objects.get(id=staff_incharge_pk)
+        main_admin_record.delete_status = True
+        main_admin_record.save()
+
+        login_record = department_login.objects.filter(staff_incharge_pk=main_admin_record).first()
+        if login_record:
+            login_record.delete_status = True
+            login_record.save()
+
+        messages.success(request, 'Successfully deleted the staff incharge.')
+        return redirect('add_staff_incharge')
+    except main_admin_record.DoesNotExist:   
+        messages.error(request, 'staff_advisor not found.')
+        return redirect('add_staff_incharge')
+    except Exception as e:
+        # Handle other exceptions
+        print('Exception delete_staff_incharge:', e)
+        messages.error(request, 'An error occurred while deleting the staff_advisor. Please contact  admin.')
+      
+        return redirect('add_staff_incharge')
+
+
+
+def change_staff_incharge_status(request, staff_incharge_pk):
+    if request.method == 'POST':
+        try:
+          
+            incharge = get_object_or_404(staff_incharge, pk=staff_incharge_pk)
+            status = request.POST.get('incharge_status')
+            print(staff_incharge_pk)
+
+            if status == 'Block':
+                incharge.is_active = 2  # Set is_active to 2 for blocking
+                incharge.save()
+            if status == 'Allow':
+                incharge.is_active = 1  # Set is_active 
+                incharge.save()    
+            
+            messages.success(request, 'Successfully changed the status')
+            return redirect('add_staff_incharge')  # Redirect after successfully updating status
+
+        except Exception as e:
+            print('Exception in change_admin_status:', e)
+            messages.error(request, 'An error occurred. Please contact  admin.')
+            return redirect('add_staff_incharge')  # Redirect to a safe page even on error
+
+    else:
+        return redirect('add_staff_incharge')  
