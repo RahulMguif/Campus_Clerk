@@ -119,49 +119,60 @@ def user_logout(request):
     return redirect('home')  # Redirect to the login page (update as needed)
 
 
+from django.db.models import Q
 
 def department_user_login(request):
     if request.method == 'POST':
         email = request.POST.get('username')
         password = request.POST.get('password')
-        print("email", email)
 
         try:
-            # Check if the user exists in the department_login table
-            user_login = department_login.objects.select_related('hod_pk', 'staff_advisor_pk').filter(
-                hod_pk__email=email, delete_status=False
-            ).first() or department_login.objects.select_related('hod_pk', 'staff_advisor_pk').filter(
-                staff_advisor_pk__email=email, delete_status=False
-            ).first()
+            # Identify the user type
+            user = None
+            role = None
 
-            print("user_login:", user_login)
+            if hod.objects.filter(email=email, delete_status=False).exists():
+                user = hod.objects.get(email=email, delete_status=False)
+                role = "hod"
+            elif staff_advisor.objects.filter(email=email, delete_status=False).exists():
+                user = staff_advisor.objects.get(email=email, delete_status=False)
+                role = "staff_advisor"
+            elif staff_incharge.objects.filter(email=email, delete_status=False).exists():
+                user = staff_incharge.objects.get(email=email, delete_status=False)
+                role = "staff_incharge"
 
-            if not user_login:
+            if not user:
                 messages.error(request, 'No account found with this email.')
                 return redirect('home')
 
-            # Identify the user and check the password
-            if user_login.hod_pk:
-                user = user_login.hod_pk
-                role = "hod"
-            else:
-                user = user_login.staff_advisor_pk
-                role = "staff_advisor"
+            # Find the user in the department_login table
+            user_login = department_login.objects.filter(
+                **{f"{role}_pk": user},
+                delete_status=False
+            ).first()
+
+            if not user_login:
+                messages.error(request, 'No account found in department login.')
+                return redirect('home')
 
             # Check if the account is blocked
             if user.is_active == 2:
                 messages.error(request, 'Your account has been blocked. Please contact the administrator.')
                 return redirect('home')
 
-            if user.password == password:  # Check password (Consider hashing for security)
+            # Check password (consider hashing it for better security)
+            if user.password == password:
                 request.session['username'] = email
-                request.session['role'] = role  # Store role in session
-                request.session.set_expiry(0)
+                request.session['role'] = role
+                request.session.set_expiry(0)  # Session expires on browser close
 
+                # Redirect based on role
                 if role == "hod":
                     return redirect('hod_home')
-                else:
+                elif role == "staff_advisor":
                     return redirect('staff_home')
+                elif role == "staff_incharge":
+                    return redirect('staff_incharge_home')
             else:
                 messages.error(request, 'Invalid password.')
                 return redirect('home')

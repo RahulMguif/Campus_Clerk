@@ -58,19 +58,30 @@
                             {% csrf_token %}
                             <div class="row g-2 mx-3 mt-2 mb-3">
                                 <div class="col">
+                                    
                                     <div class="position-relative">
+                                        <label>Full Name</label>
                                         <input type="text" class="form-control border-light bg-light" name="full_name" placeholder="Full Name *"  minlength="3" maxlength="20"   required>
                                     </div>
                                 </div><!-- end col -->
                                 <div class="col">
                                     <div class="position-relative">
+                                        <label>Email</label>
                                         <input type="email" class="form-control border-light bg-light" name="email" placeholder="Email *" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
                                         <div id="emailError" class="invalid-feedback" style="display: none;">Please enter a valid email address.</div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="position-relative">
+                                        <label>Password</label>
+                                        <input type="password" class="form-control border-light bg-light" name="password" placeholder="Password *" required>
+                                        <!-- <div id="emailError" class="invalid-feedback" style="display: none;">Please enter a valid email address.</div> -->
                                     </div>
                                 </div>
                                 
                                 
                                 <div class="col">
+                                    <label>Course</label>
                                     <select class="form-control border-light bg-light" name="course" required>
                                         <option value="">Select Course *</option>
                                         {% for c in courses %}
@@ -80,9 +91,11 @@
                                 </div>
 
                                 <div class="col">
+                                    <label>Department</label>
                                     <input type="text" class="form-control border-light bg-light" value="{{ department.department_name }}" readonly>
                                 </div>
                                 <div class="col">
+                                    <label>Semester</label>
                                     <select class="form-control border-light bg-light" name="semester" id="semester" required>
                                         <option value="">-- Select semester --</option>
                                         <option value="1">1</option>
@@ -95,16 +108,18 @@
                                         <option value="8">8</option>
                                     </select>
                                 </div>
-                                <div class="col">
+                                <!-- <div class="col">
                                     <input type="text" class="form-control border-light bg-light" value="Year of Admission :" readonly>
-                                </div>
+                                </div> -->
                                 <div class="col">
+                                    <label>Year of Admission</label>
                                     <input type="date" class="form-control border-light bg-light" name="year_of_joining" id="year_of_joining" required>
                                 </div>
                                 
                                 
                                 
                                 <div class="col">
+                                    <label>Mobile Number</label>
                                     <div class="position-relative">
                                         <input type="text"  id="phone" class="form-control border-light bg-light"  name="mobile" placeholder="Mobile Number *" required>
                                     </div>

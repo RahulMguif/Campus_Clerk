@@ -65,7 +65,8 @@
                                     <th scope="col">Branch</th>
                                     <th scope="col">Semester</th>
                                     <th scope="col">Year of Joining</th>
-                                    <th scope="col">Class Representative</th>
+                                    <th scope="col">Event Coordinated</th>
+                                    <th scope="col">Programme Coordinator</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,10 +80,19 @@
                                     <td>{{ student.semester }}</td>
                                     <td>{{ student.year_of_joining }}</td>
                                     <td>
-                                        <input type="radio" name="class_rep" 
-                                               class="class-rep-radio"
+                                        <select class="event-dropdown" data-student-id="{{ student.id }}">
+                                            <option value="">Select Event</option>
+                                            {% for event in events %}
+                                            <option value="{{ event.id }}" {% if student.event_coordinated == event.event_name %}selected{% endif %}>
+                                                {{ event.event_name }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" class="class-rep-checkbox" 
                                                data-student-id="{{ student.id }}"
-                                               {% if student.is_class_rep %}checked{% endif %}>
+                                               {% if student.is_programme_coordinator %}checked{% endif %} disabled>
                                     </td>
                                 </tr><!-- end tr -->
                                 {% empty %}
@@ -119,29 +129,51 @@
 
 <!-- =================Ajax to make a student class representative===============-->
 <script>
-    document.querySelectorAll('.class-rep-radio').forEach(radio => {
-        radio.addEventListener('change', function() {
+    document.querySelectorAll('.event-dropdown').forEach(dropdown => {
+        dropdown.addEventListener('change', function () {
             let studentId = this.dataset.studentId;
+            let eventId = this.value;
+            let checkbox = document.querySelector(`.class-rep-checkbox[data-student-id='${studentId}']`);
 
-            fetch("{% url 'assign_class_rep' %}", {
+            checkbox.disabled = !eventId; // Enable only if an event is selected
+        });
+    });
+
+    document.querySelectorAll('.class-rep-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            let studentId = this.dataset.studentId;
+            let eventDropdown = document.querySelector(`.event-dropdown[data-student-id='${studentId}']`);
+            let eventId = eventDropdown ? eventDropdown.value : null;
+
+            if (!eventId) {
+                alert("Please select an event before assigning a coordinator.");
+                this.checked = false;
+                return;
+            }
+
+            fetch("{% url 'assign_programme_coordinator' %}", {
                 method: "POST",
                 headers: {
                     "X-CSRFToken": "{{ csrf_token }}",
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
-                body: "student_id=" + studentId
+                body: "student_id=" + studentId + "&event_id=" + eventId
             })
             .then(response => response.json())
             .then(data => {
+                let message = data.message;
+                if (data.removed_message) {
+                    message = data.removed_message + "\n" + data.message; // Combine messages
+                }
+                alert(message);
                 if (data.status === "success") {
-                    alert(data.message);
-                } else {
-                    alert("Error: " + data.message);
+                    location.reload();  // Refresh page after "OK"
                 }
             });
         });
     });
 </script>
+
 <!-- =================Ajax to make a student class representative ENDS===============-->
 
 {% endblock %}
