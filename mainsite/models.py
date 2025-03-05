@@ -25,6 +25,7 @@ class student_registration(models.Model):
 class department_login(models.Model):
     hod_pk = models.ForeignKey(hod, on_delete=models.CASCADE, null=True)
     staff_advisor_pk = models.ForeignKey(staff_advisor, on_delete=models.CASCADE, null=True)
+    staff_incharge_pk = models.ForeignKey(staff_incharge, on_delete=models.CASCADE, null=True)
     role = models.CharField(max_length = 50, null=True)
     delete_status = models.BooleanField(default=False)
 

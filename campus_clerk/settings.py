@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'hod',
     'student_rep',
     'staff_advisor',
+    'staff_incharge'
     
 ]
 

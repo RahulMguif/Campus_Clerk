@@ -6,7 +6,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Office Admin</title>
+  <title>HOD</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="{% static 'admin/vendors/feather/feather.css' %}">
   <link rel="stylesheet" href="{% static 'admin/vendors/ti-icons/css/themify-icons.css' %}">
@@ -21,75 +21,28 @@
   <link rel="stylesheet" href="{% static 'admin/css/vertical-layout-light/style.css' %}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{% static 'admin/images/favicon.png' %}" />
-  <style>
+  <!-- <style>
     #src{
       width: 250px;
       height: 55px;
     }
-  </style>
+  </style> -->
 </head>
 <body>
   <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="{% url 'admin_home' %}"><img id="src" src="{% static 'admin/images/office.png' %}" class="mr-2" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="{% url 'admin_home' %}"><img src="{% static 'admin/images/Logo.png' %}" alt="logo"/></a>
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'hod_home' %}"><img id="src" src="{% static 'admin/images/Logo.png' %}" class="mr-2" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="{% url 'hod_home' %}"><img src="{% static 'admin/images/Logo.png' %}" alt="logo"/></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="icon-menu"></span>
         </button>
-        
+       
         <ul class="navbar-nav navbar-nav-right">
-          {% comment %} <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-              <i class="icon-bell mx-0"></i>
-              <span class="count"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-success">
-                    <i class="ti-info-alt mx-0"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-normal">Application Error</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    Just now
-                  </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-warning">
-                    <i class="ti-settings mx-0"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-normal">Settings</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    Private message
-                  </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-info">
-                    <i class="ti-user mx-0"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-normal">New user registration</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    2 days ago
-                  </p>
-                </div>
-              </a>
-            </div>
-          </li> {% endcomment %}
+          
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
               <img src="{% static 'admin/images/faces/avatar.jpg' %}" alt="profile"/>
@@ -113,19 +66,21 @@
       </div>
     </nav>
     <div class="container-fluid page-body-wrapper">
-   
-    
+      <!-- partial:partials/_settings-panel.html -->
+     
+     
       <!-- partial -->
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'admin_home' %}">
+            <a class="nav-link" href="{% url 'staff_incharge_home' %}">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
          
+          
           <!-- <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <i class="icon-head menu-icon"></i>
@@ -139,67 +94,18 @@
               </ul>
             </div>
           </li> -->
-          <!-- <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Students</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="error">
+            <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'view_all_student' %}"> All Students </a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'incharge_add_student' %}"> Register Students </a></li>
               </ul>
             </div>
-          </li> -->
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'view_applications' %}">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Review Applications</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'course_config' %}">
-              <i class="bi bi-book-half menu-icon"></i>
-              <span class="menu-title">Course Configuration</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'department_config' %}">
-              <i class="bi bi-diagram-3-fill menu-icon"></i>
-              <span class="menu-title">Department</span>
-            </a>
-          </li>
-          
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'add_staff_advisor' %}">
-              <i class="icon-head menu-icon"></i>
-              <span class="menu-title">Add staff advisor</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'add_hod' %}">
-              <i class="bi bi-person-badge menu-icon"></i>
-              <span class="menu-title">Add HOD</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'event_config' %}">
-              <i class="bi bi-calendar-event menu-icon"></i>
-              <span class="menu-title">Add Events</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'add_staff_incharge' %}">
-              <i class="bi bi-person-badge menu-icon"></i>
-              <span class="menu-title">Add Staff Incharge</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'feedback_menu' %}">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Add Feedback </span>
-            </a>
           </li>
         </ul>
       </nav>
@@ -208,7 +114,7 @@
         <div class="content-wrapper">
     
     
-    {% block admin_content %} 
+    {% block staff_incharge_content %} 
     
     {% endblock %}
 
@@ -217,12 +123,11 @@
       </div>
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
-           <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2025.  CampusClerk.</span>
-           
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2025.  All rights reserved.</span>
+            
           </div>
-         
-         
+          
         </footer> 
         <!-- partial -->
       </div>
