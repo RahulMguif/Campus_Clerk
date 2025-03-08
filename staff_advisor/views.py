@@ -256,3 +256,39 @@ def view_feedback(request):
     feeds_app = feedback.objects.filter(delete_status=0, department_pk=staff_dept,is_flaged=1)
     context={'feed':feed,'feeds_app':feeds_app}
     return render(request,"staff_advisor/feedback_view.html",context)
+
+def approve_reg_student(request):
+    staff_email = request.session.get('username')
+
+    if not staff_email:
+        messages.error(request, "You are not logged in. Please log in again.")
+        return redirect('home')
+
+    # Fetch the staff advisor object using the email
+    staff_advisor_obj = staff_advisor.objects.filter(email=staff_email, delete_status=False).first()
+
+    if not staff_advisor_obj:
+        messages.error(request, "Invalid staff advisor account.")
+        return redirect('home')
+
+    registered_student=student_registration.objects.filter(department=staff_advisor_obj.department_pk.department_name)
+    contexs={'registered_student':registered_student}
+   
+    return render(request,'staff_advisor/approve_reg_students.html',contexs)
+
+
+
+def registration_status(request,student_pk):
+    if request.method == "POST":
+        students = get_object_or_404(student_registration, pk=student_pk)
+        new_status = request.POST.get("adminstatus")  # Get status from form
+
+        # Update application status and date
+        students.is_approved = new_status
+        students.save()
+
+        messages.success(request, "status updated successfully.")
+        return redirect(approve_reg_student)
+    
+    messages.error(request, "Invalid request.")
+    return render(request,'staff_advisor/approve_reg_students.html')

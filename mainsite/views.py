@@ -30,6 +30,12 @@ def login(request):
             student = student_registration.objects.get(email=email)
             print(f"Stored Password (Hashed): {student.password}")  # Debugging
 
+            if not student.is_approved:
+                messages.error(request, "Your account is not approved yet. Please contact admin.")
+                print("Student account not approved!")  # Debugging
+                return render(request, "mainsite/login.html")
+
+
             if check_password(password, student.password):
                 request.session["student_id"] = student.id
                 request.session["student_name"] = student.fullname
