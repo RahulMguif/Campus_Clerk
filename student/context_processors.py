@@ -16,16 +16,16 @@ def student_context(request):
 
 
 # Student email, name and profile pic passingf for global use.
-from mainsite.models import student_registration
+# from mainsite.models import student_registration
 
-def student_profile(request):
-    if not request.session.get('student_id'):
-        return {}  # Return an empty dictionary if no user is logged in
+# def student_profile(request):
+#     if not request.session.get('student_id'):
+#         return {}  # Return an empty dictionary if no user is logged in
 
-    student = student_registration.objects.filter(pk=request.session.get('student_id')).first()
+#     student = student_registration.objects.filter(pk=request.session.get('student_id')).first()
     
-    return {
-        'student_profile_pic': student.profile_pic_url if student and student.profile_pic_url else 'admin/images/faces/avatar.jpg',
-        'student_name': student.fullname if student else '',
-        'student_email': student.email if student else '',
-    }
+#     return {
+#         'student_profile_pic': student.profile_pic_url if student and student.profile_pic_url else 'admin/images/faces/avatar.jpg',
+#         'student_name': student.fullname if student else '',
+#         'student_email': student.email if student else '',
+#     }

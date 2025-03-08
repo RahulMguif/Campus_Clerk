@@ -54,7 +54,7 @@ def assign_programme_coordinator(request):
         current_coordinators = student_registration.objects.filter(
             department=student.department,
             semester=student.semester,
-            is_programme_coordinator=True
+            is_club_coordinator=True
         ).order_by("date_joined")  # Order by oldest first
 
         removed_message = ""
@@ -63,12 +63,12 @@ def assign_programme_coordinator(request):
             # Remove the oldest coordinator
             oldest_coordinator = current_coordinators.first()
             removed_message = f"{oldest_coordinator.fullname} was removed as Programme Coordinator."
-            oldest_coordinator.is_programme_coordinator = False
+            oldest_coordinator.is_club_coordinator = False
             oldest_coordinator.event_coordinated = None  # Reset event
             oldest_coordinator.save()
 
         # Assign the new student as a programme coordinator
-        student.is_programme_coordinator = True
+        student.is_club_coordinator = True
 
         # Update the event if provided
         if event_id:
@@ -118,35 +118,58 @@ def incharge_add_student(request):
         department_id = request.POST.get('department')
         year_of_joining = request.POST.get('year_of_joining')
         semester = request.POST.get('semester')
+        event_id = request.POST.get('events')  # Fetch selected event
 
         # Check if student email already exists
         if student_registration.objects.filter(email=email).exists():
             messages.error(request, "A student with this email already exists.")
             return redirect('view_all_student')
 
-        # Fetch course name
-        course_obj = course.objects.filter(id=course_id).first()
-        course_name = course_obj.course_name if course_obj else "Unknown"
+        # Fetch course and department names
+        course_obj = get_object_or_404(course, id=course_id)
+        department_obj = get_object_or_404(departments, id=department_id)
 
-        # Fetch department name
-        department_obj = departments.objects.filter(id=department_id).first()
-        department_name = department_obj.department_name if department_obj else "Unknown"
+        # Fetch event
+        event_obj = get_object_or_404(event, id=event_id)
+
+        # Check if there are already 2 coordinators in this department & semester
+        current_coordinators = student_registration.objects.filter(
+            department=department_obj.department_name,
+            semester=semester,
+            is_club_coordinator=True
+        ).order_by("date_joined")  # Oldest first
+
+        removed_message = ""
+
+        if current_coordinators.count() >= 2:
+            # Remove the oldest coordinator
+            oldest_coordinator = current_coordinators.first()
+            removed_message = f"{oldest_coordinator.fullname} was removed as Programme Coordinator."
+            oldest_coordinator.is_club_coordinator = False
+            oldest_coordinator.event_coordinated = None  # Reset event
+            oldest_coordinator.save()
 
         # Create new student entry
         student = student_registration(
             fullname=full_name,
             email=email,
-            password=make_password(password),  # Hash the password before storing
+            password=make_password(password),  # Hash the password
             mobile=mobile,
-            course=course_name,
-            department=department_name,
+            course=course_obj.course_name,
+            department=department_obj.department_name,
             semester=semester,
             year_of_joining=year_of_joining,
-            is_active=True
+            is_active=True,
+            is_club_coordinator=True,  # Assign as club coordinator
+            event_coordinated=event_obj.event_name,  # Assign event
         )
         student.save()
 
-        messages.success(request, "Student added successfully!")
+        messages.success(request, f"{student.fullname} is now the Programme Coordinator for {student.event_coordinated}.")
+        
+        if removed_message:
+            messages.warning(request, removed_message)  # Show removal message if applicable
+
         return redirect('view_all_student')
 
     else:
@@ -158,12 +181,14 @@ def incharge_add_student(request):
             messages.error(request, "Invalid staff advisor account.")
             return redirect('home')
 
-        # Fetch all departments and courses for dropdown
+        # Fetch all departments, courses, and events for dropdown
         departments_list = departments.objects.all()
         courses_list = course.objects.all()
+        event_list = event.objects.all()
 
         context = {
             'departments': departments_list,
             'courses': courses_list,
+            'event_list': event_list,
         }
         return render(request, "staff_incharge/add_students_coordinator.html", context)

@@ -65,6 +65,7 @@
                                     <th scope="col">Branch</th>
                                     <th scope="col">Semester</th>
                                     <th scope="col">Year of Joining</th>
+                                    <th scope="col">Approval Status</th>
                                     <th scope="col">Approve</th>
                                 </tr>
                             </thead>
@@ -78,6 +79,13 @@
                                     <td>{{ student.department }}</td>
                                     <td>{{ student.semester }}</td>
                                     <td>{{ student.year_of_joining }}</td>
+                                    <td>
+                                        {% if student.is_approved %}
+                                            <span class="badge badge-success">Approved</span>
+                                        {% else %}
+                                            <span class="badge badge-warning">Pending</span>
+                                        {% endif %}
+                                    </td>                                    
                                     
                                     <td>
                                         <a href="#" class="link-success fs-15">

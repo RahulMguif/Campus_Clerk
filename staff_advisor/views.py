@@ -147,32 +147,42 @@ from django.http import JsonResponse
 
 def assign_class_rep(request):
     if request.method == "POST":
-        student_id = request.POST.get("student_id")
+        student_ids = request.POST.get("student_ids", "").strip()  
         staff_email = request.session.get('username')
 
         if not staff_email:
             return JsonResponse({"status": "error", "message": "You are not logged in"}, status=403)
 
         staff_advisor_obj = staff_advisor.objects.filter(email=staff_email, delete_status=False).first()
-
         if not staff_advisor_obj:
             return JsonResponse({"status": "error", "message": "Invalid staff advisor account"}, status=403)
 
-        student = get_object_or_404(student_registration, id=student_id)
+        student_ids = [sid.strip() for sid in student_ids.split(",") if sid.strip().isdigit()]  
 
-        # Ensure only one student per department & semester is assigned
-        student_registration.objects.filter(
-            department=student.department,
-            semester=student.semester
-        ).update(is_class_rep=False)
+        if not student_ids:
+            return JsonResponse({"status": "error", "message": "No valid student IDs provided"}, status=400)
 
-        # Assign the selected student as class rep
-        student.is_class_rep = True
-        student.save()
+        # Fetch first student to get department and semester
+        first_student = get_object_or_404(student_registration, id=student_ids[0])
+        department = first_student.department
+        semester = first_student.semester
 
-        return JsonResponse({"status": "success", "message": f"{student.fullname} is now the class representative"})
+        if len(student_ids) > 2:
+            return JsonResponse({"status": "error", "message": "Only 2 class representatives allowed per semester."})
+
+        # Reset all students in the same department and semester
+        student_registration.objects.filter(department=department, semester=semester).update(is_class_rep=False)
+
+        # Assign selected students as class reps (limit to 2)
+        updated_students = student_registration.objects.filter(id__in=student_ids[:2])
+        updated_students.update(is_class_rep=True)
+
+        student_names = " and ".join([student.fullname for student in updated_students])
+
+        return JsonResponse({"status": "success", "message": f"{student_names} have been selected as class representatives."})
 
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
+
 
 
 from django.shortcuts import render, redirect

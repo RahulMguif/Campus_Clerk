@@ -14,6 +14,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
+
 <style>
     .modal-header{
         background-color: #225160;
@@ -44,102 +45,97 @@
                     </div>
                 </div>
                 <!-- ========================Message Box End===================================== -->
-    <div class="row">
-        <div class="col-xl-12">
-            <div class="card card-height-100">
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Add New Students </h4>
-                </div><!-- end card header -->
-               
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card card-height-100">
+                                <div class="card-header align-items-center d-flex">
+                                    <h4 class="card-title mb-0 flex-grow-1">Add New Students</h4>
+                                </div>
+                                <!-- end card header -->
+                
+                                <div class="card-body">
+                                    <form method="post" action="{% url 'add_students' %}">
+                                        {% csrf_token %}
+                                        <div class="row g-3 mx-3 mt-2 mb-3">
+                                            <!-- Full Name -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Full Name</label>
+                                                <input type="text" class="form-control border-light bg-light" name="full_name" placeholder="Full Name *" minlength="3" maxlength="20" required>
+                                            </div>
+                
+                                            <!-- Email -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Email</label>
+                                                <input type="email" class="form-control border-light bg-light" name="email" placeholder="Email *" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                                            </div>
+                
+                                            <!-- Password -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Password</label>
+                                                <input type="password" class="form-control border-light bg-light" name="password" placeholder="Password *" required>
+                                            </div>
+                
+                                            <!-- Course -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Course</label>
+                                                <select class="form-control border-light bg-light" name="course" required>
+                                                    <option value="">Select Course *</option>
+                                                    {% for c in courses %}
+                                                    <option value="{{ c.id }}">{{ c.course_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                
+                                            <!-- Department -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Department</label>
+                                                <input type="text" class="form-control border-light bg-light" value="{{ department.department_name }}" readonly>
+                                            </div>
+                
+                                            <!-- Semester -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Semester</label>
+                                                <select class="form-control border-light bg-light" name="semester" id="semester" required>
+                                                    <option value="">-- Select semester --</option>
+                                                    {% for i in "12345678"|make_list %}
+<option value="{{ i }}">{{ i }}</option>
+{% endfor %}
 
-                <div class="card-body">
-                    <div>
-                        <form method="post" action="{% url 'add_students'%}">
-                            {% csrf_token %}
-                            <div class="row g-2 mx-3 mt-2 mb-3">
-                                <div class="col">
-                                    
-                                    <div class="position-relative">
-                                        <label>Full Name</label>
-                                        <input type="text" class="form-control border-light bg-light" name="full_name" placeholder="Full Name *"  minlength="3" maxlength="20"   required>
-                                    </div>
-                                </div><!-- end col -->
-                                <div class="col">
-                                    <div class="position-relative">
-                                        <label>Email</label>
-                                        <input type="email" class="form-control border-light bg-light" name="email" placeholder="Email *" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-                                        <div id="emailError" class="invalid-feedback" style="display: none;">Please enter a valid email address.</div>
-                                    </div>
+                                                </select>
+                                            </div>
+                
+                                            <!-- Year of Admission -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Year of Admission</label>
+                                                <input type="date" class="form-control border-light bg-light" name="year_of_joining" id="year_of_joining" required>
+                                            </div>
+                
+                                            <!-- Mobile Number -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Mobile Number</label>
+                                                <input type="text" id="phone" class="form-control border-light bg-light" name="mobile" placeholder="Mobile Number *" required>
+                                            </div>
+                
+                                            <!-- Submit Button -->
+                                            <div class="col-12 text-center mt-3">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <span class="d-none d-sm-inline-block me-2">ADD</span>
+                                                    <i class="ri-add-circle-line"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- end row -->
+                                    </form>
                                 </div>
-                                <div class="col">
-                                    <div class="position-relative">
-                                        <label>Password</label>
-                                        <input type="password" class="form-control border-light bg-light" name="password" placeholder="Password *" required>
-                                        <!-- <div id="emailError" class="invalid-feedback" style="display: none;">Please enter a valid email address.</div> -->
-                                    </div>
-                                </div>
-                                
-                                
-                                <div class="col">
-                                    <label>Course</label>
-                                    <select class="form-control border-light bg-light" name="course" required>
-                                        <option value="">Select Course *</option>
-                                        {% for c in courses %}
-                                            <option value="{{ c.id }}">{{ c.course_name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-
-                                <div class="col">
-                                    <label>Department</label>
-                                    <input type="text" class="form-control border-light bg-light" value="{{ department.department_name }}" readonly>
-                                </div>
-                                <div class="col">
-                                    <label>Semester</label>
-                                    <select class="form-control border-light bg-light" name="semester" id="semester" required>
-                                        <option value="">-- Select semester --</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                    </select>
-                                </div>
-                                <!-- <div class="col">
-                                    <input type="text" class="form-control border-light bg-light" value="Year of Admission :" readonly>
-                                </div> -->
-                                <div class="col">
-                                    <label>Year of Admission</label>
-                                    <input type="date" class="form-control border-light bg-light" name="year_of_joining" id="year_of_joining" required>
-                                </div>
-                                
-                                
-                                
-                                <div class="col">
-                                    <label>Mobile Number</label>
-                                    <div class="position-relative">
-                                        <input type="text"  id="phone" class="form-control border-light bg-light"  name="mobile" placeholder="Mobile Number *" required>
-                                    </div>
-                                </div><!-- end col -->
-                                <div class="col-auto">
-                                    <button type="submit" class="btn btn-primary" name="add"><span class="d-none d-sm-inline-block me-2">ADD</span> <i class="ri-add-circle-line float-end"></i></button>
-                                </div><!-- end col -->
-                           
-                            
-                            </div><!-- end row -->
-                        </form>
+                                <!-- end card body -->
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
                     </div>
-
-                    
-                </div><!-- end cardbody -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-
-     
-    </div>
+                </div>
+                
 </div>
 </div>
 </div>

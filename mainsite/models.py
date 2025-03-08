@@ -15,7 +15,7 @@ class student_registration(models.Model):
     profile_pic_url = models.CharField(max_length = 200, null=True)
     is_active = models.BooleanField(default=False)
     is_class_rep = models.BooleanField(default=False, null=True)
-    is_programme_coordinator = models.BooleanField(default=False, null=True)
+    is_club_coordinator = models.BooleanField(default=False, null=True)
     event_coordinated = models.CharField(max_length = 200, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     password_reset_token = models.CharField(max_length = 500, null=True)

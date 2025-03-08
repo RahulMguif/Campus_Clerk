@@ -73,7 +73,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'office_admin.context_processors.feedback_status',
                 "student.context_processors.student_context",  # Ensure this matches
-                "student.context_processors.student_profile",
+                # "student.context_processors.student_profile",
+                "mainsite.context_processors.global_user_details",
             ],
         },
     },
