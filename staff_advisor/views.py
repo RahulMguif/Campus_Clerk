@@ -93,6 +93,8 @@ def update_staff_remark(request, application_id):
 
 from django.utils.timezone import now
 
+
+
 def approval_status_staff_advisor(request, application_id):
     # Get the logged-in staff advisor's email from session
     email = request.session.get('username')
@@ -109,18 +111,21 @@ def approval_status_staff_advisor(request, application_id):
 
     if request.method == "POST":
         new_status = request.POST.get("staff_advisor_status")  # Get status from form
+        remark = request.POST.get("staff_advisor_remark", "").strip()  # Get remarks
 
         # Update application with staff advisor details
         application.staff_advisor_pk = staff_advisor_instance
         application.staff_approval_status = new_status
+        application.staff_advisor_remark = remark  # Save remark
         application.staff_approval_date = now()
         application.save()
 
         messages.success(request, "Application status updated successfully.")
-        return redirect("view_student_applications")  # Redirect to the applications page
+        return redirect("view_student_applications")  # Redirect to applications page
 
     messages.error(request, "Invalid request.")
     return redirect("view_student_applications")
+
 
 
 def view_students_by_department(request):

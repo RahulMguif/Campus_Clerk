@@ -106,10 +106,10 @@
                                     <!-- ==================INNER MODELS======================= -->
                                     <!-- =========EDIT SignUp Email Modal =============== -->
                                     <div id="EditidModal{{ entry.pk }}" class="modal fade" tabindex="-1" aria-labelledby="EditidModal" aria-hidden="true"  style="transform: translateY(-8%);">
-                                        <div class="modal-dialog modal-dialog-centered modal-lg" >  <!-- Wider Modal -->
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" > 
                                             <div class="modal-content border-0 shadow-lg rounded-lg">
                                                 <div class="modal-header bg-primary text-white">
-                                                    <h5 class="modal-title">Review Application Details and Update Staff Advisor Remarks and Signature</h5>
+                                                    <h5 class="modal-title">Review Application Details and Update Staff Advisor Signature</h5>
                                                    
                                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
@@ -215,10 +215,12 @@
                                                                     <input type="text" class="form-control" value="{{ entry.branch }}" readonly>
                                                                 </div>
 
-                                                                <!-- Staff Advisor Remark (Editable) -->
+                                                                <!-- Staff Advisor Remark  -->
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label fw-semibold">Staff Advisor Remark</label>
-                                                                    <textarea class="form-control" name="staff_advisor_remark" rows="2" required placeholder="Enter your remarks" style="height: 49px;">{% if entry.staff_advisor_remark %}{{ entry.staff_advisor_remark }}{% endif %}</textarea>
+                                                                    <input type="text" class="form-control" 
+                                                                           value="{% if entry.staff_advisor_remark %}{{ entry.staff_advisor_remark }}{% else %}No Remark{% endif %}" 
+                                                                           readonly>
                                                                 </div>
 
                                                                 <!-- Staff Advisor Signature (Upload or Display Existing) -->
@@ -281,6 +283,10 @@
                                                                 <option value="Approved">Approve</option>
                                                                 <option value="Rejected">Reject</option>
                                                             </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-semibold">Remarks</label>
+                                                            <textarea class="form-control border rounded-3 py-1 px-3 fs-5" name="staff_advisor_remark" rows="3" placeholder="Enter your remarks"></textarea>
                                                         </div>
 
                                                         <!-- Modal Footer Buttons -->

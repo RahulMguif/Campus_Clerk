@@ -106,6 +106,11 @@ def add_staff_advisor(request):
                 department = departments.objects.get(id=department_id)  # Fetch the department object
             else:
                 department = None  # Handle cases where no department is selected
+
+              # Check if the email already exists
+            if staff_advisor.objects.filter(email=email).exists():
+                messages.error(request, 'A staff advisor with this email already exists.')
+                return redirect('add_staff_advisor')    
            
             staff = staff_advisor.objects.create(
                     name=name,
@@ -260,6 +265,11 @@ def add_hod(request) :
                 department = departments.objects.get(id=department_id)  # Fetch the department object
             else:
                 department = None  # Handle cases where no department is selected
+
+              # Check if the email already exists
+            if hod.objects.filter(email=email).exists():
+                messages.error(request, 'A hod with this email already exists.')
+                return redirect('add_hod')    
            
            
             hod_data = hod.objects.create(
@@ -449,11 +459,11 @@ def update_application(request, application_id):
     application_entry = get_object_or_404(student_application_request, id=application_id)
 
     if request.method == 'POST':
-        office_remark = request.POST.get('office_remark', '')
+        # office_remark = request.POST.get('office_remark', '')
         office_signature = request.FILES.get('office_signature')
 
         # Update office remark
-        application_entry.office_remark = office_remark
+        # application_entry.office_remark = office_remark
 
         # Handle office signature file upload
         if office_signature:
@@ -472,14 +482,16 @@ def update_application(request, application_id):
 from django.utils.timezone import now
 
 
-def approval_status_office(request, admin_pk):  # Changed application_id → admin_pk
+def approval_status_office(request, admin_pk):  
     if request.method == "POST":
         application = get_object_or_404(student_application_request, pk=admin_pk)
         new_status = request.POST.get("adminstatus")  # Get status from form
+        remark = request.POST.get("office_remark", "").strip()  # Get remarks
 
         # Update application status and date
         application.office_approval_status = new_status
         application.office_approval_date = now()
+        application.office_remark = remark  # Save remark
         application.save()
 
         messages.success(request, "Application status updated successfully.")

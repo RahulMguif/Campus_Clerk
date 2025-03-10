@@ -46,11 +46,11 @@ def update_application_hod(request, application_id):
     application_entries = get_object_or_404(student_application_request, id=application_id)
 
     if request.method == 'POST':
-        hod_remark = request.POST.get('hod_remark', '')
+        # hod_remark = request.POST.get('hod_remark', '')
         hod_signature = request.FILES.get('hod_signature')
 
         # Update office remark
-        application_entries.hod_remark = hod_remark
+        # application_entries.hod_remark = hod_remark
 
         # Handle office signature file upload
         if hod_signature:
@@ -74,10 +74,12 @@ def approval_status_hod(request, application_pk):
     if request.method == "POST":
         application = get_object_or_404(student_application_request, pk=application_pk)
         new_status = request.POST.get("adminstatus")  # Get status from form
+        hod_remark = request.POST.get("hod_remark", "").strip()  # Get remark from form
 
         # Update application status and date
         application.hod_approval_status = new_status
         application.hod_approval_date = now()
+        application.hod_remark = hod_remark  # Save the remark
         application.save()
 
         messages.success(request, "Application status updated successfully.")

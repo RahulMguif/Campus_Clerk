@@ -314,7 +314,7 @@
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">Office Remark</label>
                                                                 <textarea class="form-control" name="office_remark" rows="2"  
-                                                                    placeholder="Write any remark" style="height: 49px;">{% if entry.office_remark %}{{ entry.office_remark }}{% endif %}</textarea>
+                                                                    placeholder="No remark" style="height: 49px;" readonly>{% if entry.office_remark %}{{ entry.office_remark }}{% endif %}</textarea>
                                                             </div>
                                                             
                                                             <div class="col-md-6 mb-3">
@@ -361,6 +361,10 @@
                                                                 <option value="Approved">Approve</option>
                                                                 <option value="Rejected">Reject</option>
                                                             </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-semibold">Remarks</label>
+                                                            <textarea class="form-control border rounded-3 py-1 px-3 fs-5" name="office_remark" rows="3" placeholder="Enter your remarks"></textarea>
                                                         </div>
                                                         
                                     

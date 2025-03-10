@@ -13,6 +13,8 @@ def global_user_details(request):
 
     # Staff Advisor Details
     staff_email = request.session.get('username')  # Assuming staff uses 'username' for login
+    staff_advisor_obj = None  # Initialize variable
+
     if staff_email:
         staff_advisor_obj = staff_advisor.objects.filter(email=staff_email, delete_status=False).first()
         if staff_advisor_obj:
@@ -26,7 +28,7 @@ def global_user_details(request):
         context['staff_incharge_email'] = staff_incharge_obj.email
 
     # HOD Details (Based on Department)
-    if staff_advisor_obj and staff_advisor_obj.department_pk:
+    if staff_advisor_obj and getattr(staff_advisor_obj, 'department_pk', None):
         hod_obj = hod.objects.filter(department_pk=staff_advisor_obj.department_pk, delete_status=False).first()
         if hod_obj:
             context['hod_name'] = hod_obj.name

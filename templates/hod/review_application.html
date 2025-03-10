@@ -138,7 +138,10 @@
                                                                 <option value="Rejected">Reject</option>
                                                             </select>
                                                         </div>
-                                                        
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-semibold">Remarks</label>
+                                                            <textarea class="form-control border rounded-3 py-1 px-3 fs-5" name="hod_remark" rows="3" placeholder="Enter your remarks"></textarea>
+                                                        </div>
                                     
                                                         <!-- Modal Footer Buttons -->
                                                         <div class="d-flex justify-content-end gap-2">
@@ -326,13 +329,13 @@
                                                             <div class="col-12">
                                                                 <h4 class="fw-bold text-center bg-light py-2 rounded">----- For HOD  Only -----</h4>
                                                             </div>
-                                                            <!-- Editable Fields -->
+                                                   
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">HOD Remark</label>
-                                                                <textarea class="form-control"name="hod_remark" rows="2"  placeholder="Write any remark" style="height: 49px;">{% if entry.hod_remark %}{{ entry.hod_remark }}{% endif %}</textarea>
+                                                                <textarea class="form-control"name="hod_remark" rows="2"  placeholder="Write any remark" style="height: 49px;" readonly>{% if entry.hod_remark %}{{ entry.hod_remark }}{% endif %}</textarea>
                                                             </div>
 
-                                                           
+                                                                    <!-- Editable Fields -->
                                                             
                                                             <div class="col-md-6 mb-3">
                                                                 <label class="form-label fw-semibold">HOD Signature *</label>
