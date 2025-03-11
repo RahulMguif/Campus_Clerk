@@ -11,4 +11,6 @@ urlpatterns = [
     path('edit_profile',views.edit_profile,name='edit_profile'),
     
     path('add_feedback/',views.add_feedback,name='add_feedback'),
+    path('view_documents/',views.view_documents,name='view_documents'),
+
 ]

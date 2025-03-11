@@ -707,4 +707,52 @@ def feedback_menu(request):
     status=feedback_enable.objects.get(id=ids)
     context={'status':status}
     return render(request,"office_admin/feed_back_menu.html",context)
-    
+
+
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.files.storage import FileSystemStorage
+from django.contrib import messages
+import os
+from django.conf import settings
+
+
+def upload_office_documents(request):
+    documents = office_documents.objects.all()
+
+    if request.method == "POST":
+        if "delete_document_id" in request.POST:  # Check if delete request
+            document_id = request.POST.get("delete_document_id")
+            document = get_object_or_404(office_documents, id=document_id)
+
+            # Delete the file from storage
+            file_path = os.path.join(settings.MEDIA_ROOT, document.document_url.lstrip('/'))
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+            # Delete from the database
+            document.delete()
+            messages.success(request, "Document deleted successfully.")
+            return redirect("upload_office_documents")
+
+        # File upload logic
+        document_name = request.POST.get("document_name")
+        description = request.POST.get("description")
+        uploaded_file = request.FILES.get("document_file")
+
+        if uploaded_file:
+            fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'documents/'))
+            filename = fs.save(uploaded_file.name, uploaded_file)
+            file_url = fs.url(os.path.join('documents', filename))  # Save correct file path
+
+            office_documents.objects.create(
+                document_name=document_name,
+                document_url=file_url,
+                description=description
+            )
+            messages.success(request, "Successfully uploaded document.")
+            return redirect("upload_office_documents")
+
+    return render(request, "office_admin/office_documents.html", {"documents": documents})

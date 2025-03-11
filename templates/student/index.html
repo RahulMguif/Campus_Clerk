@@ -219,7 +219,14 @@
         </div>
     </li>
 
-      
+      <li class="nav-item {% if request.resolver_match.url_name == 'view_documents' %} active {% endif %}">
+        <a class="nav-link {% if request.resolver_match.url_name == 'view_documents' %} active {% endif %}" 
+          href="{% url 'view_documents' %}">
+            <i class="icon-paper menu-icon"></i>
+            <span class="menu-title">Documents</span>
+        </a>
+    </li>
+    
       {% if feed %}  {# Only shows if feed_exists is True (enable_status=1 exists) #}
       <li class="nav-item {% if request.resolver_match.url_name == 'add_feedback' %} active {% endif %}">
           <a class="nav-link {% if request.resolver_match.url_name == 'add_feedback' %} active {% endif %}" 

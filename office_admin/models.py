@@ -51,5 +51,13 @@ class staff_incharge(models.Model):
     event_pk=models.ForeignKey(event, on_delete=models.CASCADE, null=True, blank=True)
     class Meta:
         db_table = 'staff_incharge'
+
+
+class office_documents(models.Model):
+    document_name = models.CharField(max_length = 200, null=True)
+    document_url = models.CharField(max_length = 150, null=True)  
+    description = models.CharField(max_length=150, null=True)
+    class Meta:
+        db_table = 'office_documents'          
         
         

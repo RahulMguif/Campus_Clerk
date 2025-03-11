@@ -1,0 +1,95 @@
+
+{% extends 'student/index.html' %}
+{% load static %}
+{% block student_content %}
+<style>
+.container-fluid {
+    margin-top: 30px;
+}
+
+.card {
+    background-color: #fafafa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    height: 100%; /* Ensure cards fill available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+
+    -webkit-box-orient: vertical;
+    max-height: 50px;
+    white-space: normal;
+}
+
+.document-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 15px;
+}
+.row {
+    margin-bottom: 20px; /* Adjust if necessary */
+}
+</style>
+    
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+          
+            <div class="col-lg-12 grid-margin stretch-card">
+             
+            
+              
+                    <div class="container">
+                        <div class="container-fluid">
+                            <h2 class="text-center">Download Office Documents</h2>
+                             <div class="row row-cols-1 row-cols-md-3 g-4 align-items-start">
+
+                                {% for document in all_documents %}
+                                <div class="col d-flex">
+                                    <a href="{{ document.document_url }}" download class="document-card w-100">
+                                        <div class="card shadow-sm p-3 d-flex flex-column h-100">
+                                            <div class="card-body text-center d-flex flex-column">
+                                                <img src="{% static 'registration/images/document.png' %}" alt="" class="document-icon mb-3">
+                                                <h5 class="card-title">{{ document.document_name }}</h5>
+                                                <p class="card-text flex-grow-1">
+                                                    {% with words=document.description.split %}
+                                                        {{ words|slice:":20"|join:" " }}{% if words|length > 20 %}...{% endif %}
+                                                    {% endwith %}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                   
+
+                
+                
+              
+            </div>
+          
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+
+
+        {% endblock %}

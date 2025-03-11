@@ -377,4 +377,9 @@ def edit_profile(request):
         print('\ntraceback_str:', traceback_str)
         return render(request, 'student/edit_profile.html')
 
+    
+def view_documents(request):
+    all_documents=office_documents.objects.all()
+    return render(request,'student/view_documents.html',{'all_documents':all_documents})    
+
 

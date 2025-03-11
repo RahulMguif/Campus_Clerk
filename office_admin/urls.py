@@ -26,6 +26,8 @@ urlpatterns = [
     path('add_staff_incharge',views.add_staff_incharge,name='add_staff_incharge'),
     path('edit_staff_incharge',views.edit_staff_incharge,name='edit_staff_incharge'),
     path('delete_staff_incharge',views.delete_staff_incharge,name='delete_staff_incharge'),
-    path('change_staff_incharge_status/<int:staff_incharge_pk>/',views.change_staff_incharge_status,name='change_staff_incharge_status'),    path('feedback_menu/',views.feedback_menu,name='feedback_menu')
+    path('change_staff_incharge_status/<int:staff_incharge_pk>/',views.change_staff_incharge_status,name='change_staff_incharge_status'),    
+    path('feedback_menu/',views.feedback_menu,name='feedback_menu'),
+    path('upload_office_documents',views.upload_office_documents,name='upload_office_documents'),
 
 ]
