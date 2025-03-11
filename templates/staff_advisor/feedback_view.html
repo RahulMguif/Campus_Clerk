@@ -1,0 +1,106 @@
+{% extends 'staff_advisor/index.html' %}
+{% load static %}
+{% block staff_advisor_content %}
+
+<div class="main-panel">        
+    <div class="content-wrapper">
+<div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+            <div class="card-body">
+                <h4 class="card-title">View FeedBack</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    SR No.
+                                </th>
+                                <th>
+                                    Comment
+                                </th>
+                                <th>
+                                    Submitted Date
+                                </th>
+                                <th>
+                                    Approved Comments
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for n in feed %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{n.comment}}</td>
+                                <td>{{n.submitted_date}}</td>
+                                <td>
+                                    {% if n.is_flaged == 0 %}
+                                        ✅
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+            <div class="card-body">
+                <h4 class="card-title">View Flaged FeedBacks</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    SR No.
+                                </th>
+                                <th>
+                                    Comment
+                                </th>
+                                <th>
+                                    Submitted Date
+                                </th>
+                                <th>
+                                    Flag the Comment
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in feeds_app %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{t.comment}}</td>
+                                <td>{{t.submitted_date}}</td>
+                                <td>
+                                    <td>
+                                        {% if t.is_flaged == 1 %}
+                                            ❌
+                                        {% endif %}
+                                    </td>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+{% endblock %}

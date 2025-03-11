@@ -21,14 +21,22 @@
   <link rel="stylesheet" href="{% static 'admin/css/vertical-layout-light/style.css' %}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{% static 'admin/images/favicon.png' %}" />
+  <!-- Message box css -->
+  <link rel="stylesheet" href="{% static 'admin/css/message_box.css' %}">
+  <style>
+    #src{
+      width: 230px;
+      height: 55px;
+    }
+  </style>
 </head>
 <body>
   <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="{% static 'admin/images/logo.svg' %}" class="mr-2" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{% static 'admin/images/logo-mini.svg' %}" alt="logo"/></a>
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'student_dashboard' %}"><img id="src" src="{% static 'admin/images/student.png' %}" class="mr-2" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="{% url 'student_dashboard' %}"><img src="{% static 'admin/images/Logo.png' %}" alt="logo"/></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -47,7 +55,7 @@
           </li>
         </ul> -->
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item dropdown">
+          <!-- <li class="nav-item dropdown">
             <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
               <i class="icon-bell mx-0"></i>
               <span class="count"></span>
@@ -94,17 +102,34 @@
                 </div>
               </a>
             </div>
-          </li>
+          </li> -->
           <li class="nav-item nav-profile dropdown">
+            <!-- <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="{% static 'admin/images/faces/avatar.jpg' %}" alt="profile"/>
+            </a> -->
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="images/faces/face28.jpg" alt="profile"/>
+              <img src="{% if student_profile_pic and student_profile_pic != 'admin/images/faces/avatar.jpg' %}/media/{{ student_profile_pic }}{% else %}{% static 'admin/images/faces/avatar.jpg' %}{% endif %}" 
+                   alt="profile" 
+                   class="rounded-circle" 
+                   style="width: 40px; height: 40px; object-fit: cover;">
             </a>
+          
+          
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item">
+              <!-- <a class="dropdown-item">
                 <i class="ti-settings text-primary"></i>
                 Settings
+              </a> -->
+              <span class="dropdown-item disabled">
+                <i class="ti-user text-primary"></i>
+                {{ student_email }}
+              </span>
+              <a href="{% url 'edit_profile' %}" class="dropdown-item">
+                <i class="ti-pencil text-primary"></i>
+                Edit Profile
               </a>
-              <a class="dropdown-item">
+              <div class="dropdown-divider"></div>
+              <a href="{% url 'student_logout' %}" class="dropdown-item">
                 <i class="ti-power-off text-primary"></i>
                 Logout
               </a>
@@ -172,40 +197,51 @@
           </ul>
         </div>
       </li> -->
-      <li class="nav-item {% if request.resolver_match.url_name == 'student_application' %} active {% endif %}">
+      <li class="nav-item {% if request.resolver_match.url_name in 'student_application my_applications' %} active {% endif %}">
         <a class="nav-link" data-toggle="collapse" href="#form-elements" 
-           aria-expanded="{% if request.resolver_match.url_name == 'student_application' %}true{% else %}false{% endif %}" 
+           aria-expanded="{% if request.resolver_match.url_name in 'student_application my_applications' %}true{% else %}false{% endif %}" 
            aria-controls="form-elements">
             <i class="icon-columns menu-icon"></i>
             <span class="menu-title">Services</span>
             <i class="menu-arrow"></i>
         </a>
-        <div class="collapse {% if request.resolver_match.url_name == 'student_application' %} show {% endif %}" id="form-elements">
+        <div class="collapse {% if request.resolver_match.url_name in 'student_application my_applications' %} show {% endif %}" id="form-elements">
             <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'student_application' %} active {% endif %}" 
                        href="{% url 'student_application' %}">Application Form</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'my_applications' %} active {% endif %}" 
+                       href="{% url 'my_applications' %}">My Applications</a>
+                </li>
             </ul>
         </div>
-      </li>
+    </li>
 
       
       {% if feed %}  {# Only shows if feed_exists is True (enable_status=1 exists) #}
       <li class="nav-item {% if request.resolver_match.url_name == 'add_feedback' %} active {% endif %}">
           <a class="nav-link {% if request.resolver_match.url_name == 'add_feedback' %} active {% endif %}" 
             href="{% url 'add_feedback' %}">
-              <i class="icon-grid menu-icon"></i>
+              <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Feedback</span>
           </a>
       </li>
       {% endif %}
 
+      {% if is_class_rep %}
+      <li class="nav-item {% if request.resolver_match.url_name == 'feedback_view' %} active {% endif %}">
+          <a class="nav-link {% if request.resolver_match.url_name == 'feedback_view' %} active {% endif %}" 
+            href="{% url 'feedback_view' %}">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Feedback View</span>
+          </a>
+      </li>
+      {% endif %}
 
 
-
-
-
+    
 
       <!-- <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">

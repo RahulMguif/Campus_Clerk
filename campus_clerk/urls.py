@@ -16,6 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -24,5 +28,9 @@ urlpatterns = [
     path('office_admin/',include('office_admin.urls')),
     path('hod_office/',include('hod.urls')),
     path('staff_advisor/',include('staff_advisor.urls')),
-    path('student_rep/',include('student_rep.urls'))
-]
+    path('student_rep/',include('student_rep.urls')),
+    path('staff_incharge/',include('staff_incharge.urls')),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

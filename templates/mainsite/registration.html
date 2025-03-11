@@ -25,7 +25,7 @@
 		<div class="wrapper" style="background-image: url('{% static 'registration/images/bg-registration-form-2.jpg' %}');">
 			
 			<div class="inner" style="width: 800px; height: 800px; background-size: cover; background-position: center; background-image: url('{% static 'registration/images/registration-form-2.jpg' %}');">
-				<form action="" method="POST">
+				<form action="{% url 'registration' %}" method="POST">
 					{% csrf_token %}
 					<h3>Registration Form</h3>
 					<div class="form-group">
@@ -43,11 +43,24 @@
 					<div class="form-group">
 						<div class="form-wrapper">
 							<label for="">Course *</label>
-							<input type="text" class="form-control" name="course" required id="course">
+							<!-- <input type="text" class="form-control" name="course" required id="course"> -->
+                            <select id="course" class="form-control" name="course" required>
+                                <option value="">Select</option>
+                                {% for course_data in courses %}
+                                <option value="{{ course_data.course_name }}">{{ course_data.course_name }}</option>
+                                {% endfor %}
+                            </select>
 						</div>
 						<div class="form-wrapper">
-							<label for="">Department *</label>
-							<input type="text" class="form-control" name="department" required id="department">
+							<label for="department">Department *</label>
+                            <select id="department" class="form-control" name="department" required>
+                                <option value="">Select</option>
+                                {% for dep in departments_list %}
+                                <option value="{{ dep.department_name }}">{{ dep.department_name }}</option>
+                                {% endfor %}
+                            </select>
+                            
+                            
 						</div>
 					</div>
 				
@@ -301,7 +314,7 @@
 </script>
 
 
-<!-- JavaScript to Auto-Hide the Alert After 3 Seconds -->
+<!- JavaScript to Auto-Hide the Alert After 3 Seconds -->
 <script>
     setTimeout(function() {
         var alertBox = document.getElementById("alert-box");

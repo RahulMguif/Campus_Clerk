@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'hod',
     'student_rep',
     'staff_advisor',
+    'staff_incharge'
     
 ]
 
@@ -70,6 +71,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'office_admin.context_processors.feedback_status',
+                "student.context_processors.student_context",  # Ensure this matches
+                # "student.context_processors.student_profile",
+                "mainsite.context_processors.global_user_details",
                 'office_admin.context_processors.feedback_status',
             ],
         },

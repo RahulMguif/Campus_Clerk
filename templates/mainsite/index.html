@@ -30,6 +30,9 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'mainsite/css/style.css' %}" rel="stylesheet">
+
+    <!-- Message box css -->
+    <link rel="stylesheet" href="{% static 'admin/css/message_box.css' %}">
     <style>
         .logo{
             width:55px
@@ -85,8 +88,9 @@
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-white mb-3">Quick Link</h4>
-                    <a class="btn btn-link" href="">Sign In</a>
-                    <a class="btn btn-link" href="">Sign Up</a>
+                    <a class="btn btn-link" href="{% url 'login' %}">Sign In</a>
+                    <a class="btn btn-link" href="{% url 'registration' %}">Sign Up</a>
+                    
                     <!-- <a class="btn btn-link" href="">Privacy Policy</a>
                     <a class="btn btn-link" href="">Terms & Condition</a>
                     <a class="btn btn-link" href="">FAQs & Help</a> -->
@@ -147,10 +151,11 @@
                     </div> -->
                     <div class="col-md-12 text-center text-md-end">
                         <div class="footer-menu">
-                            <a href="{% url 'home' %}">Home</a>
-                            <a href="{% url 'login' %}">Sign In</a>
-                            <a href="{% url 'registration' %}">Sign Up</a>
+                            <!-- <a href="">Home</a>
+                            <a href="">Sign In</a>
+                            <a href="">Sign Up</a> -->
                             <!-- <a href="">FQAs</a> -->
+                            <a href="{% url 'department_user_login' %}">Department Login</a>
                             <a href="{% url 'office_admin_login' %}">Office</a>
                         </div>
                     </div>

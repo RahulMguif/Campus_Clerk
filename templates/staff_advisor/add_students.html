@@ -1,0 +1,247 @@
+{% extends 'staff_advisor/index.html' %}
+{% load static %}
+{% block staff_advisor_content %}
+
+<!-- Material Design Icons -->
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+
+<!-- Remix Icons -->
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+
+<!-- Bootstrap Bundle JS (includes Popper.js) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+<style>
+    .modal-header{
+        background-color: #225160;
+        height: 65px;
+
+    }
+    .modal-title {
+        color: #ffffff; /* Replace #333 with your desired color */
+    }
+
+</style>
+<div class="main-content" >
+ <div id="removeNotificationModal" class="page-content">
+   <div class="container-fluid">
+                <!-- ===========================Message Box In HTML============================= -->
+                <div >
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-end" style="position: absolute; z-index: 2; right: 1%;">
+                            {% if messages %}
+                                {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show collapse" role="alert">
+                                    {{ message|safe }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- ========================Message Box End===================================== -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card card-height-100">
+                                <div class="card-header align-items-center d-flex">
+                                    <h4 class="card-title mb-0 flex-grow-1">Add New Students</h4>
+                                </div>
+                                <!-- end card header -->
+                
+                                <div class="card-body">
+                                    <form method="post" action="{% url 'add_students' %}">
+                                        {% csrf_token %}
+                                        <div class="row g-3 mx-3 mt-2 mb-3">
+                                            <!-- Full Name -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Full Name</label>
+                                                <input type="text" class="form-control border-light bg-light" name="full_name" placeholder="Full Name *" minlength="3" maxlength="20" required>
+                                            </div>
+                
+                                            <!-- Email -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Email</label>
+                                                <input type="email" class="form-control border-light bg-light" name="email" placeholder="Email *" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                                            </div>
+                
+                                            <!-- Password -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Password</label>
+                                                <input type="password" class="form-control border-light bg-light" name="password" placeholder="Password *" required>
+                                            </div>
+                
+                                            <!-- Course -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Course</label>
+                                                <select class="form-control border-light bg-light" name="course" required>
+                                                    <option value="">Select Course *</option>
+                                                    {% for c in courses %}
+                                                    <option value="{{ c.id }}">{{ c.course_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                
+                                            <!-- Department -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Department</label>
+                                                <input type="text" class="form-control border-light bg-light" value="{{ department.department_name }}" readonly>
+                                            </div>
+                
+                                            <!-- Semester -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Semester</label>
+                                                <select class="form-control border-light bg-light" name="semester" id="semester" required>
+                                                    <option value="">-- Select semester --</option>
+                                                    {% for i in "12345678"|make_list %}
+<option value="{{ i }}">{{ i }}</option>
+{% endfor %}
+
+                                                </select>
+                                            </div>
+                
+                                            <!-- Year of Admission -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Year of Admission</label>
+                                                <input type="date" class="form-control border-light bg-light" name="year_of_joining" id="year_of_joining" required>
+                                            </div>
+                
+                                            <!-- Mobile Number -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <label>Mobile Number</label>
+                                                <input type="text" id="phone" class="form-control border-light bg-light" name="mobile" placeholder="Mobile Number *" required>
+                                            </div>
+                
+                                            <!-- Submit Button -->
+                                            <div class="col-12 text-center mt-3">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <span class="d-none d-sm-inline-block me-2">ADD</span>
+                                                    <i class="ri-add-circle-line"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- end row -->
+                                    </form>
+                                </div>
+                                <!-- end card body -->
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                    </div>
+                </div>
+                
+</div>
+</div>
+</div>
+
+
+<!-- ===================Alert Fade Out Script==================== -->
+<script src="{% static 'main_admin/assets/js/jquery_3.6.3.min.js' %}"></script>
+<script>
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 4000);
+</script>
+<!-- ==========ALERT BOX FADEOUT============= -->
+
+<script>
+    function togglePassword(button) {
+        var passwordSpan = button.previousElementSibling;
+        var password = passwordSpan.getAttribute('data-password');
+    
+        if (passwordSpan.textContent === '********') {
+        passwordSpan.textContent = password;
+        button.textContent = 'Hide';
+        } else {
+        passwordSpan.textContent = '********';
+        button.textContent = 'Show';
+        }
+    }
+</script> 
+
+
+
+<script>
+   document.querySelector('input[name="name"]').addEventListener('input', function() {
+    const pattern = /^[A-Za-z\s_.'-]{3,20}$/; // Adjusted pattern to allow only letters and underscores
+    if (!pattern.test(this.value)) {
+        this.setCustomValidity('Username should be 3-20 characters and contain only letters.');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+
+
+</script>
+<script>
+    document.getElementById('email').addEventListener('input', function() {
+        const emailField = this;
+        const emailError = document.getElementById('emailError');
+        const emailValue = emailField.value.trim(); // Trim the email input
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        // Update the email field's value to the trimmed version
+        emailField.value = emailValue;
+
+        // Check if the trimmed value matches the pattern
+        if (!emailPattern.test(emailValue)) {
+            emailField.classList.add('is-invalid');  // Adds a red border
+            emailError.style.display = 'block';
+            emailError.textContent = 'Please enter a valid email address.';
+        } else {
+            emailField.classList.remove('is-invalid');
+            emailError.style.display = 'none';
+        }
+    });
+</script>
+<script>
+    document.querySelector('input[name="password"]').addEventListener('input', function() {
+        const passwordField = this;
+        const password = passwordField.value;
+        const passwordError = document.getElementById('passwordError');
+        
+        // Regular expression for password validation
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
+
+        if (!passwordPattern.test(password)) {
+            passwordField.classList.add('is-invalid');
+            passwordError.style.display = 'block';
+            passwordError.innerText = 'Password must contain 8-12 characters, including uppercase, lowercase, a number, and a special symbol.';
+        } else {
+            passwordField.classList.remove('is-invalid');
+            passwordError.style.display = 'none';
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".toggle-password").forEach(button => {
+        button.addEventListener("click", function() {
+            let input = this.previousElementSibling;
+            if (input.type === "password") {
+                input.type = "text";
+                this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                input.type = "password";
+                this.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        });
+    });
+});
+
+
+</script>
+
+
+
+
+
+
+{% endblock %}

@@ -58,12 +58,12 @@
                             <div class="row g-2 mx-3 mt-2 mb-3">
                                 <div class="col">
                                     <div class="position-relative">
-                                        <input type="text" class="form-control border-light bg-light" name="name" placeholder="Username"  minlength="3" maxlength="20"   required>
+                                        <input type="text" class="form-control border-light bg-light" name="name" placeholder="Username *"  minlength="3" maxlength="20"   required>
                                     </div>
                                 </div><!-- end col -->
                                 <div class="col">
                                     <div class="position-relative">
-                                        <input type="email" class="form-control border-light bg-light" name="email" placeholder="Email" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                                        <input type="email" class="form-control border-light bg-light" name="email" placeholder="Email *" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
                                         <div id="emailError" class="invalid-feedback" style="display: none;">Please enter a valid email address.</div>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                                 
                                 <div class="col">
                                     <div class="position-relative">
-                                        <input type="text" class="form-control border-light bg-light" name="password" placeholder="Password" required>
+                                        <input type="text" class="form-control border-light bg-light" name="password" placeholder="Password *" required>
                                     </div>
                                     <div id="passwordError" style="color: red; display: none; "></div>
 
@@ -79,7 +79,17 @@
                                 </div>
                                 <div class="col">
                                     <div class="position-relative">
-                                        <input type="text"  id="phone" class="form-control border-light bg-light"  name="mobile" placeholder="Mobile Number" required>
+                                        <select id="department" class="form-control border-light bg-light" name="department" required>
+                                            <option value="">Select Department *</option>
+                                            {% for dep in department %}
+                                                <option value="{{ dep.id }}">{{ dep.department_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="position-relative">
+                                        <input type="text"  id="phone" class="form-control border-light bg-light"  name="mobile" placeholder="Mobile Number *" required>
                                
                                     </div>
                                 </div><!-- end col -->
@@ -100,6 +110,7 @@
                                     <th scope="col">Admin Name</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Password</th>
+                                    <th scope="col">Department</th>
                                     <th scope="col">Mobile Number</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -115,6 +126,7 @@
                                         <span class="password" data-password="{{ entry.password }}">********</span>
                                         <button type="button" class="badge badge-outline-dark float-end" title="Show the password" onclick="togglePassword(this)">Show</button>
                                     </td>
+                                    <td>{{ entry.department_pk.department_name }}</td>
                                     <td>{{ entry.mobile }}</td>
                                     <td>
                                         <a class="text-body me-1 fs-15 fw-medium" href="#" title="Edit" data-bs-toggle="modal" data-bs-target="#EditidModal{{entry.pk}}"><i class="ri-edit-box-line text-info me-1"></i></a>
@@ -157,6 +169,19 @@
                                                                 </button>
                                                             </div>
                                                         </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-semibold">Department</label>
+                                                            <select id="department" class="form-control " name="department" required>
+                                                               
+                                                                <option value="">Select Department *</option>
+                                                                {% for dep in department %}
+                                                                    <option value="{{ dep.id }}" {% if entry.department_pk_id == dep.id %}selected{% endif %}>
+                                                                        {{ dep.department_name }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                 
                                     
                                                         <div class="mb-3">
                                                             <label class="form-label fw-semibold">Mobile Number</label>
@@ -236,9 +261,18 @@
                                                     <h5 class="modal-title fw-bold">Change Status</h5>
                                                     <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                    
+                                                
                                                 <!-- Modal Body -->
                                                 <div class="modal-body">
+                                                    <h5>Current status: 
+                                                        {% if entry.is_active == 1 %}
+                                                            <span style="color: green; font-weight: bold;">Allowed</span>
+                                                        {% elif entry.is_active == 2 %}
+                                                            <span style="color: red; font-weight: bold;">Blocked</span>
+                                                        {% else %}
+                                                            <span style="color: gray;">Unknown</span>
+                                                        {% endif %}
+                                                    </h5>
                                                     <form action="{% url 'change_status_hod' entry.pk %}" method="post">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="admin_pk" value="{{ entry.pk }}">

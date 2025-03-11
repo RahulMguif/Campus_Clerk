@@ -17,6 +17,15 @@ urlpatterns = [
     path('edit_hod',views.edit_hod,name='edit_hod'),
     path('delete_hod',views.delete_hod,name='delete_hod'),
     path('change_status_hod/<int:admin_pk>/',views.change_status_hod,name='change_status_hod'),
-    path('feedback_menu/',views.feedback_menu,name='feedback_menu')
+    path('feedback_menu/',views.feedback_menu,name='feedback_menu'),
+    path('view_applications',views.view_applications,name='view_applications'),
+    path('update_application/<int:application_id>/', views.update_application, name='update_application'),
+    path('approval_status_office/<int:admin_pk>/',views.approval_status_office,name='approval_status_office'),
+    path('event_config/',views.event_config,name='event_config'),
+    path('event_delete',views.event_delete,name='event_delete'),
+    path('add_staff_incharge',views.add_staff_incharge,name='add_staff_incharge'),
+    path('edit_staff_incharge',views.edit_staff_incharge,name='edit_staff_incharge'),
+    path('delete_staff_incharge',views.delete_staff_incharge,name='delete_staff_incharge'),
+    path('change_staff_incharge_status/<int:staff_incharge_pk>/',views.change_staff_incharge_status,name='change_staff_incharge_status'),    path('feedback_menu/',views.feedback_menu,name='feedback_menu')
 
 ]

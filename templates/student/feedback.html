@@ -8,6 +8,22 @@
         <div class="row">
             <div class="col-12 grid-margin">
               <div class="card">
+<<<<<<< HEAD
+=======
+                <!-- ===========================Message Box In HTML============================= -->
+                <!-- Django Messages Alert Box -->
+                {% if messages %}
+                <div id="alert-box">
+                    {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                    <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <!-- ========================Message Box End===================================== -->
+>>>>>>> 5253afc33ad58e1ce18a912e2a4f3d3db1850d91
                 <div class="card-body">
                     <h4 class="card-title">Feedback Application</h4>
                     <form class="form-sample" method="post" action="{% url 'add_feedback' %}" enctype="multipart/form-data">
@@ -17,7 +33,11 @@
                                 <input type="hidden" value="{{student_id}}" name="student_id">
                                 <label class="col-sm-3 col-form-label">Select Department</label>
                                 <div class="col-sm-12">
+<<<<<<< HEAD
                                     <select class="form-control" name="department" id="">
+=======
+                                    <select class="form-control" name="department" id="" required>
+>>>>>>> 5253afc33ad58e1ce18a912e2a4f3d3db1850d91
                                         <option value="" disabled selected>--- Select ---</option>
                                         {% for n in department %}
                                         <option value="{{n.id}}">{{n.department_name}}</option>
@@ -28,7 +48,11 @@
                             <div class="col-md-12">
                                 <label class="col-sm-3 col-form-label">Select Semester</label>
                                 <div class="col-sm-12">
+<<<<<<< HEAD
                                     <select class="form-control" name="semester" id="">
+=======
+                                    <select class="form-control" name="semester" id="" required>
+>>>>>>> 5253afc33ad58e1ce18a912e2a4f3d3db1850d91
                                         <option value="" disabled selected>--- Select ---</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -44,7 +68,11 @@
                             <div class="col-md-12">
                                 <label class="col-sm-3 col-form-label">Description</label>
                                 <div class="col-sm-12">
+<<<<<<< HEAD
                                     <textarea class="form-control" name="comment" id="" style="height: 100px;"></textarea>
+=======
+                                    <textarea class="form-control" name="comment" id="" style="height: 100px;" required></textarea>
+>>>>>>> 5253afc33ad58e1ce18a912e2a4f3d3db1850d91
                                 </div>
                             </div>
                             <div class="col-md-12 d-flex justify-content-center">
@@ -60,6 +88,20 @@
     </div>
 </div>
 
+<<<<<<< HEAD
 
+=======
+<!-- ===============Script to hide message notification===================-->
+ <!-- JavaScript to Auto-Hide the Alert After 3 Seconds -->
+ <script>
+    setTimeout(function() {
+      var alertBox = document.getElementById("alert-box");
+      if (alertBox) {
+        alertBox.style.display = "none";
+      }
+    }, 3000); // Hides after 3 seconds
+  </script>
+  <!-- ===============Script to hide message notification ENDS===================-->
+>>>>>>> 5253afc33ad58e1ce18a912e2a4f3d3db1850d91
 
 {% endblock %}

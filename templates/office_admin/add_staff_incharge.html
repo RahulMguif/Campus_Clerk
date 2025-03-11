@@ -1,0 +1,457 @@
+{% extends 'office_admin/index.html' %}
+{% load static %}
+{% block admin_content %}
+<!-- Material Design Icons -->
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+
+<!-- Remix Icons -->
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+
+<!-- Bootstrap Bundle JS (includes Popper.js) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<style>
+    .modal-header{
+        background-color: #225160;
+        height: 65px;
+
+    }
+    .modal-title {
+        color: #ffffff; /* Replace #333 with your desired color */
+    }
+
+</style>
+<div class="main-content" >
+ <div id="removeNotificationModal" class="page-content">
+   <div class="container-fluid">
+                <!-- ===========================Message Box In HTML============================= -->
+                <div >
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-end" style="position: absolute; z-index: 2; right: 1%;">
+                            {% if messages %}
+                                {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show collapse" role="alert">
+                                    {{ message|safe }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- ========================Message Box End===================================== -->
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Add Staff Incharge </h4>
+                </div><!-- end card header -->
+               
+
+                <div class="card-body">
+                    <div>
+                        <form method="post" action="{% url 'add_staff_incharge'%}">
+                            {% csrf_token %}
+                            <div class="row g-2 mx-3 mt-2 mb-3">
+                                <div class="col">
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control border-light bg-light" name="name" placeholder="Username *"  minlength="3" maxlength="20"   required>
+                                    </div>
+                                </div><!-- end col -->
+                                <div class="col">
+                                    <div class="position-relative">
+                                        <input type="email" class="form-control border-light bg-light" name="email" placeholder="Email *" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                                        <div id="emailError" class="invalid-feedback" style="display: none;">Please enter a valid email address.</div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="col">
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control border-light bg-light" name="password" placeholder="Password *" required>
+                                    </div>
+                                    <div id="passwordError" style="color: red; display: none; "></div>
+
+
+                                </div>
+                                <div class="col">
+                                    <div class="position-relative">
+                                        <select id="department" class="form-control border-light bg-light" name="department" required>
+                                            <option value="">Select Department *</option>
+                                            {% for dep in department %}
+                                                <option value="{{ dep.id }}">{{ dep.department_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="position-relative">
+                                        <select id="events" class="form-control border-light bg-light" name="events" required>
+                                            <option value="">Select Event *</option>
+                                            {% for event in event_data %}
+                                                <option value="{{ event.id }}">{{ event.event_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col">
+                                    <div class="position-relative">
+                                        <input type="text"  id="phone" class="form-control border-light bg-light"  name="mobile" placeholder="Mobile Number *" required>
+                               
+                                    </div>
+                                </div><!-- end col -->
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary" name="add"><span class="d-none d-sm-inline-block me-2">ADD</span> <i class="ri-add-circle-line float-end"></i></button>
+                                </div><!-- end col -->
+                           
+                            
+                            </div><!-- end row -->
+                        </form>
+                    </div>
+
+                    <div class="table-responsive" style="max-height: 300px;">
+                        <table class="table align-middle table-striped-columns table-hover table-nowrap mb-0" border="1px solid">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Staff Incharge Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Password</th>
+                                    <th scope="col">Department</th>
+                                    <th scope="col">Event</th>
+                                    <th scope="col">Mobile Number</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in all_data %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ entry.name }}</td>
+                                    <td>{{ entry.email }}</td>
+                                    
+                                    <td>
+                                        <span class="password" data-password="{{ entry.password }}">********</span>
+                                        <button type="button" class="badge badge-outline-dark float-end" title="Show the password" onclick="togglePassword(this)">Show</button>
+                                    </td>
+                                    <td>{{ entry.department_pk.department_name }}</td>
+                                    <td>{{ entry.event_pk.event_name }}</td>
+                                    <td>{{ entry.mobile }}</td>
+                                    <td>
+                                        <a class="text-body me-1 fs-15 fw-medium" href="#" title="Edit" data-bs-toggle="modal" data-bs-target="#EditidModal{{entry.pk}}"><i class="ri-edit-box-line text-info me-1"></i></a>
+                                        <a class="text-body me-1 fs-15 fw-medium" href="#" title="Delete" data-bs-toggle="modal" data-bs-target="#DeleteidModal{{entry.pk}}" ><i class="ri-delete-bin-2-line text-danger me-1"></i></a>
+                                        <a href="#" class="link-success fs-15">
+                                            <i class="ri-arrow-left-right-line" data-bs-toggle="modal" data-bs-target="#ChangeStatusModal{{entry.pk}}" title="Change Status"></i>
+                                        </a>
+                                        
+                                    </td>
+                                    <!-- ==================INNER MODELS======================= -->
+                                    <!-- =========EDIT SignUp Email Modal =============== -->
+                                    <div id="EditidModal{{entry.pk}}" class="modal fade" tabindex="-1" aria-labelledby="EditidModal" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content border-0 shadow-lg rounded-lg">
+                                                <div class="modal-header bg-primary text-white">
+                                                    <h5 class="modal-title" id="myExtraLargeModalLabel">Edit Staff Incharge</h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{% url 'edit_staff_incharge' %}" method="post" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="staff_incharge_pk" value="{{ entry.id }}">
+                                                        
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-semibold">Username</label>
+                                                            <input type="text" class="form-control" name="name" value="{{ entry.name }}" required>
+                                                        </div>
+                                    
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-semibold">Email</label>
+                                                            <input type="email" class="form-control" name="email" value="{{ entry.email }}" required>
+                                                        </div>
+                                    
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-semibold">Password</label>
+                                                            <div class="input-group">
+                                                                <input type="password" class="form-control" name="password" value="{{ entry.password }}" required>
+                                                                <button class="btn btn-outline-secondary toggle-password" type="button">
+                                                                    <i class="bi bi-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                      
+                                                            <div class="mb-3">
+                                                                <label class="form-label fw-semibold">Department</label>
+                                                                <select id="department" class="form-control " name="department" required>
+                                                                   
+                                                                    <option value="">Select Department *</option>
+                                                                    {% for dep in department %}
+                                                                        <option value="{{ dep.id }}" {% if entry.department_pk_id == dep.id %}selected{% endif %}>
+                                                                            {{ dep.department_name }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label fw-semibold">Event</label>
+                                                                <select id="events" class="form-control " name="events" required>
+                                                                   
+                                                                    <option value="">Select Event *</option>
+                                                                    {% for event in event_data %}
+                                                                        <option value="{{ event.id }}" {% if entry.event_pk_id == event.id %}selected{% endif %}>
+                                                                            {{ event.event_name }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                     
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-semibold">Mobile Number</label>
+                                                            <input type="text" class="form-control" name="mobile" value="{{ entry.mobile }}" required>
+                                                        </div>
+                                    
+                                                        <div class="d-flex justify-content-end gap-2">
+                                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Update</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <!-- =========EDIT SignUp Email Modal END=============== -->
+
+                                    <!-- ==============================================DELETE MODAL===================================== -->
+                                    
+                                    <div id="DeleteidModal{{entry.pk}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="DeleteidModal" aria-hidden="true">
+                                        <form action="{% url 'delete_staff_incharge'%}" method="post">
+                                            {% csrf_token %}
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header bg-primary text-white">
+                                                        <h5 class="modal-title fw-bold text-white">
+                                                            Confirm Deletion
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                    
+                                                    <!-- Modal Body -->
+                                                    <div class="modal-body text-center p-4">
+                                                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" 
+                                                            trigger="loop" 
+                                                            colors="primary:#ff4444,secondary:#121331" 
+                                                            style="width: 100px; height: 100px">
+                                                        </lord-icon>
+                                    
+                                                        <h4 class="mt-3 text-dark fw-semibold">
+                                                            Are you sure you want to remove 
+                                                            <span class="badge bg-light text-black">{{ entry.name }}</span>?
+                                                        </h4>
+                                                        <p class="text-muted mt-2">
+                                                            This action is irreversible and will permanently delete this entry from the database.
+                                                        </p>
+                                    
+                                                        <input type="hidden" name="staff_incharge_pk" value="{{ entry.id }}">
+                                                    </div>
+                                    
+                                                    <!-- Modal Footer -->
+                                                    <div class="modal-footer d-flex justify-content-center border-0">
+                                                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">
+                                                            <i class="bi bi-x-circle"></i> Cancel
+                                                        </button>
+                                                        <button type="submit" class="btn btn-danger px-4">
+                                                            <i class="bi bi-trash3"></i> Yes, Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+
+                                    <!-- ==============================================DELETE MODAL END===================================== -->
+                                      <!-- Change status modal-->
+                                      <div id="ChangeStatusModal{{entry.pk}}" class="modal fade" tabindex="-1" aria-labelledby="ChangeStatusModal" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-md">
+                                            <div class="modal-content border-0 shadow-lg">
+                                    
+                                                <!-- Modal Header -->
+                                                <div class="modal-header bg-primary text-white">
+                                                    <h5 class="modal-title fw-bold">Change Status</h5>
+                                                    <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div><br>
+                                                 
+                                                
+                                                
+                                                <!-- Modal Body -->
+                                                <div class="modal-body">
+                                                    <h5>Current status: 
+                                                        {% if entry.is_active == 1 %}
+                                                            <span style="color: green; font-weight: bold;">Allowed</span>
+                                                        {% elif entry.is_active == 2 %}
+                                                            <span style="color: red; font-weight: bold;">Blocked</span>
+                                                        {% else %}
+                                                            <span style="color: gray;">Unknown</span>
+                                                        {% endif %}
+                                                    </h5>
+                                                    <form action="{% url 'change_staff_incharge_status' entry.pk %}" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="staff_incharge_pk" value="{{ entry.pk }}">
+                                    
+                                                        <!-- Status Dropdown -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label fw-semibold">Change Status</label>
+                                                            <select class="form-select border rounded-3 py-1 px-3 fs-8" name="incharge_status">
+                                                                <option value="Allow">Allow</option>
+                                                                <option value="Block">Block</option>
+                                                            </select>
+                                                        </div>
+                                                        
+                                    
+                                                        <!-- Modal Footer Buttons -->
+                                                        <div class="d-flex justify-content-end gap-2">
+                                                            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">
+                                                                <i class="bi bi-x-circle"></i> Close
+                                                            </button>
+                                                            <button type="submit" class="btn btn-primary px-4">
+                                                                <i class="bi bi-check-circle"></i> Change Status
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!--end of status modal-->
+
+                                    <!-- ==================INNER MODELS======================= -->
+                                </tr><!-- end tr -->
+                                {% endfor %}
+                               
+                               
+                            </tbody><!-- end tbody -->
+                        </table><!-- end table -->
+                    </div>
+                </div><!-- end cardbody -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+
+     
+    </div>
+</div>
+</div>
+</div>
+
+
+<!-- ===================Alert Fade Out Script==================== -->
+<script src="{% static 'main_admin/assets/js/jquery_3.6.3.min.js' %}"></script>
+<script>
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 4000);
+</script>
+<!-- ==========ALERT BOX FADEOUT============= -->
+
+<script>
+    function togglePassword(button) {
+        var passwordSpan = button.previousElementSibling;
+        var password = passwordSpan.getAttribute('data-password');
+    
+        if (passwordSpan.textContent === '********') {
+        passwordSpan.textContent = password;
+        button.textContent = 'Hide';
+        } else {
+        passwordSpan.textContent = '********';
+        button.textContent = 'Show';
+        }
+    }
+</script> 
+
+
+
+<script>
+   document.querySelector('input[name="name"]').addEventListener('input', function() {
+    const pattern = /^[A-Za-z\s_.'-]{3,20}$/; // Adjusted pattern to allow only letters and underscores
+    if (!pattern.test(this.value)) {
+        this.setCustomValidity('Username should be 3-20 characters and contain only letters.');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+
+
+</script>
+<script>
+    document.getElementById('email').addEventListener('input', function() {
+        const emailField = this;
+        const emailError = document.getElementById('emailError');
+        const emailValue = emailField.value.trim(); // Trim the email input
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        // Update the email field's value to the trimmed version
+        emailField.value = emailValue;
+
+        // Check if the trimmed value matches the pattern
+        if (!emailPattern.test(emailValue)) {
+            emailField.classList.add('is-invalid');  // Adds a red border
+            emailError.style.display = 'block';
+            emailError.textContent = 'Please enter a valid email address.';
+        } else {
+            emailField.classList.remove('is-invalid');
+            emailError.style.display = 'none';
+        }
+    });
+</script>
+<script>
+    document.querySelector('input[name="password"]').addEventListener('input', function() {
+        const passwordField = this;
+        const password = passwordField.value;
+        const passwordError = document.getElementById('passwordError');
+        
+        // Regular expression for password validation
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
+
+        if (!passwordPattern.test(password)) {
+            passwordField.classList.add('is-invalid');
+            passwordError.style.display = 'block';
+            passwordError.innerText = 'Password must contain 8-12 characters, including uppercase, lowercase, a number, and a special symbol.';
+        } else {
+            passwordField.classList.remove('is-invalid');
+            passwordError.style.display = 'none';
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".toggle-password").forEach(button => {
+        button.addEventListener("click", function() {
+            let input = this.previousElementSibling;
+            if (input.type === "password") {
+                input.type = "text";
+                this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                input.type = "password";
+                this.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        });
+    });
+});
+
+
+</script>
+
+
+
+
+
+
+{% endblock %}

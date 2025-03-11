@@ -1,0 +1,176 @@
+{% extends 'staff_advisor/index.html' %}
+{% load static %}
+{% block staff_advisor_content %}
+<!-- Material Design Icons -->
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+
+<!-- Remix Icons -->
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+
+<!-- Bootstrap Bundle JS (includes Popper.js) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<style>
+    .modal-header{
+        background-color: #225160;
+        height: 65px;
+
+    }
+    .modal-title {
+        color: #ffffff; /* Replace #333 with your desired color */
+    }
+
+</style>
+<div class="main-content" >
+ <div id="removeNotificationModal" class="page-content">
+   <div class="container-fluid">
+                <!-- ===========================Message Box In HTML============================= -->
+                <div >
+                    <div class="row">
+                        <div class="col-lg-12 d-flex justify-content-end" style="position: absolute; z-index: 2; right: 1%;">
+                            {% if messages %}
+                                {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show collapse" role="alert">
+                                    {{ message|safe }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- ========================Message Box End===================================== -->
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Registered Students</h4>
+                </div><!-- end card header -->
+               
+
+                <div class="card-body">
+                   
+
+                    <div class="table-responsive" style="max-height: 300px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Email Address</th>
+                                    <th scope="col">Course</th>
+                                    <th scope="col">Branch</th>
+                                    <th scope="col">Semester</th>
+                                    <th scope="col">Year of Joining</th>
+                                    <th scope="col">Approval Status</th>
+                                    <th scope="col">Approve</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in registered_student %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ student.fullname }}</td>
+                                    <td>{{ student.email }}</td>
+                                    <td>{{ student.course }}</td>
+                                    <td>{{ student.department }}</td>
+                                    <td>{{ student.semester }}</td>
+                                    <td>{{ student.year_of_joining }}</td>
+                                    <td>
+                                        {% if student.is_approved %}
+                                            <span class="badge badge-success">Approved</span>
+                                        {% else %}
+                                            <span class="badge badge-warning">Pending</span>
+                                        {% endif %}
+                                    </td>                                    
+                                    
+                                    <td>
+                                        <a href="#" class="link-success fs-15">
+                                            <i class="ri-arrow-left-right-line" data-bs-toggle="modal" data-bs-target="#ChangeStatusModal{{ student.pk }}" title="Change Status"></i>
+                                        </a>
+                                        
+                                       
+                                    </td>
+                               
+                                 <!-- Change status modal-->
+                                 <div id="ChangeStatusModal{{student.pk}}" class="modal fade" tabindex="-1" aria-labelledby="ChangeStatusModal" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-md">
+                                        <div class="modal-content border-0 shadow-lg">
+                                
+                                            <!-- Modal Header -->
+                                            <div class="modal-header bg-primary text-white">
+                                                <h5 class="modal-title fw-bold">Change Status</h5>
+                                                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                
+                                            <!-- Modal Body -->
+                                            <div class="modal-body">
+                                                <form action="{% url 'registration_status' student.pk %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="student_pk" value="{{ student.pk }}">
+                                
+                                                    <!-- Status Dropdown -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-semibold">Change Status</label>
+                                                        <select class="form-select border rounded-3 py-1 px-3 fs-5" name="adminstatus">
+                                                            <option value="1">Approve</option>
+                                                            <option value="0">Reject</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                
+                                                    <!-- Modal Footer Buttons -->
+                                                    <div class="d-flex justify-content-end gap-2">
+                                                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">
+                                                            <i class="bi bi-x-circle"></i> Close
+                                                        </button>
+                                                        <button type="submit" class="btn btn-primary px-4">
+                                                            <i class="bi bi-check-circle"></i> Change Status
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr><!-- end tr -->
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No students found for your department.</td>
+                            </tr>
+                                <!--end of status modal-->
+                            {% endfor %}
+                               
+                               
+                            </tbody><!-- end tbody -->
+                        </table><!-- end table -->
+                    </div>
+                </div><!-- end cardbody -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+
+     
+    </div>
+</div>
+</div>
+</div>
+
+
+<!-- ===================Alert Fade Out Script==================== -->
+<script src="{% static 'main_admin/assets/js/jquery_3.6.3.min.js' %}"></script>
+<script>
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 4000);
+</script>
+<!-- ==========ALERT BOX FADEOUT============= -->
+
+
+
+{% endblock %}

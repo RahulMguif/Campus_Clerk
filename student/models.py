@@ -1,5 +1,8 @@
 from django.db import models
 from mainsite.models import student_registration
+from staff_advisor.models import *
+from hod.models import *
+from office_admin.models import *
 from office_admin.models import departments
 
 
@@ -27,10 +30,12 @@ class student_application_request(models.Model):
     phone_number = models.CharField(max_length=100, null=True)
     student_signature_url = models.CharField(max_length = 150, null=True)
     student_email_address = models.CharField(max_length = 150, null=True)
+    staff_advisor_pk = models.ForeignKey(staff_advisor, on_delete=models.CASCADE, null=True)
     staff_advisor_remark = models.CharField(max_length = 150, null=True)
     staff_advisor_signature_url = models.CharField(max_length = 150, null=True)
     staff_approval_status = models.CharField(max_length=20, null=True)
     staff_approval_date = models.DateField(null=True)
+    hod_pk = models.ForeignKey(hod, on_delete=models.CASCADE, null=True)
     hod_remark = models.CharField(max_length = 150, null=True)
     hod_signature_url = models.CharField(max_length = 150, null=True)   
     hod_approval_status = models.CharField(max_length=20, null=True)
@@ -51,7 +56,7 @@ class student_application_request(models.Model):
 
 class feedback(models.Model):
     student_pk = models.ForeignKey(student_registration, on_delete=models.CASCADE)
-    department = models.ForeignKey(departments, on_delete=models.CASCADE,null=True) # eg: CS, ECE
+    department_pk = models.ForeignKey(departments, on_delete=models.CASCADE, null=True) # eg: CS, ECE
     semester = models.IntegerField(null=True)
     comment = models.CharField(max_length=1100)
     is_flaged = models.IntegerField(null=True)
