@@ -1,0 +1,73 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>SR No.</th>
+            <th>Comment</th>
+            <th>Submitted Date</th>
+            <th>Flag the Comment</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for n in feed %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ n.comment }}</td>
+            <td>{{ n.submitted_date|date }}</td>
+            <td>
+                <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                    data-target="#viewApplicationModal{{ n.id }}">
+                    <i class="bi bi-flag-fill"></i>  <!-- Solid flag -->
+                </button>
+            </td>
+        </tr>
+        <!--======================Application details view modal==================-->
+<div class="modal fade" id="viewApplicationModal{{ n.id }}" tabindex="-1" role="dialog"
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Flag the Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- ✅ Added class="flag-comment-form" -->
+            <form method="POST" class="flag-comment-form" action="{% url 'flag_comment' %}">
+                {% csrf_token %}
+                <div class="modal-body text-center p-5">
+                    <lord-icon 
+                        src="https://cdn.lordicon.com/zpxybbhl.json" 
+                        trigger="loop" 
+                        colors="primary:#121331,secondary:#08a88a" 
+                        style="width:120px;height:120px">
+                    </lord-icon>
+
+                    <div class="mt-4">
+                        <h4 class="mb-3">Do you want to Flag this comment?</h4>
+                        
+                        <!-- ✅ Hidden input for feedback ID -->
+                        <input type="hidden" name="flaged" value="{{ n.id }}">
+
+                        <!-- ✅ Added flag_reason input -->
+                        <textarea name="flag_reason" class="form-control" placeholder="Enter reason for flagging" required></textarea>
+                        
+                        <div class="hstack gap-2 justify-content-center mt-3">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Yes, Flag</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!--======================Application details view modal ENDS==================-->
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">No Feedbacks Found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -215,15 +215,14 @@
                                                                     <input type="text" class="form-control" value="{{ entry.branch }}" readonly>
                                                                 </div>
 
-                                                                <!-- Staff Advisor Remark  -->
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label fw-semibold">Staff Advisor Remark</label>
-                                                                    <input type="text" class="form-control" 
-                                                                           value="{% if entry.staff_advisor_remark %}{{ entry.staff_advisor_remark }}{% else %}No Remark{% endif %}" 
-                                                                           readonly>
+                                                                    <label>Student Signature</label>
+                                                                    <div>
+                                                                        <img src="{% if entry.student_signature_url %}/{{ entry.student_signature_url }}{% else %}/static/images/default-signature.png{% endif %}"
+                                                                            alt="Student Signature"
+                                                                            style="max-width: 100%; height: auto; border: 1px solid #ddd; padding: 5px;">
+                                                                    </div>
                                                                 </div>
-
-                                                                <!-- Staff Advisor Signature (Upload or Display Existing) -->
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label fw-semibold">Upload Staff Advisor Signature *</label>
                                                                     
@@ -237,6 +236,17 @@
                                                                     
                                                                     <input type="file" class="form-control mt-2" name="staff_advisor_signature" accept="image/*" required>
                                                                 </div>
+
+                                                                <!-- Staff Advisor Remark  -->
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label class="form-label fw-semibold">Staff Advisor Remark</label>
+                                                                    <input type="text" class="form-control" 
+                                                                           value="{% if entry.staff_advisor_remark %}{{ entry.staff_advisor_remark }}{% else %}No Remark{% endif %}" 
+                                                                           readonly>
+                                                                </div>
+
+                                                                <!-- Staff Advisor Signature (Upload or Display Existing) -->
+                                                                
 
 
                                                                 <!-- Application Status -->
