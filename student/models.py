@@ -59,7 +59,8 @@ class feedback(models.Model):
     semester = models.IntegerField(null=True)
     comment = models.CharField(max_length=1100)
     feedback_for = models.CharField(max_length=50, null=True)
-    is_flaged = models.IntegerField(null=True)
+    is_flaged = models.BooleanField(default=False)
+    flag_reason = models.CharField(max_length=100, null=True)
     submitted_date = models.DateTimeField(null=True)
     delete_status = models.CharField(max_length=50)
 

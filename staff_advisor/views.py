@@ -72,12 +72,12 @@ def update_staff_remark(request, application_id):
     application_entry = get_object_or_404(student_application_request, id=application_id)
 
     if request.method == 'POST':
-        staff_advisor_remark = request.POST.get('staff_advisor_remark', '')
+        # staff_advisor_remark = request.POST.get('staff_advisor_remark', '')
         staff_advisor_signature = request.FILES.get('staff_advisor_signature')
 
         # Update the application with the logged-in staff advisor's details
         application_entry.staff_advisor_pk = staff_advisor_instance
-        application_entry.staff_advisor_remark = staff_advisor_remark
+        # application_entry.staff_advisor_remark = staff_advisor_remark
 
         # Handle signature file upload
         if staff_advisor_signature:
