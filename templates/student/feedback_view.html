@@ -120,6 +120,55 @@
                         </div>
                     </div>
                 </div> 
+
+
+                <!--============================View flaged feedbacks=-=-=-=-=-=-=----------=-=-=-=--->
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                      <div class="card">
+                        <div class="card-body">
+                            <div class="card-body">
+                                <h4 class="card-title">View Flaged FeedBacks</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    SR No.
+                                                </th>
+                                                <th>
+                                                    Comment
+                                                </th>
+                                                <th>
+                                                    Submitted Date
+                                                </th>
+                                                <th>
+                                                    Flaged Feedbacks
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for t in feeds_app %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>{{t.comment}}</td>
+                                                <td>{{t.submitted_date}}</td>
+                                                <td>
+                                                    {% if t.is_flaged == 1 %}
+                                                        ❌
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <!--============================View flaged feedbacks=-=-=-=-=-=-=----------=-=-=-=--->
             </div>
         </div>
     </div>

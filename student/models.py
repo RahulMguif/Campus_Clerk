@@ -3,7 +3,7 @@ from mainsite.models import student_registration
 from staff_advisor.models import *
 from hod.models import *
 from office_admin.models import *
-from office_admin.models import departments
+
 
 
 # Student application model
@@ -55,10 +55,10 @@ class student_application_request(models.Model):
 # Student feedback model
 
 class feedback(models.Model):
-    student_pk = models.ForeignKey(student_registration, on_delete=models.CASCADE)
     department_pk = models.ForeignKey(departments, on_delete=models.CASCADE, null=True) # eg: CS, ECE
     semester = models.IntegerField(null=True)
     comment = models.CharField(max_length=1100)
+    feedback_for = models.CharField(max_length=50, null=True)
     is_flaged = models.IntegerField(null=True)
     submitted_date = models.DateTimeField(null=True)
     delete_status = models.CharField(max_length=50)

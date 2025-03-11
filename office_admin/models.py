@@ -52,3 +52,4 @@ class staff_incharge(models.Model):
     class Meta:
         db_table = 'staff_incharge'
         
+        
