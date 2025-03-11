@@ -1,8 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib import messages
+from campus_clerk import settings
 from office_admin.models import *
 from mainsite.models import *
+from staff_incharge.models import notification
 
 # Create your views here.
 def staff_incharge_home(request):
@@ -192,3 +194,30 @@ def incharge_add_student(request):
             'event_list': event_list,
         }
         return render(request, "staff_incharge/add_students_coordinator.html", context)
+    
+    
+    
+from django.core.files.storage import FileSystemStorage
+
+def add_notification(request):
+    if request.method == "POST":
+        heading = request.POST.get('heading')
+        description = request.POST.get('description')
+        attached_sign_url = None  # Default to None
+        if 'document' in request.FILES:
+            signature_file = request.FILES['document']
+            fs = FileSystemStorage(location=settings.MEDIA_ROOT + '/notification')
+            attached_sign = fs.save(signature_file.name, signature_file)
+            attached_sign_url = 'media/notification/' + attached_sign  # Store relative path
+        # Create and save the notification
+        notification.objects.create(
+            heading=heading,
+            description=description,
+            document=attached_sign_url,
+            delete_status='0'
+        )
+        messages.success(request, 'Successfully added the notification')
+        return redirect('add_notification')
+    notif=notification.objects.all()
+    context={'notification':notif}
+    return render(request, "staff_incharge/add_notification.html",context)

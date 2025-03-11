@@ -1,12 +1,7 @@
 {% extends 'office_admin/index.html' %}
 {% load static %}
 {% block admin_content %}
-<<<<<<< HEAD
-
-
-=======
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
->>>>>>> 5253afc33ad58e1ce18a912e2a4f3d3db1850d91
 
 
 <div class="col-12">
@@ -25,11 +20,7 @@
     {% endif %}
 </div>
 
-<<<<<<< HEAD
-<div class="row">
-=======
 <!-- <div class="row">
->>>>>>> 5253afc33ad58e1ce18a912e2a4f3d3db1850d91
     <div class="col-md-12 mt-5 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
@@ -53,11 +44,7 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-</div>
-=======
 </div> -->
->>>>>>> 5253afc33ad58e1ce18a912e2a4f3d3db1850d91
 
 <!-- Modal -->
 <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
@@ -74,15 +61,10 @@
                     <label for="exampleInputUsername1">Select Feedback Enable Status</label>
                     <select class="form-control" name="select_value" id="">
                         <option selected disabled>---- Select ---</option>
-<<<<<<< HEAD
-                        <option value="1" {% if status.enable_status == 1 %}selected{% endif %}>On</option>
-                        <option value="0" {% if status.enable_status == 0 %}selected{% endif %}>Off</option>
-=======
                         <!-- <option value="1" {% if status.enable_status == 1 %}selected{% endif %}>On</option>
                         <option value="0" {% if status.enable_status == 0 %}selected{% endif %}>Off</option> -->
                         <option value="1" {% if status.enable_status %}selected{% endif %}>On</option>
                         <option value="0" {% if not status.enable_status %}selected{% endif %}>Off</option>
->>>>>>> 5253afc33ad58e1ce18a912e2a4f3d3db1850d91
                     </select>
                 </div>
                 <div class="modal-footer">
