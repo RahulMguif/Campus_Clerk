@@ -53,7 +53,3 @@ class staff_incharge(models.Model):
         db_table = 'staff_incharge'
         
         
-class feedback_enable(models.Model):
-    enable_status = models.BooleanField(default=False)
-    class Meta:
-        db_table = 'feedback_enable'

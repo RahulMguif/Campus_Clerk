@@ -8,7 +8,6 @@ from django.contrib import messages
 
 from office_admin.models import *
 
-from office_admin.models import feedback_enable
 from .models import *
 from datetime import datetime, date, timedelta
 from django.db import transaction
@@ -282,13 +281,10 @@ def add_feedback(request):
         # return HttpResponse(depart)
         semester=request.POST.get('semester')
         comment=request.POST.get('comment')
-        student=request.POST.get('student_id')
-        student_obj=student_registration.objects.get(id=student)
         feed=feedback()
         feed.department_pk=department_obj
         feed.semester=semester
         feed.comment=comment
-        feed.student_pk=student_obj
         feed.is_flaged=0
         feed.submitted_date=timezone.now()
         feed.delete_status=0
@@ -308,9 +304,19 @@ def feedback_view(request):
     student=student_registration.objects.get(id=student_id)
     stud_dept=student.department
     stud_sem=student.semester
+
+    # Fetch the department ID based on the department name
+    try:
+        department = departments.objects.get(department_name=stud_dept)
+        department_id = department.id
+    except departments.DoesNotExist:
+        # Handle the case if the department does not exist
+        department_id = None
+
     # return HttpResponse(stud_dept)
     feed = feedback.objects.filter(delete_status=0, department_pk_id__department_name=stud_dept,is_flaged=0,semester=stud_sem)
-    context={'feed':feed}
+    feeds_app = feedback.objects.filter(delete_status=0, department_pk=department_id,is_flaged=1)
+    context={'feed':feed, 'feeds_app':feeds_app}
     return render(request,"student/feedback_view.html",context)
 
 
@@ -372,31 +378,3 @@ def edit_profile(request):
         return render(request, 'student/edit_profile.html')
 
 
-
-from django.utils import timezone
-
-def add_feedback(request):
-    if request.method=='POST':
-        depart=request.POST.get('department')
-        department_obj=departments.objects.get(id=depart)
-        # return HttpResponse(depart)
-        semester=request.POST.get('semester')
-        comment=request.POST.get('comment')
-        student=request.POST.get('student_id')
-        student_obj=student_registration.objects.get(id=student)
-        feed=feedback()
-        feed.department=department_obj
-        feed.semester=semester
-        feed.comment=comment
-        feed.student_pk=student_obj
-        feed.is_flaged=0
-        feed.submitted_date=timezone.now()
-        feed.delete_status=0
-        feed.save()
-        messages.success(request, 'Successfully changed the status')
-        return redirect('add_feedback')
-    student_id=request.session["student_id"]
-    department=departments.objects.filter(delete_status=0)
-    context={'department':department,'student_id':student_id}
-    return render(request,"student/feedback.html",context)
-    

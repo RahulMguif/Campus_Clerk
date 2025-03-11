@@ -52,6 +52,11 @@
                 <i class="ti-settings text-primary"></i>
                 Settings
               </a> -->
+              <span class="dropdown-item disabled">
+                <i class="ti-user text-primary"></i>
+                {{ staff_incharge_email }}
+              </span>
+              <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url 'student_logout' %}">
                 <i class="ti-power-off text-primary"></i>
                 Logout

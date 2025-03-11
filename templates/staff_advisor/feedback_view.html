@@ -24,7 +24,7 @@
                                     Submitted Date
                                 </th>
                                 <th>
-                                    Approved Comments
+                                    Approved Feedbacks
                                 </th>
                             </tr>
                         </thead>
@@ -69,7 +69,7 @@
                                     Submitted Date
                                 </th>
                                 <th>
-                                    Flag the Comment
+                                    Flaged Feedbacks
                                 </th>
                             </tr>
                         </thead>
@@ -80,11 +80,9 @@
                                 <td>{{t.comment}}</td>
                                 <td>{{t.submitted_date}}</td>
                                 <td>
-                                    <td>
-                                        {% if t.is_flaged == 1 %}
-                                            ❌
-                                        {% endif %}
-                                    </td>
+                                    {% if t.is_flaged == 1 %}
+                                        ❌
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
