@@ -2,7 +2,144 @@
 {% load static %}
 {% block mainsite_content %}
 
+<style>
+    /* ===============================HOME Page Notification =========================================== */
+.announcement_box{
+    position: fixed;
+    min-height: 150px;
+    /* background-color: #004b8de7; */
+    background-color: #838383;
+    opacity: 0.9;
+    width: 300px;
+    right: 6px;
+    bottom: 100px;
+    padding: 5px 5px 10px 5px;
+    box-shadow: 2px 2px 8px #332a2a;
+    border-radius: 10px;
+    display: none;
+    z-index: 500;
+	}
 
+.neon1 {
+    width: 10px;
+    height: 95px;
+    border-radius: 5px 0px 0px 5px;
+    position: fixed;
+    background: linear-gradient(to bottom, rgb(90, 90, 255), rgb(150, 150, 200));
+    opacity: 0.5;
+    animation: flicker 1.2s infinite alternate;
+    z-index: 1;
+    }
+
+    @keyframes flicker {
+        0% {
+          opacity: 0.2;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+.close_btn {
+    float: right;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 500;
+    position: absolute;
+    right: 15px;
+    top: 5px;
+    border-radius: 10%;
+}
+
+.announcement_box_title h5{
+    font-size: 14px;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* Card */
+.card {
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+  background-color: #5f5b5b;
+}
+
+.card-header, .card-footer {
+    border-color: #5f5b5b;
+    background-color: #5f5b5b;
+    color: #798eb3;
+    padding: 15px;
+}
+
+.card-title {
+    padding: 20px 0 15px 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #ffffff;
+    font-family: "Poppins", sans-serif;
+}
+
+.card-title span {
+  color: #899bbd;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.card-body {
+  padding: 0 20px 20px 20px;
+}
+
+.card-img-overlay {
+  background-color: rgba(85, 85, 85, 0.6);
+}
+
+
+/* News & Updates */
+.dashboard .news .post-item+.post-item {
+  margin-top: 15px;
+}
+
+.news_slide{
+  width:100%;
+  height:75px;
+  background-color:#5f5b5b;
+  overflow:hidden;
+}
+.news_slide ul{
+  list-style:none;
+  position:relative;
+  padding-left: 0px;
+}
+.news_slide li{
+  height:100px;
+}
+.news_slide h6{
+  color:#fff;
+  padding-top:10px;
+  margin-bottom: 0px;
+}
+.news_slide img{
+  float: left;
+}
+.news_slide p{
+  font-size: small;
+  padding: 10px 0px 0px 0px;
+  line-height: 1.4;
+  color: #ffffff;
+}
+
+.news_slide a{
+    color: #0ff;
+}
+.news_slide:hover{
+    animation-play-state: paused;
+}
+
+
+/* ===============================HOME Page Notification ========================================== */
+</style>
 <!-- ===========================Message Box In HTML============================= -->
     <!-- Django Messages Alert Box -->
     {% if messages %}
@@ -16,7 +153,65 @@
     </div>
     {% endif %}
 <!-- ========================Message Box End===================================== -->
-
+<!-- ===============================HOME Page Notification =========================================== -->
+<div class="announcement_box">
+	<div class="close_btn">X</div>
+    
+	<div class="announcement_box_title">
+		<h5>NOTIFICATION</h5>
+	</div>
+	
+	<div class="announcement_box_content">
+        <div class="neon1"></div>
+        <div class="card">
+       
+            <div class="card-body">
+                
+                <div class="news_slide">
+                    <ul style="margin-top: -100px; top: 0px;">
+                        
+                        <li>
+                            <div class="clearfix">
+                                <h6 class="notification_header">
+                                    <a href="#">
+                                    Hello
+                                    </a>
+                                </h6>
+                                <p>
+                                    Hai Hello <!-- Truncates description to 10 words -->
+                        
+                                    <a href="#" >
+                                    View...
+                                 </a>
+                              
+                                </p>
+                            </div>
+                        </li>
+                        
+                        <li>
+                            <div class="clearfix">
+                                <h6 class="notification_header">
+                                    <a href="#">
+                                    Hello
+                                    </a>
+                                </h6>
+                                <p>
+                                    Hai Hello <!-- Truncates description to 10 words -->
+                        
+                                    <a href="#" >
+                                    View...
+                                 </a>
+                              
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+<!-- ===============================HOME Page Notification END=========================================== -->
  <!-- Carousel Start -->
  <div class="container-fluid p-0 mb-5">
     <div class="owl-carousel header-carousel position-relative">
@@ -440,5 +635,40 @@
     }, 3000); // Hides after 3 seconds
   </script>
   <!-- ===============Script to hide message notification ENDS===================-->
-
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let notificationBox = document.querySelector(".announcement_box");
+        let closeBtn = document.querySelector(".close_btn");
+        let newsSlide = document.querySelector(".news_slide ul");
+    
+        // Show the notification box after .1 seconds
+        setTimeout(function () {
+            notificationBox.style.display = "block";
+        }, 100);
+    
+        // Hide the notification box when the close button is clicked
+        closeBtn.addEventListener("click", function () {
+            notificationBox.style.display = "none";
+        });
+    
+        // Function to scroll the news items
+        function startNewsTicker() {
+            let firstItem = newsSlide.querySelector("li");
+            newsSlide.appendChild(firstItem.cloneNode(true)); // Clone first item and add to end
+            setInterval(function () {
+                newsSlide.style.transition = "transform 0.6s ease-in-out";
+                newsSlide.style.transform = "translateY(-100px)"; // Move up by one item height
+    
+                setTimeout(function () {
+                    newsSlide.appendChild(newsSlide.firstElementChild); // Move first item to end
+                    newsSlide.style.transition = "none";
+                    newsSlide.style.transform = "translateY(0)"; // Reset position
+                }, 600);
+            }, 3000); // Change news every 3 seconds
+        }
+    
+        // Start the scrolling effect
+        startNewsTicker();
+    });
+    </script>
 {% endblock mainsite_content %}
