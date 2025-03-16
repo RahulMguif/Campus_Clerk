@@ -144,7 +144,7 @@ def view_students_by_department(request):
         return redirect('home')
 
     # Get students where the department matches the staff advisor's department
-    students = student_registration.objects.filter(department=staff_advisor_obj.department_pk.department_name)
+    students = student_registration.objects.filter(department=staff_advisor_obj.department_pk.department_name, is_approved='1')
 
     return render(request, 'staff_advisor/view_students.html', {'students': students, 'staff_email': staff_advisor_obj.email})
 
@@ -245,7 +245,7 @@ def add_student(request):
         student.save()
 
         messages.success(request, "Student added successfully!")
-        return redirect('view_students_by_department')
+        return redirect('approve_reg_student')
 
     else:
         # Load department & courses for the form
