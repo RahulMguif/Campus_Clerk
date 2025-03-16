@@ -71,6 +71,9 @@
                                 <th>
                                     Flaged Feedbacks
                                 </th>
+                                <th>
+                                    Flaged Reason
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,6 +87,7 @@
                                         ❌
                                     {% endif %}
                                 </td>
+                                <td>{{t.flag_reason}}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
