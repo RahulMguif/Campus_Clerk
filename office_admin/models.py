@@ -1,6 +1,7 @@
 from django.db import models
 
 
+
 class course(models.Model):
     course_name = models.CharField(max_length = 200, null=True)
     delete_status = models.BooleanField(default=False)
@@ -53,11 +54,6 @@ class staff_incharge(models.Model):
         db_table = 'staff_incharge'
 
 
-class office_documents(models.Model):
-    document_name = models.CharField(max_length = 200, null=True)
-    document_url = models.CharField(max_length = 150, null=True)  
-    description = models.CharField(max_length=150, null=True)
-    class Meta:
-        db_table = 'office_documents'          
+        
         
         

@@ -66,3 +66,12 @@ class feedback(models.Model):
 
     class Meta:
         db_table = 'feedback'
+        
+
+class office_documents(models.Model):
+    document_name = models.CharField(max_length = 200, null=True)
+    document_url = models.CharField(max_length = 150, null=True)  
+    reason = models.CharField(max_length=150, null=True)
+    student_pk=models.ForeignKey(student_registration, on_delete=models.CASCADE, null=True, blank=True)
+    class Meta:
+        db_table = 'office_documents'          

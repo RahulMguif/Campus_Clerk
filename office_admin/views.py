@@ -738,8 +738,7 @@ def upload_office_documents(request):
             return redirect("upload_office_documents")
 
         # File upload logic
-        document_name = request.POST.get("document_name")
-        description = request.POST.get("description")
+      
         uploaded_file = request.FILES.get("document_file")
 
         if uploaded_file:
@@ -748,9 +747,9 @@ def upload_office_documents(request):
             file_url = fs.url(os.path.join('documents', filename))  # Save correct file path
 
             office_documents.objects.create(
-                document_name=document_name,
+               
                 document_url=file_url,
-                description=description
+                
             )
             messages.success(request, "Successfully uploaded document.")
             return redirect("upload_office_documents")
