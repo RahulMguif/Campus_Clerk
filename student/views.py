@@ -454,11 +454,41 @@ def edit_profile(request):
         return render(request, 'student/edit_profile.html')
 
     
+
+
+
+
 # def view_documents(request):
-#     all_documents=office_documents.objects.all()
+#     if request.method == "POST":
+#         document_name = request.POST.get("document_name")
+#         reason = request.POST.get("description")
 
-#     return render(request,'student/view_documents.html',{'all_documents':all_documents})  
+#         # Get student ID from session
+#         student_id = request.session.get("student_id")  
+        
+#         if not student_id:
+#             messages.error(request, "Student not logged in!")
+#             return redirect("view_documents")
 
+#         try:
+#             student = student_registration.objects.get(pk=student_id)
+#         except student_registration.DoesNotExist:
+#             messages.error(request, "Invalid student ID!")
+#             return redirect("view_documents")
+
+#         # Save document with associated student
+#         new_document = office_documents(
+#             document_name=document_name,
+#             reason=reason,
+#             student_pk=student
+#         )
+#         new_document.save()
+
+#         messages.success(request, "Document saved successfully!")
+#         return redirect("view_documents")  # Redirect after save
+
+#     all_documents = office_documents.objects.all()
+#     return render(request, "student/view_documents.html", {"all_documents": all_documents})
 
 
 def view_documents(request):
@@ -480,15 +510,16 @@ def view_documents(request):
             return redirect("view_documents")
 
         # Save document with associated student
-        new_document = office_documents(
+        office_documents.objects.create(
             document_name=document_name,
             reason=reason,
             student_pk=student
         )
-        new_document.save()
+        messages.success(request, "Document requested successfully!")
+        return redirect("view_documents")
 
-        messages.success(request, "Document saved successfully!")
-        return redirect("view_documents")  # Redirect after save
+    # Filter documents only for the logged-in student
+    student_id = request.session.get("student_id")
+    all_documents = office_documents.objects.filter(student_pk_id=student_id)
 
-    all_documents = office_documents.objects.all()
     return render(request, "student/view_documents.html", {"all_documents": all_documents})

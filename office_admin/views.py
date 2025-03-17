@@ -721,6 +721,7 @@ from django.conf import settings
 
 def upload_office_documents(request):
     documents = office_documents.objects.all()
+    uploaded_documents = office_documents.objects.filter(document_url__isnull=True) | office_documents.objects.filter(document_url="")
 
     if request.method == "POST":
         if "delete_document_id" in request.POST:  # Check if delete request
@@ -738,20 +739,23 @@ def upload_office_documents(request):
             return redirect("upload_office_documents")
 
         # File upload logic
-      
         uploaded_file = request.FILES.get("document_file")
+        document_id = request.POST.get("document_id")
 
-        if uploaded_file:
+        if uploaded_file and document_id:
             fs = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'documents/'))
             filename = fs.save(uploaded_file.name, uploaded_file)
-            file_url = fs.url(os.path.join('documents', filename))  # Save correct file path
+            file_url = fs.url(os.path.join('documents', filename))
 
-            office_documents.objects.create(
-               
-                document_url=file_url,
-                
-            )
+            # Update the document with the uploaded file URL
+            document = office_documents.objects.get(id=document_id)
+            document.document_url = file_url
+            document.save()
+
             messages.success(request, "Successfully uploaded document.")
             return redirect("upload_office_documents")
 
-    return render(request, "office_admin/office_documents.html", {"documents": documents})
+    return render(request, "office_admin/office_documents.html", {
+    "documents": documents,
+    "uploaded_documents": uploaded_documents
+     })
