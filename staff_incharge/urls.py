@@ -6,5 +6,6 @@ urlpatterns = [
     path('view_all_student/',views.view_all_student,name='view_all_student'),
     path('incharge_add_student/',views.incharge_add_student,name='incharge_add_student'),
     path('assign_programme_coordinator/', views.assign_programme_coordinator, name='assign_programme_coordinator'),
-    path('add_notification/',views.add_notification, name='add_notification')
+    path('add_notification/',views.add_notification, name='add_notification'),
+    path('notification_delete/',views.notification_delete,name='notification_delete')
 ]

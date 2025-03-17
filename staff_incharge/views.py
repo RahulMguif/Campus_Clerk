@@ -220,6 +220,17 @@ def add_notification(request):
         )
         messages.success(request, 'Successfully added the notification')
         return redirect('add_notification')
-    notif=notification.objects.all()
+    notif=notification.objects.filter(delete_status=0)
     context={'notification':notif}
     return render(request, "staff_incharge/add_notification.html",context)
+
+
+
+def notification_delete(request):
+    if request.method=="POST":
+        id=request.POST.get('delete_id')
+        delete=notification.objects.get(id=id)
+        delete.delete_status=1
+        delete.save()
+        messages.success(request, 'Successfully deleted the notification')
+        return redirect('add_notification')
