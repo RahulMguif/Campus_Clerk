@@ -99,8 +99,8 @@
                                                 <select class="form-control border-light bg-light" name="semester" id="semester" required>
                                                     <option value="">-- Select semester --</option>
                                                     {% for i in "12345678"|make_list %}
-<option value="{{ i }}">{{ i }}</option>
-{% endfor %}
+                                                    <option value="{{ i }}">{{ i }}</option>
+                                                    {% endfor %}
 
                                                 </select>
                                             </div>
@@ -114,7 +114,7 @@
                                             <!-- Mobile Number -->
                                             <div class="col-md-6 col-lg-4">
                                                 <label>Mobile Number</label>
-                                                <input type="text" id="phone" class="form-control border-light bg-light" name="mobile" placeholder="Mobile Number *" required>
+                                                <input type="text" id="phone" class="form-control border-light bg-light" name="mobile" placeholder="Mobile Number *" maxlength="10" required>
                                             </div>
                 
                                             <!-- Submit Button -->

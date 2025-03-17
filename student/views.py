@@ -305,105 +305,51 @@ def add_feedback(request):
     
 def feedback_view(request):
     student_id = request.session.get("student_id")
-    student = student_registration.objects.get(id=student_id)
-    stud_dept = student.department
-    stud_sem = student.semester
+    student=student_registration.objects.get(id=student_id)
+    stud_dept=student.department
+    stud_sem=student.semester
 
-    # Get Department ID
+    # Fetch the department ID based on the department name
     try:
         department = departments.objects.get(department_name=stud_dept)
         department_id = department.id
     except departments.DoesNotExist:
+        # Handle the case if the department does not exist
         department_id = None
 
-    # Capture Filters
-    feedback_for = request.GET.get('feedback_for', 'Academics')
-    start_date = request.GET.get('start_date', '')
-    end_date = request.GET.get('end_date', '')
-
-    # Filter Regular Feedback
-    feed = feedback.objects.filter(
-        delete_status=0,
-        department_pk_id=department_id,
-        semester=stud_sem,
-        feedback_for=feedback_for,
-        is_flaged=0
-    )
-
-    # Filter Flagged Feedback
-    feeds_app = feedback.objects.filter(
-        delete_status=0,
-        department_pk_id=department_id,
-        feedback_for=feedback_for,
-        is_flaged=1
-    )
-
-    # Apply Date Filter if Provided
-    if start_date and end_date:
-        feed = feed.filter(submitted_date__range=[start_date, end_date])
-        feeds_app = feeds_app.filter(submitted_date__range=[start_date, end_date])
-
-    # Handle AJAX Request
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        feedback_html = render_to_string('student/partials/feedback_table.html', {'feed': feed})
-        flagged_html = render_to_string('student/partials/flagged_feedback_table.html', {'feeds_app': feeds_app})
-        return JsonResponse({'feedback_html': feedback_html, 'flagged_html': flagged_html})
-
-    # Render Full Page
-    context = {'feed': feed, 'feeds_app': feeds_app}
-    return render(request, "student/feedback_view.html", context)
+    # return HttpResponse(stud_dept)
+    feed = feedback.objects.filter(delete_status=0, department_pk_id__department_name=stud_dept,is_flaged=0,semester=stud_sem)
+    feeds_app = feedback.objects.filter(delete_status=0, department_pk=department_id,is_flaged=1)
+    context={'feed':feed, 'feeds_app':feeds_app}
+    return render(request,"student/feedback_view.html",context)
 
 
-from django.http import JsonResponse
-from django.contrib import messages
-from django.shortcuts import get_object_or_404
 
-from django.contrib.messages import get_messages
+# def flag_comment(request):
+#     if request.method=='POST':
+#         id=request.POST.get('flaged')
+#         flag=feedback.objects.get(id=id)
+#         flag.is_flaged=1
+#         flag.save()
+#         messages.success(request, 'Successfully flaged the comment')
+#         return redirect('feedback_view')
+
 
 def flag_comment(request):
     if request.method == 'POST':
         id = request.POST.get('flaged')
-        flag_reason = request.POST.get('flag_reason')
+        reason = request.POST.get('flag_reason')  # Get the flag reason
 
-        if not id or not flag_reason:
-            return JsonResponse({'error': 'Missing data'}, status=400)
+        try:
+            flag = feedback.objects.get(id=id)
+            flag.is_flaged = True
+            flag.flag_reason = reason  # Save the reason in the database
+            flag.save()
+            messages.success(request, 'Successfully flagged the comment with reason.')
+        except feedback.DoesNotExist:
+            messages.error(request, 'Feedback not found.')
 
-        flag = get_object_or_404(feedback, id=id)
-        flag.is_flaged = 1
-        flag.flag_reason = flag_reason
-        flag.save()
-        messages.success(request, 'Successfully flagged the comment.')
-
-        # ✅ Get messages
-        storage = get_messages(request)
-        success_message = ''
-        for message in storage:
-            success_message = str(message)
-
-        # ✅ Refresh Tables
-        student_id = request.session.get("student_id")
-        student = student_registration.objects.get(id=student_id)
-        stud_dept = student.department
-        stud_sem = student.semester
-        department = departments.objects.get(department_name=stud_dept)
-        department_id = department.id
-
-        feed = feedback.objects.filter(
-            delete_status=0, department_pk_id=department_id, semester=stud_sem, is_flaged=0
-        )
-        feeds_app = feedback.objects.filter(
-            delete_status=0, department_pk_id=department_id, is_flaged=1
-        )
-
-        feedback_html = render_to_string('student/partials/feedback_table.html', {'feed': feed})
-        flagged_html = render_to_string('student/partials/flagged_feedback_table.html', {'feeds_app': feeds_app})
-
-        return JsonResponse({
-            'feedback_html': feedback_html, 
-            'flagged_html': flagged_html, 
-            'message': success_message
-        })
-
+        return redirect('feedback_view')
 
     
 
