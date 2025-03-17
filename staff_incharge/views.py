@@ -203,6 +203,7 @@ def add_notification(request):
     if request.method == "POST":
         heading = request.POST.get('heading')
         description = request.POST.get('description')
+        date=request.POST.get('date')
         attached_sign_url = None  # Default to None
         if 'document' in request.FILES:
             signature_file = request.FILES['document']
@@ -214,7 +215,8 @@ def add_notification(request):
             heading=heading,
             description=description,
             document=attached_sign_url,
-            delete_status='0'
+            delete_status='0',
+            date=date
         )
         messages.success(request, 'Successfully added the notification')
         return redirect('add_notification')

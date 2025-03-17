@@ -18,6 +18,10 @@
                                 <input type="text" name="heading" class="form-control">
                             </div>
                             <div class="form-group">
+                                <label for="exampleInputUsername1">Add Date</label>
+                                <input type="date" name="date" class="form-control">
+                            </div>
+                            <div class="form-group">
                                 <label for="exampleInputUsername1">Description</label>
                                 <textarea class="form-control" name="description" id=""></textarea>
                             </div>
@@ -43,6 +47,7 @@
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">Notification Heading</th>
+                                            <th scope="col">Date</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Documents</th>
                                             <th scope="col">Edit</th>
@@ -54,6 +59,7 @@
                                         <tr>
                                             <td>{{forloop.counter}}</td>
                                             <td>{{n.heading}}</td>
+                                            <td>{{n.date|date}}</td>
                                             <td>{{n.description}}</td>
                                             <td>
                                                 <a target="_blank" href="/{{n.document}}"><button type="button" class="btn btn-primary">View</button></a>
