@@ -75,3 +75,17 @@ class office_documents(models.Model):
     student_pk=models.ForeignKey(student_registration, on_delete=models.CASCADE, null=True, blank=True)
     class Meta:
         db_table = 'office_documents'          
+
+
+class event_registration(models.Model):
+    event_pk = models.ForeignKey(event, on_delete=models.CASCADE, null=True) # eg: Nss
+    full_name = models.CharField(max_length=100, null=True)
+    course_pk = models.ForeignKey(course, on_delete=models.CASCADE, null=True)
+    department_pk = models.ForeignKey(departments, on_delete=models.CASCADE, null=True)
+    semester = models.IntegerField(null=True)
+    email_address = models.CharField(max_length = 150, null=True)
+    mobile_number = models.CharField(max_length = 150, null=True)
+    submitted_date = models.DateTimeField(null=True)
+
+    class Meta:
+        db_table = 'event_registration'
