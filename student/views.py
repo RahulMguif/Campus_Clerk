@@ -7,6 +7,7 @@ import traceback
 from django.contrib import messages
 
 from office_admin.models import *
+from staff_incharge.models import notification
 
 from .models import *
 from datetime import datetime, date, timedelta
@@ -469,3 +470,19 @@ def view_documents(request):
     all_documents = office_documents.objects.filter(student_pk_id=student_id)
 
     return render(request, "student/view_documents.html", {"all_documents": all_documents})
+
+
+
+def notification_view(request):
+    try:
+        current_user = request.session.get('student_id')
+        if current_user is None:
+            return redirect('404')
+        note=notification.objects.filter(delete_status=0).order_by('-id')
+        context={'note':note}
+        return render(request,'student/notification_view.html',context)
+    except Exception as e:
+        print('Exception in edit_profile:', e)
+        traceback_str = traceback.format_exc()
+        print('\ntraceback_str:', traceback_str)
+        return render(request, 'student/edit_profile.html')

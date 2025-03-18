@@ -12,5 +12,7 @@ urlpatterns = [
     
     path('add_feedback/',views.add_feedback,name='add_feedback'),
     path('view_documents/',views.view_documents,name='view_documents'),
+    
+    path('notification_view/',views.notification_view,name='notification_view')
 
 ]

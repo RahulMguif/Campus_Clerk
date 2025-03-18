@@ -75,6 +75,7 @@ TEMPLATES = [
                 "student.context_processors.student_context",  # Ensure this matches
                 # "student.context_processors.student_profile",
                 "mainsite.context_processors.global_user_details",
+                
             ],
         },
     },
@@ -97,7 +98,7 @@ WSGI_APPLICATION = 'campus_clerk.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.mysql',
-       'NAME': 'campus_clerk_new',
+       'NAME': 'campus_clerk',
        'USER': 'root',
        'PASSWORD': 'admin',
        'HOST':'localhost',
