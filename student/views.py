@@ -5,6 +5,7 @@ from django.core.validators import EmailValidator
 from django.core.files.storage import FileSystemStorage
 import traceback
 from django.contrib import messages
+from campus_clerk import settings
 
 from office_admin.models import *
 from staff_incharge.models import notification
@@ -486,3 +487,69 @@ def notification_view(request):
         traceback_str = traceback.format_exc()
         print('\ntraceback_str:', traceback_str)
         return render(request, 'student/edit_profile.html')
+
+
+def add_announcement(request):
+    if request.method == "POST":
+        heading = request.POST.get('name')
+        description = request.POST.get('description')
+        date=request.POST.get('date')
+        attached_sign_url = None  # Default to None
+        if 'document' in request.FILES:
+            signature_file = request.FILES['document']
+            fs = FileSystemStorage(location=settings.MEDIA_ROOT + '/notification')
+            attached_sign = fs.save(signature_file.name, signature_file)
+            attached_sign_url = 'media/notification/' + attached_sign  # Store relative path
+        # Create and save the notification
+        notification.objects.create(
+            heading=heading,
+            description=description,
+            document=attached_sign_url,
+            delete_status='0',
+            date=date
+        )
+        messages.success(request, 'Successfully added the announcement')
+        return render(request,"student/add_announcement.html") 
+    all_notification=notification.objects.filter(delete_status=0)
+    context={'all_notification':all_notification}
+    return render(request,"student/add_announcement.html",context)        
+
+# def add_attendance(request):
+#     all_events=notification.objects.filter(delete_status=0)
+#     return render(request,"student/add_attendance.html",{'all_events':all_events})  
+
+
+
+def add_attendance(request):
+    if request.method == "POST":
+        event_id = request.POST.get('name')  # Get selected event's ID
+        attendance_sheet = request.FILES.get('attendance_sheet')
+
+        if not event_id or not attendance_sheet:
+            messages.error(request, "Please select an event and upload a file.")
+            return redirect('add_attendance')
+
+        try:
+            event = notification.objects.get(id=event_id)  # Get event by ID
+
+            # Save the uploaded file
+            fs = FileSystemStorage(location=settings.MEDIA_ROOT + '/attendance_sheets')
+            file_name = fs.save(attendance_sheet.name, attendance_sheet)
+            file_url = 'media/attendance_sheets/' + file_name  # Store relative URL
+
+            # Update the notification with attendance URL
+            event.attendance_url = file_url
+            event.save()
+
+            messages.success(request, "Attendance sheet uploaded successfully.")
+            return redirect('add_attendance')
+        
+        except notification.DoesNotExist:
+            messages.error(request, "Selected event does not exist.")
+            return redirect('add_attendance')
+
+    # Fetch events for the dropdown
+    events = notification.objects.filter(delete_status=0)
+    all_events = notification.objects.filter(delete_status=0).exclude(attendance_url__isnull=True).exclude(attendance_url="")
+
+    return render(request, "student/add_attendance.html", {'all_events': all_events,'events':events})

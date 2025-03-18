@@ -8,5 +8,6 @@ class notification(models.Model):
     enable=models.CharField(max_length=10,null=True)
     delete_status=models.CharField(max_length=5,null=True)
     date=models.DateTimeField(null=True)
+    attendance_url=models.CharField(max_length=300,null=True)
     class Meta:
         db_table = 'notification'
