@@ -23,6 +23,8 @@
   <link rel="shortcut icon" href="{% static 'admin/images/favicon.png' %}" />
   <!-- Message box css -->
   <link rel="stylesheet" href="{% static 'admin/css/message_box.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
   <style>
     #src{
       width: 230px;
@@ -231,7 +233,7 @@
       <li class="nav-item {% if request.resolver_match.url_name == 'add_feedback' %} active {% endif %}">
           <a class="nav-link {% if request.resolver_match.url_name == 'add_feedback' %} active {% endif %}" 
             href="{% url 'add_feedback' %}">
-              <i class="icon-paper menu-icon"></i>
+              <i class="bi bi-calendar-event menu-icon"></i>
               <span class="menu-title">Feedback</span>
           </a>
       </li>
@@ -271,8 +273,8 @@
         <a class="nav-link" data-toggle="collapse" href="#form-element" 
            aria-expanded="{% if request.resolver_match.url_name in 'add_announcement add_attendance' %}true{% else %}false{% endif %}" 
            aria-controls="form-element">
-            <i class="icon-columns menu-icon"></i>
-            <span class="menu-title">Event Announcement</span>
+            <i class="bi bi-newspaper menu-icon"></i>
+            <span class="menu-title">Announcement</span>
             <i class="menu-arrow"></i>
         </a>
         <div class="collapse {% if request.resolver_match.url_name in 'add_announcement add_attendance' %} show {% endif %}" id="form-element">

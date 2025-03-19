@@ -509,14 +509,21 @@ def add_announcement(request):
             date=date
         )
         messages.success(request, 'Successfully added the announcement')
-        return render(request,"student/add_announcement.html") 
+        return redirect("add_announcement") 
     all_notification=notification.objects.filter(delete_status=0)
     context={'all_notification':all_notification}
     return render(request,"student/add_announcement.html",context)        
 
-# def add_attendance(request):
-#     all_events=notification.objects.filter(delete_status=0)
-#     return render(request,"student/add_attendance.html",{'all_events':all_events})  
+from django.shortcuts import get_object_or_404, redirect
+
+
+def delete_announcement(request, announcement_id):
+    if request.method == "POST":
+        announcement = get_object_or_404(notification, id=announcement_id)
+        announcement.delete()
+        messages.success(request, "Announcement deleted successfully.")
+        return redirect('add_announcement')  # Change to the name of your announcement list view
+    return redirect('add_announcement')
 
 
 
