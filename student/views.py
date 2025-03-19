@@ -5,8 +5,10 @@ from django.core.validators import EmailValidator
 from django.core.files.storage import FileSystemStorage
 import traceback
 from django.contrib import messages
+from campus_clerk import settings
 
 from office_admin.models import *
+from staff_incharge.models import notification
 
 from .models import *
 from datetime import datetime, date, timedelta
@@ -469,3 +471,92 @@ def view_documents(request):
     all_documents = office_documents.objects.filter(student_pk_id=student_id)
 
     return render(request, "student/view_documents.html", {"all_documents": all_documents})
+
+
+
+def notification_view(request):
+    try:
+        current_user = request.session.get('student_id')
+        if current_user is None:
+            return redirect('404')
+        note=notification.objects.filter(delete_status=0).order_by('-id')
+        context={'note':note}
+        return render(request,'student/notification_view.html',context)
+    except Exception as e:
+        print('Exception in edit_profile:', e)
+        traceback_str = traceback.format_exc()
+        print('\ntraceback_str:', traceback_str)
+        return render(request, 'student/edit_profile.html')
+
+
+def add_announcement(request):
+    if request.method == "POST":
+        heading = request.POST.get('name')
+        description = request.POST.get('description')
+        date=request.POST.get('date')
+        attached_sign_url = None  # Default to None
+        if 'document' in request.FILES:
+            signature_file = request.FILES['document']
+            fs = FileSystemStorage(location=settings.MEDIA_ROOT + '/notification')
+            attached_sign = fs.save(signature_file.name, signature_file)
+            attached_sign_url = 'media/notification/' + attached_sign  # Store relative path
+        # Create and save the notification
+        notification.objects.create(
+            heading=heading,
+            description=description,
+            document=attached_sign_url,
+            delete_status='0',
+            date=date
+        )
+        messages.success(request, 'Successfully added the announcement')
+        return redirect("add_announcement") 
+    all_notification=notification.objects.filter(delete_status=0)
+    context={'all_notification':all_notification}
+    return render(request,"student/add_announcement.html",context)        
+
+from django.shortcuts import get_object_or_404, redirect
+
+
+def delete_announcement(request, announcement_id):
+    if request.method == "POST":
+        announcement = get_object_or_404(notification, id=announcement_id)
+        announcement.delete()
+        messages.success(request, "Announcement deleted successfully.")
+        return redirect('add_announcement')  # Change to the name of your announcement list view
+    return redirect('add_announcement')
+
+
+
+def add_attendance(request):
+    if request.method == "POST":
+        event_id = request.POST.get('name')  # Get selected event's ID
+        attendance_sheet = request.FILES.get('attendance_sheet')
+
+        if not event_id or not attendance_sheet:
+            messages.error(request, "Please select an event and upload a file.")
+            return redirect('add_attendance')
+
+        try:
+            event = notification.objects.get(id=event_id)  # Get event by ID
+
+            # Save the uploaded file
+            fs = FileSystemStorage(location=settings.MEDIA_ROOT + '/attendance_sheets')
+            file_name = fs.save(attendance_sheet.name, attendance_sheet)
+            file_url = 'media/attendance_sheets/' + file_name  # Store relative URL
+
+            # Update the notification with attendance URL
+            event.attendance_url = file_url
+            event.save()
+
+            messages.success(request, "Attendance sheet uploaded successfully.")
+            return redirect('add_attendance')
+        
+        except notification.DoesNotExist:
+            messages.error(request, "Selected event does not exist.")
+            return redirect('add_attendance')
+
+    # Fetch events for the dropdown
+    events = notification.objects.filter(delete_status=0)
+    all_events = notification.objects.filter(delete_status=0).exclude(attendance_url__isnull=True).exclude(attendance_url="")
+
+    return render(request, "student/add_attendance.html", {'all_events': all_events,'events':events})

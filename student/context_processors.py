@@ -29,3 +29,11 @@ def student_context(request):
 #         'student_name': student.fullname if student else '',
 #         'student_email': student.email if student else '',
 #     }
+
+
+from .models import student_registration
+
+def student_menu_context(request):
+    student_id = request.session.get("student_id")
+    student = student_registration.objects.filter(id=student_id).first()
+    return {"show_club_menu": student.is_club_coordinator if student else 0}
