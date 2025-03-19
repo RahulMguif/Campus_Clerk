@@ -36,6 +36,61 @@ def view_all_student(request):
 
 from django.http import JsonResponse
 
+# def assign_programme_coordinator(request):
+#     if request.method == "POST":
+#         student_id = request.POST.get("student_id")
+#         event_id = request.POST.get("event_id")
+#         staff_incharge_email = request.session.get('username')
+
+#         if not staff_incharge_email:
+#             return JsonResponse({"status": "error", "message": "You are not logged in"}, status=403)
+
+#         staff_incharge_obj = staff_incharge.objects.filter(email=staff_incharge_email, delete_status=False).first()
+
+#         if not staff_incharge_obj:
+#             return JsonResponse({"status": "error", "message": "Invalid staff incharge account"}, status=403)
+
+#         student = get_object_or_404(student_registration, id=student_id)
+
+#         # Get current coordinators for the same department & semester
+#         current_coordinators = student_registration.objects.filter(
+#             department=student.department,
+#             semester=student.semester,
+#             is_club_coordinator=True
+#         ).order_by("date_joined")  # Order by oldest first
+
+#         removed_message = ""
+
+#         if current_coordinators.count() >= 2:
+#             # Remove the oldest coordinator
+#             oldest_coordinator = current_coordinators.first()
+#             removed_message = f"{oldest_coordinator.fullname} was removed as Programme Coordinator."
+#             oldest_coordinator.is_club_coordinator = False
+#             oldest_coordinator.event_coordinated = None  # Reset event
+#             oldest_coordinator.save()
+
+#             removed_student = student_registration.objects.get(id=oldest_coordinator.id)
+#             print(removed_student.is_club_coordinator)  # Should print False
+
+
+#         # Assign the new student as a programme coordinator
+#         student.is_club_coordinator = True
+
+#         # Update the event if provided
+#         if event_id:
+#             event_obj = get_object_or_404(event, id=event_id)
+#             student.event_coordinated = event_obj.event_name
+
+#         student.save()
+
+#         return JsonResponse({
+#             "status": "success",
+#             "message": f"{student.fullname} is now the Programme Coordinator for {student.event_coordinated}.",
+#             "removed_message": removed_message
+#         })
+
+#     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
+
 def assign_programme_coordinator(request):
     if request.method == "POST":
         student_id = request.POST.get("student_id")
@@ -45,14 +100,16 @@ def assign_programme_coordinator(request):
         if not staff_incharge_email:
             return JsonResponse({"status": "error", "message": "You are not logged in"}, status=403)
 
+        # Fetch staff incharge details
         staff_incharge_obj = staff_incharge.objects.filter(email=staff_incharge_email, delete_status=False).first()
 
         if not staff_incharge_obj:
             return JsonResponse({"status": "error", "message": "Invalid staff incharge account"}, status=403)
 
+        # Get the student
         student = get_object_or_404(student_registration, id=student_id)
 
-        # Get current coordinators for the same department & semester
+        # Get current coordinators in the same department & semester
         current_coordinators = student_registration.objects.filter(
             department=student.department,
             semester=student.semester,
@@ -60,16 +117,18 @@ def assign_programme_coordinator(request):
         ).order_by("date_joined")  # Order by oldest first
 
         removed_message = ""
+        removed_student_id = None
 
         if current_coordinators.count() >= 2:
             # Remove the oldest coordinator
             oldest_coordinator = current_coordinators.first()
             removed_message = f"{oldest_coordinator.fullname} was removed as Programme Coordinator."
+            removed_student_id = oldest_coordinator.id  # Capture removed student's ID
             oldest_coordinator.is_club_coordinator = False
             oldest_coordinator.event_coordinated = None  # Reset event
-            oldest_coordinator.save()
+            oldest_coordinator.save(update_fields=['is_club_coordinator', 'event_coordinated'])  # ✅ Explicit save
 
-        # Assign the new student as a programme coordinator
+        # Assign the new student as a Programme Coordinator
         student.is_club_coordinator = True
 
         # Update the event if provided
@@ -77,12 +136,13 @@ def assign_programme_coordinator(request):
             event_obj = get_object_or_404(event, id=event_id)
             student.event_coordinated = event_obj.event_name
 
-        student.save()
+        student.save(update_fields=['is_club_coordinator', 'event_coordinated'])  # ✅ Explicit save
 
         return JsonResponse({
             "status": "success",
             "message": f"{student.fullname} is now the Programme Coordinator for {student.event_coordinated}.",
-            "removed_message": removed_message
+            "removed_message": removed_message,
+            "removed_student_id": removed_student_id  # Send removed student ID for UI update
         })
 
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
