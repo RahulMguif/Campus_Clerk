@@ -560,3 +560,74 @@ def add_attendance(request):
     all_events = notification.objects.filter(delete_status=0).exclude(attendance_url__isnull=True).exclude(attendance_url="")
 
     return render(request, "student/add_attendance.html", {'all_events': all_events,'events':events})
+
+
+
+def apply_notification(request, pk):
+    try:
+        current_user = request.session.get('student_id')
+        if current_user is None:
+            return redirect('notification_view')
+
+        # Retrieve the specific notification using the ID
+        note = get_object_or_404(notification, id=pk)
+
+        course_obj = course.objects.all()
+        department_obj = departments.objects.all()
+
+        # Render the application form with the notification details
+        context = {'note': note,
+                   'courses': course_obj,
+                   'departments': department_obj,
+                   }
+        return render(request, 'student/apply_notification.html', context)
+
+    except Exception as e:
+        print(f'Error in apply_notification: {e}')
+        return redirect('notification_view')
+    
+
+def submit_application(request):
+    if request.method == 'POST':
+        try:
+            notification_id = request.POST.get('notification_id')
+            full_name = request.POST.get('full_name')
+            email_address = request.POST.get('email_address')
+            course_id = request.POST.get('course_pk')
+            department_id = request.POST.get('department_pk')
+            semester = request.POST.get('semester')
+            mobile_number = request.POST.get('mobile_number')
+
+            # Validate notification existence
+            notification_obj = notification.objects.get(pk=notification_id)
+
+            # Validate course and department existence
+            course_obj = course.objects.get(pk=course_id)
+            department_obj = departments.objects.get(pk=department_id)
+
+            # Insert the data into the event_registration model
+            event_registration.objects.create(
+                notification_pk=notification_obj,
+                full_name=full_name,
+                email_address=email_address,
+                course_pk=course_obj,
+                department_pk=department_obj,
+                semester=semester,
+                mobile_number=mobile_number,
+                submitted_date=timezone.now()
+            )
+
+            messages.success(request, "Application submitted successfully.")
+            return redirect('notification_view')  # Redirect to a success page or desired URL
+
+        except notification.DoesNotExist:
+            messages.error(request, "Notification not found.")
+        except course.DoesNotExist:
+            messages.error(request, "Course not found.")
+        except departments.DoesNotExist:
+            messages.error(request, "Department not found.")
+        except Exception as e:
+            print(f"Error: {e}")
+            messages.error(request, "An error occurred while submitting the application.")
+            
+    return redirect('notification_view')  # Redirect to an error page or back to form on failure

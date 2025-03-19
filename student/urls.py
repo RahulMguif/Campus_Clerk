@@ -17,5 +17,8 @@ urlpatterns = [
     path('add_announcement/',views.add_announcement,name='add_announcement'),
     path('delete_announcement/<int:announcement_id>/', views.delete_announcement, name='delete_announcement'),
     path('add_attendance/',views.add_attendance,name='add_attendance'),
+    path('notification/apply/<int:pk>/', views.apply_notification, name='apply_notification'),
+    path('notification/submit/', views.submit_application, name='submit_application'),
+
 
 ]

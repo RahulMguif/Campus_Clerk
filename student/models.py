@@ -3,7 +3,7 @@ from mainsite.models import student_registration
 from staff_advisor.models import *
 from hod.models import *
 from office_admin.models import *
-
+from staff_incharge.models import *
 
 
 # Student application model
@@ -78,7 +78,8 @@ class office_documents(models.Model):
 
 
 class event_registration(models.Model):
-    event_pk = models.ForeignKey(event, on_delete=models.CASCADE, null=True) # eg: Nss
+    # event_pk = models.ForeignKey(event, on_delete=models.CASCADE, null=True) # eg: Nss
+    notification_pk = models.ForeignKey(notification, on_delete=models.CASCADE, null=True) # eg: Nss
     full_name = models.CharField(max_length=100, null=True)
     course_pk = models.ForeignKey(course, on_delete=models.CASCADE, null=True)
     department_pk = models.ForeignKey(departments, on_delete=models.CASCADE, null=True)
