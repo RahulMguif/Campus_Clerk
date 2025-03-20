@@ -250,7 +250,7 @@
       {% endif %}
 
         
-      {% if show_club_menu %}
+      <!-- {% if show_club_menu %}
       <li class="nav-item {% if request.resolver_match.url_name == 'feedback_view' %} active {% endif %}">
         <a class="nav-link {% if request.resolver_match.url_name == 'feedback_view' %} active {% endif %}" 
           href="{% url 'notification_view' %}">
@@ -258,7 +258,7 @@
             <span class="menu-title">Add Notification</span>
         </a>
       </li>
-      {% endif %}
+      {% endif %} -->
 
 
       <li class="nav-item {% if request.resolver_match.url_name == 'notification_view' %} active {% endif %}">
@@ -269,27 +269,29 @@
         </a>
       </li>
 
+      {% if show_club_menu %}
       <li class="nav-item {% if request.resolver_match.url_name in 'add_announcement add_attendance' %} active {% endif %}">
-        <a class="nav-link" data-toggle="collapse" href="#form-element" 
-           aria-expanded="{% if request.resolver_match.url_name in 'add_announcement add_attendance' %}true{% else %}false{% endif %}" 
-           aria-controls="form-element">
-            <i class="bi bi-newspaper menu-icon"></i>
-            <span class="menu-title">Announcement</span>
-            <i class="menu-arrow"></i>
-        </a>
-        <div class="collapse {% if request.resolver_match.url_name in 'add_announcement add_attendance' %} show {% endif %}" id="form-element">
-            <ul class="nav flex-column sub-menu">
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'add_announcement' %} active {% endif %}" 
-                       href="{% url 'add_announcement' %}">Add Announcement</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'add_attendance' %} active {% endif %}" 
-                       href="{% url 'add_attendance' %}">Add Attendance</a>
-                </li>
-            </ul>
-        </div>
-    </li>
+          <a class="nav-link" data-toggle="collapse" href="#form-element" 
+            aria-expanded="{% if request.resolver_match.url_name in 'add_announcement add_attendance' %}true{% else %}false{% endif %}" 
+            aria-controls="form-element">
+              <i class="bi bi-newspaper menu-icon"></i>
+              <span class="menu-title">Announcement</span>
+              <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse {% if request.resolver_match.url_name in 'add_announcement add_attendance' %} show {% endif %}" id="form-element">
+              <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                      <a class="nav-link {% if request.resolver_match.url_name == 'add_announcement' %} active {% endif %}" 
+                        href="{% url 'add_announcement' %}">Add Announcement</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link {% if request.resolver_match.url_name == 'add_attendance' %} active {% endif %}" 
+                        href="{% url 'add_attendance' %}">Add Attendance</a>
+                  </li>
+              </ul>
+          </div>
+      </li>
+      {% endif %}
 
 
       

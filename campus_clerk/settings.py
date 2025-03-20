@@ -75,6 +75,7 @@ TEMPLATES = [
                 "student.context_processors.student_context",  # Ensure this matches
                 # "student.context_processors.student_profile",
                 "mainsite.context_processors.global_user_details",
+                "student.context_processors.student_menu_context"
                 
             ],
         },

@@ -36,7 +36,7 @@
                 <!-- ========================Message Box End===================================== -->
                 <div class="card-body">
                   <h4 class="card-title">Application Form for: {{ note.heading }}</h4>
-                  <p>{{ note.description }}</p>
+                  <p>Description: {{ note.description }}</p>
                   <form class="form-sample" id="undertakingForm" method="post" action="{% url 'submit_application' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" name="notification_id" value="{{ note.id }}">

@@ -54,7 +54,7 @@
                 <div class="card-body">
                    
 
-                    <div class="table-responsive" style="max-height: 300px;">
+                    <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -160,16 +160,41 @@
                 body: "student_id=" + studentId + "&event_id=" + eventId
             })
             .then(response => response.json())
+            // .then(data => {
+            //     let message = data.message;
+            //     if (data.removed_message) {
+            //         message = data.removed_message + "\n" + data.message; // Combine messages
+            //     }
+            //     alert(message);
+            //     if (data.status === "success") {
+            //         location.reload();  // Refresh page after "OK"
+            //     }
+            // });
+
             .then(data => {
-                let message = data.message;
-                if (data.removed_message) {
-                    message = data.removed_message + "\n" + data.message; // Combine messages
-                }
-                alert(message);
-                if (data.status === "success") {
-                    location.reload();  // Refresh page after "OK"
-                }
-            });
+    let message = data.message;
+    if (data.removed_message) {
+        message = data.removed_message + "\n" + data.message;
+    }
+    alert(message);
+
+    if (data.status === "success") {
+        let checkbox = document.querySelector(`.class-rep-checkbox[data-student-id='${studentId}']`);
+        if (checkbox) {
+            checkbox.checked = true;
+            checkbox.disabled = true;  // ✅ Disable newly assigned coordinator
+        }
+
+        if (data.removed_student_id) {
+            let removedCheckbox = document.querySelector(`.class-rep-checkbox[data-student-id='${data.removed_student_id}']`);
+            if (removedCheckbox) {
+                removedCheckbox.checked = false;
+                removedCheckbox.disabled = false;  // ✅ Allow removed student to be reassigned
+            }
+        }
+    }
+});
+
         });
     });
 </script>
