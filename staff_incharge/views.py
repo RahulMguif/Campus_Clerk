@@ -5,6 +5,7 @@ from campus_clerk import settings
 from office_admin.models import *
 from mainsite.models import *
 from staff_incharge.models import notification
+from student.models import event_registration
 
 # Create your views here.
 def staff_incharge_home(request):
@@ -294,3 +295,124 @@ def notification_delete(request):
         delete.save()
         messages.success(request, 'Successfully deleted the notification')
         return redirect('add_notification')
+    
+
+# def event_participants(request):
+#     # Get the logged-in staff incharge's email from session
+#     staff_incharge_email = request.session.get('username')
+
+#     if not staff_incharge_email:
+#         messages.error(request, "You are not logged in. Please log in again.")
+#         return redirect('home')
+    
+#     # Fetch the staff incharge object using the email
+#     staff_incharge_obj = staff_incharge.objects.filter(email=staff_incharge_email, delete_status=False).first()
+
+#     if not staff_incharge_obj:
+#         messages.error(request, "Invalid staff incharge account.")
+#         return redirect('home')
+    
+#     students = event_registration.objects.all().order_by('-id')
+#     context = {
+#         'students': students,
+#     }
+#     return render(request,"staff_incharge/event_participants.html", context)
+
+
+
+def event_participants(request):
+    # Get the logged-in staff incharge's email from session
+    staff_incharge_email = request.session.get('username')
+
+    if not staff_incharge_email:
+        messages.error(request, "You are not logged in. Please log in again.")
+        return redirect('home')
+    
+    # Fetch the staff incharge object using the email
+    staff_incharge_obj = staff_incharge.objects.filter(email=staff_incharge_email, delete_status=False).first()
+
+    if not staff_incharge_obj:
+        messages.error(request, "Invalid staff incharge account.")
+        return redirect('home')
+
+    # Get all notifications for dropdown
+    notifications = notification.objects.filter(delete_status='0').order_by('-date')
+
+    # Get all departments for dropdown
+    departments_list = departments.objects.filter(delete_status='0')
+
+    # Get all courses for dropdown
+    course_list = course.objects.filter(delete_status='0')
+
+    # Filtering by notification_pk
+    notification_pk = request.GET.get('notification_pk')
+
+    attendance_url = None
+    if notification_pk:
+        students = event_registration.objects.filter(notification_pk_id=notification_pk).order_by('-id')
+        selected_notification = notification.objects.filter(id=notification_pk).first()
+        
+        # Get the attendance URL if available
+        if selected_notification and selected_notification.attendance_url:
+            attendance_url = selected_notification.attendance_url
+    else:
+        students = event_registration.objects.all().order_by('-id')
+
+    context = {
+        'students': students,
+        'notifications': notifications,
+        'selected_notification': notification_pk,
+        'attendance_url': attendance_url,
+        'departments': departments_list,
+        'courses': course_list,
+    }
+    return render(request, "staff_incharge/event_participants.html", context)
+
+
+from django.shortcuts import render, redirect
+from django.utils.timezone import now
+from django.contrib import messages
+
+def add_student_to_event(request):
+    if request.method == "POST":
+        # Get the form data
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email_address')
+        mobile = request.POST.get('mobile_number')
+        course_id = request.POST.get('course_pk')
+        department_id = request.POST.get('department_pk')
+        semester = request.POST.get('semester')
+        notification_id = request.GET.get('notification_pk')  # Get from query string
+
+        # Validate that notification ID is present
+        if not notification_id:
+            messages.error(request, "No event selected.")
+            return redirect('event_participants')  # Replace with your actual event list page
+
+        # Get related objects
+        try:
+            notification_obj = notification.objects.get(pk=notification_id)
+            course_obj = course.objects.get(pk=course_id)
+            department_obj = departments.objects.get(pk=department_id)
+        except (notification.DoesNotExist, course.DoesNotExist, departments.DoesNotExist):
+            messages.error(request, "Invalid selection.")
+            return redirect('event_participants')
+
+        # Create and save the new event registration
+        event_registration.objects.create(
+            notification_pk=notification_obj,
+            full_name=full_name,
+            email_address=email,
+            mobile_number=mobile,
+            course_pk=course_obj,
+            department_pk=department_obj,
+            semester=semester,
+            submitted_date=now()
+        )
+
+        messages.success(request, "Student added successfully.")
+        return redirect('event_participants')  # Redirect back to the event page
+
+    else:
+        messages.error(request, "Invalid request method.")
+        return redirect('event_participants')
