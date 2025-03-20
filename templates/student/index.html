@@ -243,7 +243,7 @@
       <li class="nav-item {% if request.resolver_match.url_name == 'feedback_view' %} active {% endif %}">
           <a class="nav-link {% if request.resolver_match.url_name == 'feedback_view' %} active {% endif %}" 
             href="{% url 'feedback_view' %}">
-              <i class="icon-grid menu-icon"></i>
+              <i class="bi bi-exclamation-triangle menu-icon"></i>
               <span class="menu-title">Feedback View</span>
           </a>
       </li>
@@ -264,8 +264,8 @@
       <li class="nav-item {% if request.resolver_match.url_name == 'notification_view' %} active {% endif %}">
         <a class="nav-link {% if request.resolver_match.url_name == 'notification_view' %} active {% endif %}" 
           href="{% url 'notification_view' %}">
-            <i class="icon-grid menu-icon"></i>
-            <span class="menu-title">Notification</span>
+            <i class="bi bi-megaphone-fill menu-icon"></i>
+            <span class="menu-title">New Announcements</span>
         </a>
       </li>
 
