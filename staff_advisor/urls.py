@@ -12,5 +12,5 @@ urlpatterns = [
     path('view_feedback/',views.view_feedback, name='view_feedback'),
     path('approve_reg_student/',views.approve_reg_student, name='approve_reg_student'),
     path('registration_status/<int:student_pk>/',views.registration_status, name='registration_status'),
-    path('event_participants/',views.event_participants,name='event_participants'),
+    path('event_participants/',views.event_participants_list,name='event_participants_list'),
 ]

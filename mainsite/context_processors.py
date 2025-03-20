@@ -1,5 +1,8 @@
-from mainsite.models import student_registration, staff_advisor, staff_incharge
+from mainsite.models import student_registration
 from hod.models import *
+from staff_advisor.models import *
+from office_admin.models import *
+
 
 def global_user_details(request):
     context = {}
@@ -29,20 +32,44 @@ def global_user_details(request):
         context['staff_incharge_name'] = staff_incharge_obj.name
         context['staff_incharge_email'] = staff_incharge_obj.email
 
-    # ===================== HOD Details Based on Department =====================
-    if staff_advisor_obj and staff_advisor_obj.department_pk:
-        # Use department_pk_id instead of department_pk to avoid conflicts
-        hod_obj = hod.objects.filter(department_pk_id=staff_advisor_obj.department_pk_id, delete_status=False).first()
+    # ===================== HOD Details =====================
+    # Fetch HOD Details based on the logged-in user's role
+    if staff_advisor_obj:
+        # If the user is a staff advisor, fetch the HOD based on their department
+        if staff_advisor_obj.department_pk:
+            department_id = staff_advisor_obj.department_pk.id
+            hod_obj = hod.objects.filter(department_pk_id=department_id, delete_status=False).first()
+            if hod_obj:
+                context['hod_name'] = hod_obj.name
+                context['hod_email'] = hod_obj.email
+            else:
+                context['hod_name'] = "N/A"
+                context['hod_email'] = "N/A"
+        else:
+            context['hod_name'] = "N/A"
+            context['hod_email'] = "N/A"
+    elif staff_incharge_obj:
+        # If the user is a staff in-charge, fetch the HOD based on their department
+        if staff_incharge_obj.department_pk:
+            department_id = staff_incharge_obj.department_pk.id
+            hod_obj = hod.objects.filter(department_pk_id=department_id, delete_status=False).first()
+            if hod_obj:
+                context['hod_name'] = hod_obj.name
+                context['hod_email'] = hod_obj.email
+            else:
+                context['hod_name'] = "N/A"
+                context['hod_email'] = "N/A"
+        else:
+            context['hod_name'] = "N/A"
+            context['hod_email'] = "N/A"
+    else:
+        # If the user is a HOD, fetch their own details
+        hod_obj = hod.objects.filter(email=staff_email, delete_status=False).first()
         if hod_obj:
             context['hod_name'] = hod_obj.name
             context['hod_email'] = hod_obj.email
+        else:
+            context['hod_name'] = "N/A"
+            context['hod_email'] = "N/A"
 
     return context
-
-
-from .models import student_registration
-
-def student_menu_context(request):
-    student_id = request.session.get("student_id")
-    student = student_registration.objects.filter(id=student_id).first()
-    return {"show_club_menu": student.is_club_coordinator if student else 0}

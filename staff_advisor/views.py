@@ -311,7 +311,7 @@ def registration_status(request,student_pk):
 from datetime import datetime, timedelta
 from django.utils.timezone import make_aware
 
-def event_participants(request):
+def event_participants_list(request):
     student = student_registration.objects.all()
     participant = event_registration.objects.all()
 
