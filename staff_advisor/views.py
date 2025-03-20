@@ -307,3 +307,33 @@ def registration_status(request,student_pk):
     
     messages.error(request, "Invalid request.")
     return render(request,'staff_advisor/approve_reg_students.html')
+
+from datetime import datetime, timedelta
+from django.utils.timezone import make_aware
+
+def event_participants(request):
+    student = student_registration.objects.all()
+    participant = event_registration.objects.all()
+
+    # Get filter values
+    name = request.GET.get("name", "").strip()
+    from_date = request.GET.get("from_date", "")
+    to_date = request.GET.get("to_date", "")
+
+    # Apply name filter
+    if name:
+        participant = participant.filter(full_name__icontains=name)
+
+    # Handle date filters correctly
+    if from_date:
+        from_date = datetime.strptime(from_date, "%Y-%m-%d")  # Convert string to date
+        from_date = make_aware(from_date)  # Ensure it's timezone aware
+        participant = participant.filter(submitted_date__gte=from_date)
+
+    if to_date:
+        to_date = datetime.strptime(to_date, "%Y-%m-%d")  # Convert string to date
+        to_date = make_aware(to_date + timedelta(days=1)) - timedelta(seconds=1)  # Include full day
+        participant = participant.filter(submitted_date__lte=to_date)
+
+    context = {"participant": participant, "student": student}
+    return render(request, "staff_advisor/event_participants.html", context)
