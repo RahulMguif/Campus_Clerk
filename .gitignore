@@ -8,23 +8,32 @@ __pycache__/
 # Except for __init__.py, which should be included
 !**/migrations/__init__.py
 
-# # Ignore all files within news_events folder
-# **/media/notification/*
+# # Ignore all files within notification folder
+**/media/notification/*
 
-# # Ignore all files within career_cv folder
-# **/media/career_cv/*
+# # Ignore all files within attached_proofs folder
+**/media/attached_proofs/*
 
-# # Ignore all files within career_notifications folder
-# **/media/career_notifications/*
+# Ignore all files within attached_signature folder
+**/media/attached_signature/*
 
-# # Ignore all files within covering_letter folder
-# **/media/covering_letter/*
+# Ignore all files within attendance_sheets folder
+**/media/attendance_sheets/*
 
-# # Ignore all files within tenders folder
-# **/media/tenders/*
+# Ignore all files within documents folder
+**/media/documents/*
 
-# # Ignore all files within banner folder
-# **/media/banner/*
+# Ignore all files within hod_signature folder
+**/media/hod_signature/*
 
-# # Ignore all files within eminent_visitors folder
-# **/media/eminent_visitors/*
+# Ignore all files within notification folder
+**/media/notification/*
+
+# Ignore all files within office_signatures folder
+**/media/office_signatures/*
+
+# Ignore all files within profile_pic folder
+**/media/profile_pic/*
+
+# Ignore all files within staff_signatures folder
+**/media/staff_signatures/*
