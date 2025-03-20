@@ -9,7 +9,7 @@ __pycache__/
 !**/migrations/__init__.py
 
 # # Ignore all files within news_events folder
-**/media/notification/*
+# **/media/notification/*
 
 # # Ignore all files within career_cv folder
 # **/media/career_cv/*
